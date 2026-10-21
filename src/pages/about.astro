@@ -84,7 +84,7 @@ const skills = [
 
   <section class="container-page mt-20">
     <h2 class="text-2xl font-semibold tracking-tight">Skills & tools</h2>
-    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-reveal-stagger>
       {
         skills.map((s) => (
           <div class="card p-5">
@@ -104,7 +104,7 @@ const skills = [
     experience.length > 0 && (
       <section class="container-page mt-20">
         <h2 class="text-2xl font-semibold tracking-tight">Experience</h2>
-        <ol class="mt-8 max-w-3xl border-l border-line">
+        <ol class="mt-8 max-w-3xl border-l border-line" data-reveal-stagger>
           {experience.map((item) => (
             <li class="relative pb-10 pl-8 last:pb-0">
               <span class="absolute top-1.5 -left-[5px] size-2.5 rounded-full bg-accent" aria-hidden="true" />

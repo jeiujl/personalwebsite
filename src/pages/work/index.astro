@@ -42,7 +42,7 @@ const filters = [
       }
     </div>
 
-    <div id="project-grid" class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div id="project-grid" class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
       {projects.map((project) => <ProjectCard project={project} headingLevel="h2" />)}
     </div>
   </section>
@@ -61,6 +61,7 @@ const filters = [
       cards.forEach((card) => {
         card.hidden = filter !== 'all' && card.dataset.category !== filter;
       });
+      document.dispatchEvent(new Event('projects:filtered'));
     }),
   );
 </script>

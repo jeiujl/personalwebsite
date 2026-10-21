@@ -7,16 +7,17 @@ interface Props {
 const { steps } = Astro.props;
 ---
 
-<figure class="card p-6 sm:p-8">
+<figure class="card p-6 sm:p-8" data-workflow>
   <figcaption class="eyebrow">How it works</figcaption>
   <ol class="mt-6 grid gap-3 lg:grid-flow-col lg:auto-cols-fr lg:gap-0">
     {
       steps.map((step, i) => {
         const last = i === steps.length - 1;
         return (
-          <li class="relative flex gap-4 lg:flex-col lg:gap-3 lg:pr-4">
+          <li class="relative flex gap-4 lg:flex-col lg:gap-3 lg:pr-4" data-workflow-step>
             <div class="flex flex-col items-center lg:flex-row">
               <span
+                data-workflow-badge
                 class:list={[
                   'z-10 inline-flex size-9 shrink-0 items-center justify-center rounded-full text-sm font-semibold',
                   last ? 'bg-accent text-accent-ink' : 'border border-line bg-surface-2 text-ink',
@@ -24,7 +25,9 @@ const { steps } = Astro.props;
               >
                 {i + 1}
               </span>
-              {!last && <span class="mt-1 w-px flex-1 bg-line lg:mt-0 lg:ml-1 lg:h-px lg:w-auto" />}
+              {!last && (
+                <span data-workflow-line class="mt-1 w-px flex-1 bg-line lg:mt-0 lg:ml-1 lg:h-px lg:w-auto" />
+              )}
             </div>
             <div class="pb-4 lg:pb-0">
               <p class="font-semibold">{step.label}</p>

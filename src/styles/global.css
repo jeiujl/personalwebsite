@@ -80,9 +80,17 @@
     border-radius: 4px;
   }
   @media (prefers-reduced-motion: no-preference) {
-    html {
+    html:not(.lenis) {
       scroll-behavior: smooth;
     }
+  }
+  /* Lenis smooth scrolling (from lenis/dist/lenis.css) */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis:not(.lenis-autoToggle).lenis-stopped {
+    overflow: clip;
   }
 }
 

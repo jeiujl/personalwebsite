@@ -7,11 +7,13 @@ const { metrics } = Astro.props;
 
 {
   metrics.length > 0 && (
-    <dl class="grid gap-4 sm:grid-cols-3">
+    <dl class="grid gap-4 sm:grid-cols-3" data-reveal-stagger>
       {metrics.map((m) => (
         <div class="card flex flex-col-reverse p-5">
           <dt class="mt-1 text-sm text-muted">{m.label}</dt>
-          <dd class="text-3xl font-semibold tracking-tight text-accent">{m.value}</dd>
+          <dd class="text-3xl font-semibold tracking-tight text-accent tabular-nums" data-count>
+            {m.value}
+          </dd>
         </div>
       ))}
     </dl>

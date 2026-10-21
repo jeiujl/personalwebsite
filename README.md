@@ -26,6 +26,11 @@ Almost everything you'll want to change lives in a few places. Search the projec
 
 **Photo / resume:** put files in `public/` (e.g. `public/images/headshot.jpg`, `public/resume.pdf`) and set `photo` / `resumeUrl` in `src/config/site.ts`.
 
+## Motion & 3D
+
+- **3D hero** (`src/components/HeroScene.astro`, `src/scripts/automation-scene.ts`): an interactive Three.js "automation network". The tiles, labels and captions are defined at the top of `HeroScene.astro`. It loads after the page has finished loading, and only on devices with real GPU acceleration. Everyone else, including people who turn off motion and speed tests like Lighthouse, sees the static illustration in `HeroVisual.astro`. Add `?3d=1` to the URL to force the scene on.
+- **Scroll animations** (`src/scripts/motion.ts`): GSAP + Lenis. Add `data-reveal` to an element to fade it in on scroll, or `data-reveal-stagger` to a grid to reveal its children one by one. Also available: `data-count` (count-up numbers), `data-magnetic` (buttons) and `data-tilt` (cards). Everything is skipped when the visitor prefers reduced motion.
+
 ## Referral links
 
 Give each person who refers you their own link, such as `https://yoursite.com/?ref=dad`. The site remembers it while the visitor browses. If they send an inquiry, the email subject says who referred them, e.g. "New inquiry (ref: dad): Website from Jane". There's also a ready-to-send intro message for referrers (`referralBlurb` in `src/config/site.ts`).

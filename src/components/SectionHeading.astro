@@ -9,7 +9,7 @@ interface Props {
 const { eyebrow, title, intro, align = 'left', as: Heading = 'h2' } = Astro.props;
 ---
 
-<div class:list={['max-w-2xl', align === 'center' && 'mx-auto text-center']}>
+<div class:list={['max-w-2xl', align === 'center' && 'mx-auto text-center']} data-reveal>
   {eyebrow && <p class="eyebrow">{eyebrow}</p>}
   <Heading
     class:list={[

@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import AutomationRecipe from '../components/AutomationRecipe.astro';
 import CTA from '../components/CTA.astro';
-import HeroVisual from '../components/HeroVisual.astro';
+import HeroScene from '../components/HeroScene.astro';
 import Icon from '../components/Icon.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import SectionHeading from '../components/SectionHeading.astro';
@@ -47,23 +47,26 @@ const personSchema = {
   <!-- Hero -->
   <section class="container-page grid items-center gap-16 pt-14 pb-20 sm:pt-20 lg:grid-cols-[1.1fr_1fr] lg:gap-12">
     <div>
-      <p class="badge">
+      <p class="badge" data-hero-item>
         <span class="mr-1.5 size-1.5 rounded-full bg-accent"></span>
         Taking on new clients
       </p>
-      <h1 class="mt-5 text-4xl leading-[1.08] font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
+      <h1
+        class="mt-5 text-4xl leading-[1.08] font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl"
+        data-hero-title
+      >
         {site.headline}
       </h1>
-      <p class="mt-6 max-w-xl text-lg text-pretty text-muted">{site.description}</p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a href={ctaHref} class="btn-primary px-6 py-3 text-base">
+      <p class="mt-6 max-w-xl text-lg text-pretty text-muted" data-hero-item>{site.description}</p>
+      <div class="mt-8 flex flex-wrap gap-3" data-hero-item>
+        <a href={ctaHref} class="btn-primary px-6 py-3 text-base" data-magnetic>
           Book a free call <Icon name="arrow-right" size={18} />
         </a>
         <a href="/work" class="btn-secondary px-6 py-3 text-base">See my work</a>
       </div>
-      <p class="mt-8 text-sm text-muted">Websites · App design · CRM & AI automations</p>
+      <p class="mt-8 text-sm text-muted" data-hero-item>Websites · App design · CRM & AI automations</p>
     </div>
-    <HeroVisual />
+    <HeroScene />
   </section>
 
   <!-- Two pillars -->
@@ -73,7 +76,7 @@ const personSchema = {
       title="Two ways I help your business grow"
       intro="Most small businesses need the same two things: to look professional online, and to stop letting leads slip through the cracks."
     />
-    <div class="mt-10 grid gap-6 md:grid-cols-2">
+    <div class="mt-10 grid gap-6 md:grid-cols-2" data-reveal-stagger>
       {
         pillars.map((pillar) => (
           <div class="card p-8">
@@ -115,7 +118,7 @@ const personSchema = {
         See all work <Icon name="arrow-right" size={18} />
       </a>
     </div>
-    <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
       {featured.map((project) => <ProjectCard project={project} />)}
     </div>
   </section>
@@ -127,7 +130,7 @@ const personSchema = {
       title="Work that happens while you're busy"
       intro="A few of the most popular automations. Each one runs in the background, so you and your team can focus on the job in front of you."
     />
-    <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
       {recipes.map((recipe) => <AutomationRecipe recipe={recipe} />)}
       <a
         href="/contact?service=Not%20sure%20yet"
@@ -149,7 +152,7 @@ const personSchema = {
     testimonials.length > 0 && (
       <section class="container-page py-16">
         <SectionHeading eyebrow="Kind words" title="What clients say" />
-        <div class="mt-10 grid gap-6 md:grid-cols-3">
+        <div class="mt-10 grid gap-6 md:grid-cols-3" data-reveal-stagger>
           {testimonials.map((t) => (
             <TestimonialCard testimonial={t} />
           ))}
@@ -160,7 +163,7 @@ const personSchema = {
 
   <!-- About snippet -->
   <section class="container-page py-16">
-    <div class="card grid items-center gap-8 p-8 sm:p-10 md:grid-cols-[auto_1fr]">
+    <div class="card grid items-center gap-8 p-8 sm:p-10 md:grid-cols-[auto_1fr]" data-reveal>
       {
         site.photo ? (
           <img
