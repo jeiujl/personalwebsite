@@ -47,7 +47,9 @@ export const server = {
         console.error('Contact form: RESEND_API_KEY or CONTACT_TO_EMAIL is not set.');
         throw new ActionError({
           code: 'INTERNAL_SERVER_ERROR',
-          message: `The form isn't connected yet. Please email me directly at ${site.email}.`,
+          message: site.email
+            ? `The form isn't connected yet. Please email me directly at ${site.email}.`
+            : "The form isn't connected yet. Please try again a little later.",
         });
       }
 
@@ -84,7 +86,9 @@ export const server = {
         console.error('Contact form: Resend error', error);
         throw new ActionError({
           code: 'INTERNAL_SERVER_ERROR',
-          message: `Something went wrong sending your message. Please email me directly at ${site.email}.`,
+          message: site.email
+            ? `Something went wrong sending your message. Please email me directly at ${site.email}.`
+            : 'Something went wrong sending your message. Please try again in a moment.',
         });
       }
 

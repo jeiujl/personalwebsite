@@ -91,7 +91,7 @@ function workflows() {
     const badges = diagram.querySelectorAll('[data-workflow-badge]');
     mm.add({ wide: '(min-width: 1024px)', narrow: '(max-width: 1023.98px)' }, (ctx) => {
       const wide = ctx.conditions?.wide;
-      gsap.set(lines, { transformOrigin: wide ? 'left center' : 'center top' });
+      if (lines.length) gsap.set(lines, { transformOrigin: wide ? 'left center' : 'center top' });
       const tl = gsap.timeline({
         defaults: { ease: EASE },
         scrollTrigger: { trigger: diagram, start: 'top 75%', once: true },

@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import AutomationRecipe from '../components/AutomationRecipe.astro';
 import CTA from '../components/CTA.astro';
@@ -22,9 +23,9 @@ const personSchema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: site.name,
-  jobTitle: 'Website & app designer, automation specialist',
+  jobTitle: 'Website & app designer, founder of Flowa AI',
   description: site.description,
-  email: `mailto:${site.email}`,
+  ...(site.email ? { email: `mailto:${site.email}` } : {}),
   url: Astro.site?.href,
   sameAs: site.socials.map((s) => s.href),
 };
@@ -55,7 +56,7 @@ const personSchema = {
     <GhostTitle text="Work" class="container-page" />
     <div class="container-page">
       <div class="flex flex-wrap items-end justify-between gap-6">
-        <SectionHeading eyebrow="Selected work" title="Real problems, solved" intro="A few projects and the difference they made." />
+        <SectionHeading eyebrow="Selected work" title="Selected projects" intro="A few things I've designed, built and set up." />
         <a href="/work" class="arrow-link">See all work <span class="arrow" aria-hidden="true">↗</span></a>
       </div>
       <div class="mt-14 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
@@ -68,9 +69,9 @@ const personSchema = {
   <section class="grid-lines border-t border-line bg-surface-2 py-24">
     <div class="container-page">
       <SectionHeading
-        eyebrow="Automations I set up"
+        eyebrow="Automations I offer"
         title="Work that happens while you're busy"
-        intro="A few of the most popular automations. Each one runs in the background, so you and your team can focus on the job in front of you."
+        intro="A few common automations I can set up. Each one runs in the background, so you and your team can focus on the job in front of you."
       />
       <div class="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
         {recipes.map((recipe, i) => <AutomationRecipe recipe={recipe} index={i} />)}
@@ -110,13 +111,12 @@ const personSchema = {
     <div class="container-page grid items-center gap-10 pt-20 md:grid-cols-[auto_1fr]" data-reveal>
       {
         site.photo ? (
-          <img
+          <Image
             src={site.photo}
-            alt={`Photo of ${site.name}`}
-            width="200"
-            height="250"
-            loading="lazy"
-            class="aspect-[4/5] w-40 object-cover grayscale sm:w-48"
+            alt={site.photoAlt}
+            widths={[192, 384]}
+            sizes="192px"
+            class="aspect-[4/5] w-40 object-cover transition-[filter] duration-700 sm:w-48 [@media(hover:hover)]:grayscale [@media(hover:hover)]:hover:grayscale-0"
           />
         ) : (
           <span
@@ -131,10 +131,10 @@ const personSchema = {
       <div>
         <p class="eyebrow">About me</p>
         <h2 class="heading mt-4 text-4xl sm:text-5xl">Hi, I'm {site.name}.</h2>
-        <!-- TODO: a short, friendly intro in your own words -->
         <p class="mt-4 max-w-2xl text-lg text-muted">
-          I'm a designer and automation specialist who helps small businesses get more out of their time online. I
-          explain everything in plain English, and I don't disappear after launch.
+          I'm a Financial Analysis &amp; Risk Management student at the University of Waterloo and the founder of Flowa
+          AI. I design and build websites and apps, and set up automations, like missed-call text-back, so callers who
+          can't get through still hear back.
         </p>
         <a href="/about" class="arrow-link mt-6">More about me <span class="arrow" aria-hidden="true">↗</span></a>
       </div>

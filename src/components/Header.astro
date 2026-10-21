@@ -80,7 +80,7 @@ const isActive = (href: string) => current === href || current.startsWith(`${hre
   </nav>
   <div class="container-page flex flex-wrap items-center gap-3 border-t border-line py-6">
     <a href={ctaHref} class="btn-signal">Book a free call <span class="text-accent" aria-hidden="true">↗</span></a>
-    <a href={`mailto:${site.email}`} class="arrow-link">{site.email}</a>
+    {site.email && <a href={`mailto:${site.email}`} class="arrow-link">{site.email}</a>}
   </div>
 </div>
 

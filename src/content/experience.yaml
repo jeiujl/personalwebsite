@@ -1,22 +1,34 @@
-# TODO: sample timeline. Replace with your own experience (newest first), or delete entries.
-- id: freelance
-  role: Freelance designer & automation specialist
-  org: Self-employed
-  period: 2024 – Present
-  summary: Designing websites and apps and building CRM and AI automations for small businesses.
+# Experience on the About page: education first, then roles. `period` and
+# `summary` are optional.
+# TODO: add dates for Flowa AI, HayesX, IPMD and Alpha Futures, and say what you
+# did with Alpha Futures.
+- id: waterloo
+  role: Financial Analysis & Risk Management (FARM)
+  org: University of Waterloo
+  period: 2026 – Present
+  summary: Undergraduate studies in financial analysis and risk management.
   order: 1
-  sample: true
-- id: previous-role
-  role: Your previous role
-  org: Company name
-  period: 2022 – 2024
-  summary: One or two lines about what you did and what you're proud of.
-  order: 2
-  sample: true
-- id: education
-  role: Degree, course or certification
-  org: School or provider
-  period: 2020 – 2022
-  summary: Anything relevant you studied or completed.
+- id: flowa
+  role: Founder
+  org: Flowa AI
+  summary: Started Flowa AI, a company that sets up automations for businesses, including missed-call text-back for a dental services company.
   order: 3
-  sample: true
+- id: hayesx
+  role: App designer, developer & project manager
+  org: HayesX
+  summary: Designed, built and managed the HayesX pilot companion app, with a preflight checklist, digital logbook, manuals and messages in one place.
+  order: 4
+- id: ipmd
+  role: Project Manager
+  org: IPMD, Inc.
+  order: 5
+- id: alpha-futures
+  role: Worked with
+  org: Alpha Futures
+  order: 6
+- id: uts
+  role: High school diploma
+  org: University of Toronto Schools
+  period: Graduated 2026
+  summary: Graduated from University of Toronto Schools in 2026.
+  order: 2

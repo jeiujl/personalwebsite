@@ -16,19 +16,19 @@ const automation = services.filter((s) => s.data.pillar === 'automation');
 const faqs = [
   {
     q: 'Do I need to be technical?',
-    a: "Not at all. I handle the setup and explain everything in plain English. When we launch, I'll walk you and your team through it, and you'll get a short video guide to come back to.",
+    a: "Not at all. I handle the setup and explain everything in plain English. When we launch, I'll walk you and your team through it.",
   },
   {
     q: 'How much does it cost?',
-    a: "Every business is different, so I quote each project after a free call. Websites and app designs are a one-time project fee. The CRM platform is a monthly subscription that includes the software, setup and support. You'll always know the price before any work starts.",
+    a: "Every business is different, so I quote each project after a free call. You'll always know the price before any work starts.",
   },
   {
     q: 'How long does a project take?',
-    a: 'Most websites take 2–5 weeks. Automation setups usually go live in 1–2 weeks. App designs depend on the size of the app. Your proposal will include a timeline.',
+    a: 'It depends on the size of the project. After our call, your proposal will include a timeline you can plan around.',
   },
   {
-    q: `What is ${site.platformName}?`,
-    a: `${site.platformName} is an all-in-one platform for your leads, texts, emails, calendar, reviews and automations. I set it up for your business, brand it for you, and manage it, so you get one tool instead of five.`,
+    q: site.platformName ? `What is ${site.platformName}?` : 'What is the all-in-one platform?',
+    a: `${site.platformName || 'It'} is an all-in-one platform for your leads, texts, emails, calendar, reviews and automations. I set it up for your business, brand it for you, and manage it, so you get one tool instead of five.`,
   },
   {
     q: 'Can you work with the tools I already use?',

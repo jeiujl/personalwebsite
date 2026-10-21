@@ -9,7 +9,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 export const prerender = false;
 
 const nextSteps = [
-  { title: 'I reply within one business day', text: 'Usually much sooner.' },
+  { title: 'I read it and get back to you', text: 'By email, as soon as I can.' },
   { title: 'We have a free 20-minute call', text: 'You tell me about your business and goals.' },
   { title: 'You get a clear proposal', text: 'What I recommend, the timeline and the price.' },
 ];
@@ -44,21 +44,27 @@ const nextSteps = [
           }
         </ol>
 
-        <div class="mt-10 space-y-3">
-          <p class="eyebrow">Prefer email?</p>
-          <a href={`mailto:${site.email}`} class="arrow-link text-lg">
-            {site.email} <span class="arrow" aria-hidden="true">↗</span>
-          </a>
-          {
-            site.bookingUrl && (
-              <p>
-                <a href={site.bookingUrl} target="_blank" rel="noopener" class="arrow-link text-lg">
-                  Book a call directly <span class="arrow" aria-hidden="true">↗</span>
-                </a>
-              </p>
-            )
-          }
-        </div>
+        {
+          (site.email || site.bookingUrl) && (
+            <div class="mt-10 space-y-3">
+              {site.email && (
+                <>
+                  <p class="eyebrow">Prefer email?</p>
+                  <a href={`mailto:${site.email}`} class="arrow-link text-lg">
+                    {site.email} <span class="arrow" aria-hidden="true">↗</span>
+                  </a>
+                </>
+              )}
+              {site.bookingUrl && (
+                <p>
+                  <a href={site.bookingUrl} target="_blank" rel="noopener" class="arrow-link text-lg">
+                    Book a call directly <span class="arrow" aria-hidden="true">↗</span>
+                  </a>
+                </p>
+              )}
+            </div>
+          )
+        }
       </div>
 
       <div>

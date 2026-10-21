@@ -65,10 +65,14 @@ const kind = category === 'crm' || category === 'ai' ? 'automation' : category;
         {[0, 1, 2, 3].map((i) => (
           <>
             {i > 0 && <div class:list={['h-px flex-1', i < 3 ? 'bg-accent' : 'bg-line']} />}
+            {/* Round nodes like the homepage network; the bg-coloured ring stops the line at the rim */}
             <div
-              class:list={['flex size-11 shrink-0 items-center justify-center border bg-surface sm:size-13', i < 3 ? 'border-accent' : 'border-line']}
+              class:list={[
+                'flex size-11 shrink-0 items-center justify-center rounded-full border bg-surface ring-4 ring-bg sm:size-13',
+                i < 3 ? 'border-accent' : 'border-line',
+              ]}
             >
-              <div class="size-2.5" style={i === 3 ? 'background:var(--line)' : 'background:var(--hue)'} />
+              <div class="size-2.5 rounded-full" style={i === 3 ? 'background:var(--line)' : 'background:var(--hue)'} />
             </div>
           </>
         ))}

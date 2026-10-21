@@ -21,11 +21,13 @@ Almost everything you'll want to change lives in a few places. Search the projec
 | Colors, fonts and the four service colors | `src/styles/global.css` (tokens at the top) and `src/lib/disciplines.ts` |
 | The five automation steps in the homepage story | `src/components/HeroScene.astro` (the `steps` list) |
 
-**Sample content:** placeholder projects, testimonials and experience entries have `sample: true`, which shows a "Sample" badge on the site. Replace them with real ones (and remove the flag), or delete the file.
+**Testimonials:** the reviews sections stay hidden until `src/content/testimonials/` has at least one quote. Only add quotes a client has approved word for word (see the README in that folder).
 
 **Adding a project:** copy one of the files in `src/content/projects/`, rename it (the file name becomes the URL, e.g. `/work/my-project/`) and edit the frontmatter. `category` is one of `website`, `app`, `crm` or `ai`, which sets the project's color and work filter. To use a real screenshot, put the image next to the file and add `cover: ./my-image.png` and `coverAlt: "…"`. Automation projects can list `workflow` steps, which are drawn as a diagram.
 
-**Photo / resume:** put files in `public/` (e.g. `public/images/headshot.jpg`, `public/resume.pdf`) and set `photo` / `resumeUrl` in `src/config/site.ts`.
+**Photo:** the headshot lives in `src/assets/` and is imported at the top of `src/config/site.ts` (`photo`, with `photoAlt` describing it), so Astro serves it in optimized sizes. To swap it, replace `src/assets/jerry-liu.jpg` with another 4:5 portrait.
+
+**Resume:** put the PDF in `public/` (e.g. `public/resume.pdf`) and set `resumeUrl: '/resume.pdf'` in `src/config/site.ts`.
 
 ## Design & motion
 
@@ -49,7 +51,7 @@ Inquiries are emailed to you through [Resend](https://resend.com) (free tier). S
 | `CONTACT_TO_EMAIL` | Where inquiries go. Until you verify a domain, this must be the email address you signed up to Resend with |
 | `CONTACT_FROM_EMAIL` | Optional. Defaults to Resend's test sender. After verifying your domain in Resend, use e.g. `Your Name <hello@yourdomain.com>` |
 
-Redeploy after adding them. Until they're set, the form tells visitors to email you directly. Spam is filtered with a hidden honeypot field and a minimum fill time.
+Redeploy after adding them. Until they're set, the form shows a "not connected yet" message (and points to your email if `email` is set in `site.ts`). While `email` is empty, the form is the only way to reach you, so set these before sharing the site. Spam is filtered with a hidden honeypot field and a minimum fill time.
 
 ## Development
 

@@ -19,7 +19,7 @@ const projects = defineCollection({
       category: z.enum(disciplineKeys),
       role: z.string(),
       tools: z.array(z.string()).default([]),
-      year: z.number().int(),
+      year: z.number().int().optional(),
       duration: z.string().optional(),
       // Optional cover image (relative path to an image next to the .md file).
       // Without one, a styled preview is drawn based on the category.
@@ -85,8 +85,8 @@ const experience = defineCollection({
   schema: z.object({
     role: z.string(),
     org: z.string(),
-    period: z.string(),
-    summary: z.string(),
+    period: z.string().optional(),
+    summary: z.string().optional(),
     order: z.number(),
     sample,
   }),

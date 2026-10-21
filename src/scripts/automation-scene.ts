@@ -1,6 +1,6 @@
-// The interactive 3D hero: a night sky with five tiles that tell the story of
-// one automation (missed call → text back → CRM → booked → review), joined by
-// paths a mint pulse travels along. It auto-plays until the visitor scrolls;
+// The interactive 3D hero: a night sky with five round nodes that tell the
+// story of one automation (missed call → text back → CRM → booked → review),
+// threaded on one smooth wave that a mint pulse travels along. It auto-plays until the visitor scrolls;
 // then the scroll story drives it through setProgress/setFocus.
 // Loaded lazily by HeroScene.astro.
 import {
@@ -9,6 +9,8 @@ import {
   BufferGeometry,
   CanvasTexture,
   Color,
+  Curve,
+  CylinderGeometry,
   DirectionalLight,
   EdgesGeometry,
   Group,
@@ -22,19 +24,18 @@ import {
   PlaneGeometry,
   Points,
   PointsMaterial,
-  QuadraticBezierCurve3,
   Raycaster,
   Scene,
   SphereGeometry,
   Sprite,
   SpriteMaterial,
   SRGBColorSpace,
+  TorusGeometry,
   TubeGeometry,
   Vector2,
   Vector3,
   WebGLRenderer,
 } from 'three';
-import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { iconPaths, type IconName } from '../lib/icons';
 
 export interface SceneNode {
@@ -60,15 +61,65 @@ export interface AutomationScene {
   dispose(): void;
 }
 
-// Network layout in world units (story framing)
-const LAYOUT: [number, number, number][] = [
-  [-3.1, -0.2, 0.2],
-  [-1.5, 1.1, -0.6],
-  [0, -0.55, 0.6],
-  [1.55, 0.95, -0.4],
-  [3.1, -0.4, 0.3],
-];
-const TILE = 1.15;
+// ── Network geometry ──────────────────────────────────────────────────────
+// Round "coin" nodes. Lines end on a circle (RIM) larger than the node's
+// biggest on-screen outline, so they never run into it: the mint ring at full
+// pop + hover, plus the coin's side wall when it's turned by the pointer tilt
+// and wobble, plus a small gap.
+const NODE_R = 0.48;
+const NODE_DEPTH = 0.28;
+const RING_TUBE = 0.014;
+const POP = 0.08;
+const HOVER = 0.04;
+const MAX_YAW = 0.2; // pointer tilt
+const WOBBLE = 0.1; // per-coin sway
+const RIM = (NODE_R + RING_TUBE) * (1 + POP + HOVER) + (NODE_DEPTH / 2) * Math.sin(MAX_YAW + WOBBLE) + 0.03;
+const TUBE_SEG = 64;
+const TUBE_RAD = 8;
+
+// One smooth sine period through the five nodes: mid → high → mid → low → mid.
+// Depth (z) is flat at every node, so lines stay level with the node faces.
+const SPAN = 3.36;
+const STEP = (2 * SPAN) / 4;
+const wavePhase = (x: number) => (x + SPAN) / STEP;
+const waveY = (x: number) => 0.2 + 0.9 * Math.sin((Math.PI / 2) * wavePhase(x));
+const waveZ = (x: number) => 0.14 * Math.cos(Math.PI * wavePhase(x));
+const wavePoint = (x: number, target = new Vector3()) => target.set(x, waveY(x), waveZ(x));
+const nodeX = (i: number) => -SPAN + i * STEP;
+
+/** A slice [x0, x1] of the wave. Use getPointAt for even (arc-length) spacing. */
+class WaveSegment extends Curve<Vector3> {
+  x0: number;
+  x1: number;
+  constructor(x0: number, x1: number) {
+    super();
+    this.x0 = x0;
+    this.x1 = x1;
+    this.arcLengthDivisions = 400;
+  }
+  override getPoint(t: number, target = new Vector3()) {
+    return wavePoint(this.x0 + (this.x1 - this.x0) * t, target);
+  }
+}
+
+/** Where the wave, leaving the node at xc in direction dir, crosses radius r. */
+function rimX(xc: number, dir: 1 | -1, r: number) {
+  const yc = waveY(xc);
+  const dist = (x: number) => Math.hypot(x - xc, waveY(x) - yc);
+  const h = (dir * STEP) / 256;
+  let lo = xc;
+  let hi = xc + h;
+  for (let k = 0; k < 256 && dist(hi) < r; k++) {
+    lo = hi;
+    hi += h;
+  }
+  for (let k = 0; k < 30; k++) {
+    const mid = (lo + hi) / 2;
+    if (dist(mid) < r) lo = mid;
+    else hi = mid;
+  }
+  return hi;
+}
 const DWELL = 1.0; // auto-play: seconds a node stays lit before moving on
 const TRAVEL = 1.0; // auto-play: seconds per path
 const HOLD = 1.8; // auto-play: pause on the last node
@@ -182,9 +233,12 @@ export function mount(container: HTMLElement, { nodes, onStep, onReady }: Option
   const world = new Group();
   scene.add(world);
 
-  const tileGeometry = new RoundedBoxGeometry(TILE, TILE, 0.34, 5, 0.12);
-  const edgeGeometry = new EdgesGeometry(tileGeometry, 25);
-  const iconGeometry = new PlaneGeometry(TILE * 0.48, TILE * 0.48);
+  // Rotate the geometry (not the mesh) so the coin faces the camera; the mesh
+  // rotation is used for the gentle wobble.
+  const tileGeometry = new CylinderGeometry(NODE_R, NODE_R, NODE_DEPTH, 72, 1).rotateX(Math.PI / 2);
+  const edgeGeometry = new EdgesGeometry(tileGeometry, 25); // front and back rim circles
+  const iconGeometry = new PlaneGeometry(NODE_R * 0.96, NODE_R * 0.96);
+  const ringGeometry = new TorusGeometry(NODE_R, RING_TUBE, 8, 96);
   const labelGeometry = new PlaneGeometry(2.6, 0.32);
 
   const tiles = nodes.map((node, i) => {
@@ -195,6 +249,12 @@ export function mount(container: HTMLElement, { nodes, onStep, onReady }: Option
 
     const edgeMaterial = new LineBasicMaterial({ color: colors.muted, transparent: true, opacity: 0.55 });
     tile.add(new LineSegments(edgeGeometry, edgeMaterial));
+    // A thicker mint rim that fades in when the node lights up. Like the label,
+    // it doesn't write depth, so it can't cut into glows drawn after it.
+    const ringMaterial = new MeshBasicMaterial({ color: colors.accent, transparent: true, opacity: 0, depthWrite: false });
+    const ring = new Mesh(ringGeometry, ringMaterial);
+    ring.position.z = NODE_DEPTH / 2;
+    tile.add(ring);
 
     const iconCanvas = document.createElement('canvas');
     iconCanvas.width = iconCanvas.height = 192;
@@ -203,13 +263,13 @@ export function mount(container: HTMLElement, { nodes, onStep, onReady }: Option
     iconTexture.colorSpace = SRGBColorSpace;
     const iconMaterial = new MeshBasicMaterial({ map: iconTexture, transparent: true, color: colors.ink });
     const icon = new Mesh(iconGeometry, iconMaterial);
-    icon.position.z = 0.176;
+    icon.position.z = NODE_DEPTH / 2 + 0.004;
     tile.add(icon);
 
     const halo = new Sprite(
       new SpriteMaterial({ map: glow, color: colors.accent, transparent: true, opacity: 0, depthWrite: false, blending: AdditiveBlending }),
     );
-    halo.scale.setScalar(TILE * 3.2);
+    halo.scale.setScalar(NODE_R * 6.4);
     halo.position.z = -0.3;
 
     const labelCanvas = document.createElement('canvas');
@@ -217,9 +277,9 @@ export function mount(container: HTMLElement, { nodes, onStep, onReady }: Option
     labelCanvas.height = 80;
     const labelTexture = new CanvasTexture(labelCanvas);
     labelTexture.colorSpace = SRGBColorSpace;
-    const labelMaterial = new MeshBasicMaterial({ map: labelTexture, transparent: true, color: colors.muted });
+    const labelMaterial = new MeshBasicMaterial({ map: labelTexture, transparent: true, depthWrite: false, color: colors.muted });
     const label = new Mesh(labelGeometry, labelMaterial);
-    label.position.y = -TILE * 0.82;
+    label.position.y = -(NODE_R + 0.4);
 
     group.add(halo, tile, label);
     world.add(group);
@@ -229,12 +289,15 @@ export function mount(container: HTMLElement, { nodes, onStep, onReady }: Option
       tile,
       material,
       edgeMaterial,
+      ring,
+      ringMaterial,
       iconMaterial,
       halo,
+      label,
       labelCanvas,
       labelTexture,
       labelMaterial,
-      base: new Vector3(...LAYOUT[i]),
+      base: wavePoint(nodeX(i)),
       active: 0,
       pop: 0,
       hover: 0,
@@ -250,18 +313,18 @@ export function mount(container: HTMLElement, { nodes, onStep, onReady }: Option
   paintLabels();
   document.fonts?.ready.then(paintLabels);
 
-  const paths = tiles.slice(1).map((t, i) => {
-    const a = tiles[i].base;
-    const b = t.base;
-    const mid = a.clone().add(b).multiplyScalar(0.5);
-    mid.z += 0.9;
-    mid.y += 0.3;
-    const curve = new QuadraticBezierCurve3(a, mid, b);
+  // One continuous wave, split into segments that start and end at the rims
+  const paths = tiles.slice(1).map((_, i) => {
+    const curve = new WaveSegment(rimX(nodeX(i), 1, RIM), rimX(nodeX(i + 1), -1, RIM));
     const base = new Mesh(
-      new TubeGeometry(curve, 64, 0.014, 6),
+      new TubeGeometry(curve, TUBE_SEG, 0.014, TUBE_RAD),
       new MeshBasicMaterial({ color: colors.ink, transparent: true, opacity: 0.18 }),
     );
-    const lit = new Mesh(new TubeGeometry(curve, 64, 0.026, 6), new MeshBasicMaterial({ color: colors.accent }));
+    const lit = new Mesh(
+      new TubeGeometry(curve, TUBE_SEG, 0.026, TUBE_RAD),
+      new MeshBasicMaterial({ color: colors.accent }),
+    );
+    lit.geometry.setDrawRange(0, 0);
     world.add(base, lit);
     return { curve, base, lit };
   });
@@ -364,11 +427,11 @@ export function mount(container: HTMLElement, { nodes, onStep, onReady }: Option
     // Framing between hero and story
     // Story framing sits a little high, leaving the bottom for the caption
     const f = ease(clamp01(focus));
-    world.position.set(mix(heroFrame.x, 0, f), mix(heroFrame.y, storyY, f), 0);
+    world.position.set(mix(heroFrame.x, 0, f), mix(heroFrame.y, storyY, f) + Math.sin(elapsed * 0.8) * 0.04, 0);
     world.scale.setScalar(mix(heroFrame.scale, storyScale, f));
 
     // Tilt and sway
-    const ty = coarse ? Math.sin(elapsed * 0.35) * 0.18 : pointer.x * 0.3;
+    const ty = coarse ? Math.sin(elapsed * 0.35) * 0.18 : pointer.x * MAX_YAW;
     const tx = coarse ? Math.sin(elapsed * 0.27) * 0.08 : pointer.y * 0.16;
     world.rotation.y += (ty - world.rotation.y) * Math.min(1, dt * 3);
     world.rotation.x += (tx - world.rotation.x) * Math.min(1, dt * 3);
@@ -393,10 +456,12 @@ export function mount(container: HTMLElement, { nodes, onStep, onReady }: Option
       t.pop = Math.max(0, t.pop - dt * 2.2);
       t.hover += ((hovered === i ? 1 : 0) - t.hover) * Math.min(1, dt * 8);
 
+      // Nodes stay put on the wave (so the rims line up with the line ends) and
+      // "breathe" in depth instead of bobbing up and down.
       t.group.position.copy(t.base);
-      t.group.position.y += Math.sin(elapsed * 1.1 + i * 1.3) * 0.06;
-      t.group.scale.setScalar(1 + Math.sin(t.pop * Math.PI) * 0.14 + t.hover * 0.07);
-      t.tile.rotation.y = Math.sin(elapsed * 0.55 + i) * 0.1;
+      t.tile.position.z = Math.sin(elapsed * 1.1 + i * 1.3) * 0.03;
+      t.group.scale.setScalar(1 + Math.sin(t.pop * Math.PI) * POP + t.hover * HOVER);
+      t.tile.rotation.y = Math.sin(elapsed * 0.55 + i) * WOBBLE;
       t.tile.rotation.x = Math.cos(elapsed * 0.45 + i) * 0.06;
 
       t.material.color.copy(colors.tile).lerp(colors.tileLit, t.active);
@@ -406,15 +471,16 @@ export function mount(container: HTMLElement, { nodes, onStep, onReady }: Option
       t.labelMaterial.color.copy(tint.copy(colors.muted).lerp(colors.ink, Math.max(t.active * 0.6, t.hover)));
       // Labels only appear once the network takes center stage
       t.labelMaterial.opacity = Math.max(f, t.hover);
+      t.label.visible = t.labelMaterial.opacity > 0.01;
       t.halo.material.opacity = t.active * 0.22 + Math.sin(t.pop * Math.PI) * 0.35;
+      t.ringMaterial.opacity = t.active * 0.9;
+      t.ring.visible = t.active > 0.01;
     });
 
     paths.forEach((p, i) => {
-      const local = clamp01(s - i);
-      const index = p.lit.geometry.index!;
-      const triangles = Math.floor((index.count / 3) * local);
-      p.lit.geometry.setDrawRange(0, triangles * 3);
-      p.lit.visible = triangles > 0;
+      const count = Math.floor(clamp01(s - i) * TUBE_SEG * TUBE_RAD) * 6;
+      p.lit.geometry.setDrawRange(0, count);
+      p.lit.visible = count > 0;
     });
 
     const segment = Math.min(n - 2, Math.floor(s));
@@ -422,7 +488,10 @@ export function mount(container: HTMLElement, { nodes, onStep, onReady }: Option
     const moving = along > 0.001 && along < 0.999 && s < n - 1;
     pulse.visible = moving;
     if (moving) {
-      paths[segment].curve.getPoint(along, pulse.position);
+      // Arc-length position matches how the tube was built; the pulse grows out
+      // of one rim and sinks into the next.
+      paths[segment].curve.getPointAt(along, pulse.position);
+      pulse.scale.setScalar(Math.min(1, along / 0.06, (1 - along) / 0.06));
       pulseGlow.scale.setScalar(1 + Math.sin(elapsed * 12) * 0.12);
     }
   }

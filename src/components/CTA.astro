@@ -29,7 +29,13 @@ const {
         <a href={ctaHref} class="btn-signal" data-magnetic>
           Book a free call <span class="text-accent" aria-hidden="true">↗</span>
         </a>
-        <a href={`mailto:${site.email}`} class="btn-ghost" data-magnetic>Email me</a>
+        {
+          site.email && (
+            <a href={`mailto:${site.email}`} class="btn-ghost" data-magnetic>
+              Email me
+            </a>
+          )
+        }
       </div>
     </div>
   </div>

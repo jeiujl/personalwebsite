@@ -1,33 +1,44 @@
 ---
 // Static version of the automation network, shown when the 3D scene doesn't
-// run (reduced motion, Save-Data, no GPU acceleration, no JavaScript).
+// run (reduced motion, Save-Data, no GPU acceleration, no JavaScript). Same
+// shape as the 3D one: round nodes threaded on one smooth wave.
 import { iconPaths, type IconName } from '../lib/icons';
 
 interface Props {
   nodes: { icon: IconName; label: string }[];
 }
 const { nodes } = Astro.props;
-// Tile centers as percentages of the box (zig-zag, left to right)
+
+// Node centres as % of the box (2.2:1): mid, high, mid, low, mid
 const points = [
-  [9, 62],
-  [29, 28],
-  [50, 70],
-  [71, 30],
-  [91, 64],
+  [9, 50],
+  [29.5, 26],
+  [50, 50],
+  [70.5, 74],
+  [91, 50],
 ];
-const curve = (a: number[], b: number[]) => {
-  const mx = (a[0] + b[0]) / 2;
-  const my = Math.min(a[1], b[1]) - 8;
-  return `M ${a[0]} ${a[1]} Q ${mx} ${my} ${b[0]} ${b[1]}`;
+const W = 2.2; // viewBox is 220 × 100 so the wave isn't squashed
+const AMP = 24; // % of height from the midline to a peak
+const slope = [-1, 0, 1, 0, -1]; // direction of the wave at each node (SVG y points down)
+
+// Cubic segments that share tangents at every node, so the four pieces read
+// as one continuous sine-like wave.
+const segment = (i: number) => {
+  const [x0, y0] = points[i];
+  const [x1, y1] = points[i + 1];
+  const hx = ((x1 - x0) * W) / 3;
+  const hy0 = (slope[i] * AMP * Math.PI) / 6;
+  const hy1 = (slope[i + 1] * AMP * Math.PI) / 6;
+  return `M ${x0 * W} ${y0} C ${x0 * W + hx} ${y0 + hy0} ${x1 * W - hx} ${y1 - hy1} ${x1 * W} ${y1}`;
 };
 ---
 
 <div class="relative aspect-[2.2/1] w-full" aria-hidden="true">
-  <svg class="absolute inset-0 h-full w-full overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <svg class="absolute inset-0 h-full w-full overflow-visible" viewBox="0 0 220 100" preserveAspectRatio="none">
     {
-      points.slice(1).map((p, i) => (
+      points.slice(1).map((_, i) => (
         <path
-          d={curve(points[i], p)}
+          d={segment(i)}
           fill="none"
           stroke={i === 0 ? 'var(--accent)' : 'var(--ink)'}
           stroke-opacity={i === 0 ? 1 : 0.2}
@@ -39,19 +50,18 @@ const curve = (a: number[], b: number[]) => {
   </svg>
   {
     nodes.map((node, i) => (
-      <div
-        class="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-2"
-        style={`left:${points[i][0]}%;top:${points[i][1]}%`}
-      >
+      <div class="absolute -translate-x-1/2 -translate-y-1/2" style={`left:${points[i][0]}%;top:${points[i][1]}%`}>
+        {/* Only the circle is centred on the wave; the label hangs below it.
+            The background-coloured ring leaves a small gap where the line meets the circle */}
         <span
           class:list={[
-            'flex size-11 items-center justify-center border bg-[#121311] sm:size-14',
+            'flex size-11 items-center justify-center rounded-full border bg-[#121311] ring-4 ring-bg sm:size-14 sm:ring-[5px]',
             i < 2 ? 'border-accent text-accent' : 'border-line text-ink',
           ]}
         >
           <svg
-            width="22"
-            height="22"
+            width="20"
+            height="20"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -62,7 +72,7 @@ const curve = (a: number[], b: number[]) => {
             <path d={iconPaths[node.icon]} />
           </svg>
         </span>
-        <span class="mono hidden text-[10px] whitespace-nowrap text-muted sm:block">
+        <span class="mono absolute top-full left-1/2 mt-2 hidden -translate-x-1/2 text-[10px] whitespace-nowrap text-muted sm:block">
           {String(i + 1).padStart(2, '0')} {node.label}
         </span>
       </div>
