@@ -18,10 +18,39 @@ export default defineConfig({
   adapter: vercel({ webAnalytics: { enabled: true } }),
   integrations: [sitemap()],
   vite: { plugins: [tailwindcss()] },
+  // All fonts are self-hosted from installed @fontsource packages, so builds
+  // don't depend on a font CDN.
   fonts: [
     {
-      // Self-hosted from the installed @fontsource-variable/geist package, so
-      // builds don't depend on a font CDN.
+      // Display: condensed monument headlines
+      provider: fontProviders.local(),
+      name: 'Anton',
+      cssVariable: '--font-anton',
+      options: {
+        variants: [
+          { src: ['@fontsource/anton/files/anton-latin-400-normal.woff2'], weight: '400', style: 'normal' },
+        ],
+      },
+      fallbacks: ['Impact', 'Arial Narrow', 'sans-serif'],
+    },
+    {
+      // Mono: nav, tags, labels and metadata
+      provider: fontProviders.local(),
+      name: 'Geist Mono',
+      cssVariable: '--font-geist-mono',
+      options: {
+        variants: [
+          {
+            src: ['@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2'],
+            weight: '100 900',
+            style: 'normal',
+          },
+        ],
+      },
+      fallbacks: ['ui-monospace', 'monospace'],
+    },
+    {
+      // Text: headings and body
       provider: fontProviders.local(),
       name: 'Geist',
       cssVariable: '--font-geist',

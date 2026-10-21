@@ -1,81 +1,74 @@
 ---
-// A drawn preview used when a project has no cover image. Three variants that
-// hint at the kind of work: a browser window, a phone, or a workflow.
+// A drawn preview used when a project has no cover image: a dark panel with
+// hairlines, tinted with the project's service color.
+import { disciplines, type Discipline } from '../lib/disciplines';
+
 interface Props {
-  category: 'website' | 'app' | 'automation';
+  category: Discipline;
   class?: string;
 }
 const { category, class: className = '' } = Astro.props;
+const hue = disciplines[category].hue;
+const kind = category === 'crm' || category === 'ai' ? 'automation' : category;
 ---
 
 <div
-  class:list={[
-    'relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-accent-soft',
-    className,
-  ]}
+  data-surface="dark"
+  class:list={['cover relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-bg', className]}
+  style={`--hue:${hue}`}
   aria-hidden="true"
 >
-  <div
-    class="absolute -top-16 -right-16 size-56 rounded-full bg-accent opacity-15 blur-2xl"
-  >
-  </div>
+  <div class="cover-grid absolute inset-0"></div>
+  <div class="absolute -right-10 -bottom-16 size-56 rounded-full opacity-30 blur-3xl" style="background:var(--hue)"></div>
   {
-    category === 'website' && (
-      <div class="relative w-[78%] overflow-hidden rounded-lg border border-line bg-surface shadow-lg">
+    kind === 'website' && (
+      <div class="relative w-[74%] border border-line bg-surface">
         <div class="flex items-center gap-1.5 border-b border-line px-3 py-2">
-          <span class="size-2 rounded-full bg-line" />
-          <span class="size-2 rounded-full bg-line" />
-          <span class="size-2 rounded-full bg-line" />
-          <span class="ml-3 h-2 w-1/3 rounded-full bg-surface-2" />
+          <span class="size-1.5 rounded-full bg-line" />
+          <span class="size-1.5 rounded-full bg-line" />
+          <span class="size-1.5 rounded-full bg-line" />
         </div>
-        <div class="grid grid-cols-[1.4fr_1fr] gap-4 p-5">
-          <div class="space-y-2.5">
-            <div class="h-3 w-11/12 rounded-full bg-ink/80" />
-            <div class="h-3 w-3/4 rounded-full bg-ink/80" />
-            <div class="h-2 w-full rounded-full bg-line" />
-            <div class="h-2 w-5/6 rounded-full bg-line" />
-            <div class="mt-3 h-5 w-24 rounded-full bg-accent" />
+        <div class="grid grid-cols-[1.5fr_1fr] gap-4 p-5">
+          <div class="space-y-2">
+            <div class="h-5 w-11/12 bg-ink/85" />
+            <div class="h-5 w-2/3 bg-ink/85" />
+            <div class="mt-3 h-1.5 w-full bg-line" />
+            <div class="h-1.5 w-4/5 bg-line" />
+            <div class="mt-4 h-5 w-20 rounded-full border" style="border-color:var(--hue)" />
           </div>
-          <div class="rounded-md bg-surface-2" />
+          <div class="border border-line" style="background:color-mix(in srgb, var(--hue) 22%, transparent)" />
         </div>
       </div>
     )
   }
   {
-    category === 'app' && (
+    kind === 'app' && (
       <div class="relative flex items-end gap-4">
-        <div class="h-44 w-24 translate-y-3 rounded-[1.25rem] border border-line bg-surface p-2 shadow-md">
-          <div class="h-full space-y-1.5 rounded-xl bg-surface-2 p-2">
-            <div class="h-10 rounded-md bg-accent/25" />
-            <div class="h-2 w-3/4 rounded-full bg-line" />
-            <div class="h-2 w-1/2 rounded-full bg-line" />
-          </div>
+        <div class="h-40 w-[5.5rem] translate-y-3 rounded-[1.1rem] border border-line bg-surface p-2">
+          <div class="h-12 rounded-md" style="background:color-mix(in srgb, var(--hue) 30%, transparent)" />
+          <div class="mt-2 h-1.5 w-3/4 bg-line" />
+          <div class="mt-1.5 h-1.5 w-1/2 bg-line" />
         </div>
-        <div class="h-52 w-28 rounded-[1.4rem] border border-line bg-surface p-2 shadow-lg">
-          <div class="flex h-full flex-col gap-1.5 rounded-xl bg-surface-2 p-2">
-            <div class="h-2 w-1/2 rounded-full bg-ink/70" />
-            <div class="h-8 rounded-md border border-line bg-surface" />
-            <div class="h-8 rounded-md border-2 border-accent bg-surface" />
-            <div class="h-8 rounded-md border border-line bg-surface" />
-            <div class="mt-auto h-5 rounded-full bg-accent" />
-          </div>
+        <div class="flex h-48 w-[6.5rem] flex-col gap-1.5 rounded-[1.25rem] border border-line bg-surface p-2.5">
+          <div class="h-1.5 w-1/2 bg-ink/70" />
+          <div class="h-7 border border-line" />
+          <div class="h-7 border" style="border-color:var(--hue)" />
+          <div class="h-7 border border-line" />
+          <div class="mt-auto h-5 rounded-full border border-accent" />
         </div>
       </div>
     )
   }
   {
-    category === 'automation' && (
-      <div class="relative flex w-[82%] items-center">
+    kind === 'automation' && (
+      <div class="relative flex w-[80%] items-center">
         {[0, 1, 2, 3].map((i) => (
           <>
-            {i > 0 && <div class="h-0.5 flex-1 bg-accent/50" />}
+            {i > 0 && <div class:list={['h-px flex-1', i < 3 ? 'bg-accent' : 'bg-line']} />}
             <div
-              class:list={[
-                'flex size-12 shrink-0 items-center justify-center rounded-xl border bg-surface shadow-sm sm:size-14',
-                i === 3 ? 'border-accent' : 'border-line',
-              ]}
+              class:list={['flex size-11 shrink-0 items-center justify-center border bg-surface sm:size-13', i < 3 ? 'border-accent' : 'border-line']}
             >
-              <div class:list={['size-4 rounded-full', i === 3 ? 'bg-accent' : 'bg-line']} />
+              <div class="size-2.5" style={i === 3 ? 'background:var(--line)' : 'background:var(--hue)'} />
             </div>
           </>
         ))}
@@ -83,3 +76,12 @@ const { category, class: className = '' } = Astro.props;
     )
   }
 </div>
+
+<style>
+  .cover-grid {
+    background-image:
+      linear-gradient(to right, var(--grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+</style>

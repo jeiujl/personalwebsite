@@ -1,80 +1,123 @@
 ---
 import { ctaHref, nav, site } from '../config/site';
-import Icon from './Icon.astro';
-import ThemeToggle from './ThemeToggle.astro';
 
 const current = Astro.url.pathname;
 const isActive = (href: string) => current === href || current.startsWith(`${href}/`);
 ---
 
-<header class="sticky top-0 z-40 border-b border-line/70 bg-bg/85 backdrop-blur">
+<header
+  id="site-header"
+  data-surface="dark"
+  class="sticky top-0 z-50 border-b border-line/50 bg-bg transition-colors duration-300"
+>
   <div class="container-page flex h-16 items-center justify-between gap-4">
-    <a href="/" class="flex items-center gap-2.5 font-semibold tracking-tight">
-      <span
-        class="inline-flex size-8 items-center justify-center rounded-full bg-accent text-xs font-bold text-accent-ink"
-        aria-hidden="true">{site.initials}</span
-      >
-      <span>{site.name}</span>
+    <a href="/" class="flex items-center gap-2 text-[16px] font-semibold tracking-[-0.02em] text-ink">
+      {site.name}
+      <span class="text-accent" aria-hidden="true">✦</span>
     </a>
 
-    <nav aria-label="Main" class="hidden items-center gap-1 md:flex">
+    <nav aria-label="Main" class="hidden items-center gap-1.5 md:flex">
       {
-        nav.map((item) => (
-          <a
-            href={item.href}
-            aria-current={isActive(item.href) ? 'page' : undefined}
-            class:list={[
-              'rounded-full px-3.5 py-2 text-sm font-medium transition-colors',
-              isActive(item.href) ? 'text-ink' : 'text-muted hover:text-ink',
-            ]}
-          >
-            {item.label}
-          </a>
-        ))
+        nav.map((item) => {
+          const active = isActive(item.href);
+          return (
+            <a
+              href={item.href}
+              aria-current={active ? 'page' : undefined}
+              class:list={[
+                'mono flex items-center gap-1.5 rounded-full border px-3 py-[7px] text-[12px] leading-none transition-colors',
+                active ? 'border-ink/40 text-ink' : 'border-transparent text-muted hover:border-line hover:text-ink',
+              ]}
+            >
+              <span class:list={[active ? 'text-accent' : 'text-muted']} aria-hidden="true">
+                {active ? '•' : '+'}
+              </span>
+              {item.label}
+            </a>
+          );
+        })
       }
     </nav>
 
     <div class="flex items-center gap-2">
-      <ThemeToggle />
-      <a href={ctaHref} class="btn-primary hidden sm:inline-flex">Book a free call</a>
+      <a href={ctaHref} class="btn-signal hidden px-4 py-2 text-[14px] sm:inline-flex">
+        Book a call <span class="text-accent" aria-hidden="true">↗</span>
+      </a>
       <button
         type="button"
         id="menu-button"
-        class="inline-flex size-9 items-center justify-center rounded-full border border-line md:hidden"
+        class="mono rounded-full border border-line px-3.5 py-[7px] text-[12px] leading-none text-ink md:hidden"
         aria-controls="mobile-menu"
         aria-expanded="false"
-        aria-label="Open menu"
       >
-        <Icon name="menu" size={18} />
+        Menu
       </button>
     </div>
   </div>
-
-  <nav id="mobile-menu" aria-label="Mobile" class="hidden border-t border-line md:hidden">
-    <div class="container-page flex flex-col py-3">
-      {
-        nav.map((item) => (
-          <a
-            href={item.href}
-            aria-current={isActive(item.href) ? 'page' : undefined}
-            class="rounded-lg px-2 py-3 text-base font-medium text-ink hover:bg-surface-2"
-          >
-            {item.label}
-          </a>
-        ))
-      }
-      <a href={ctaHref} class="btn-primary mt-2">Book a free call</a>
-    </div>
-  </nav>
 </header>
 
+<div
+  id="mobile-menu"
+  data-surface="dark"
+  class="fixed inset-0 z-40 hidden flex-col bg-bg pt-20 md:hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menu"
+>
+  <nav aria-label="Mobile" class="container-page flex flex-1 flex-col justify-center gap-1">
+    <a href="/" class="monument text-[clamp(56px,17vw,96px)] text-ink">Home</a>
+    {
+      nav.map((item) => (
+        <a
+          href={item.href}
+          aria-current={isActive(item.href) ? 'page' : undefined}
+          class:list={['monument text-[clamp(56px,17vw,96px)]', isActive(item.href) ? 'text-accent' : 'text-ink']}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
+  <div class="container-page flex flex-wrap items-center gap-3 border-t border-line py-6">
+    <a href={ctaHref} class="btn-signal">Book a free call <span class="text-accent" aria-hidden="true">↗</span></a>
+    <a href={`mailto:${site.email}`} class="arrow-link">{site.email}</a>
+  </div>
+</div>
+
 <script>
-  const button = document.getElementById('menu-button');
-  const menu = document.getElementById('mobile-menu');
-  button?.addEventListener('click', () => {
-    const open = button.getAttribute('aria-expanded') === 'true';
-    button.setAttribute('aria-expanded', String(!open));
-    button.setAttribute('aria-label', open ? 'Open menu' : 'Close menu');
-    menu?.classList.toggle('hidden', open);
-  });
+  // Mobile menu
+  const button = document.getElementById('menu-button')!;
+  const menu = document.getElementById('mobile-menu')!;
+  const setOpen = (open: boolean) => {
+    button.setAttribute('aria-expanded', String(open));
+    button.textContent = open ? 'Close' : 'Menu';
+    menu.classList.toggle('hidden', !open);
+    menu.classList.toggle('flex', open);
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+  };
+  button.addEventListener('click', () => setOpen(button.getAttribute('aria-expanded') !== 'true'));
+  document.addEventListener('keydown', (e) => e.key === 'Escape' && setOpen(false));
+
+  // Match the header to whatever surface sits underneath it: dark over the
+  // heroes and bands, light over the pages.
+  const header = document.getElementById('site-header')!;
+  const darkSections = [...document.querySelectorAll('[data-band][data-surface="dark"]')];
+  const under = new Set<Element>();
+  let observer: IntersectionObserver | undefined;
+  const watch = () => {
+    observer?.disconnect();
+    under.clear();
+    // A 1px line just under the header's bottom edge decides its look.
+    const edge = header.offsetHeight;
+    observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => (e.isIntersecting ? under.add(e.target) : under.delete(e.target)));
+        header.dataset.surface = under.size ? 'dark' : 'light';
+      },
+      { rootMargin: `-${edge}px 0px -${window.innerHeight - edge - 1}px 0px` },
+    );
+    darkSections.forEach((section) => observer!.observe(section));
+  };
+  watch();
+  addEventListener('resize', watch, { passive: true });
 </script>

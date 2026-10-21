@@ -1,34 +1,36 @@
 ---
 import { ctaHref, site } from '../config/site';
-import Icon from './Icon.astro';
+import Starfield from './Starfield.astro';
 
 interface Props {
   title?: string;
   text?: string;
 }
 const {
-  title = "Let's talk about your business",
+  title = "Let's talk",
   text = "Tell me what's slowing you down. In a free 20-minute call I'll suggest where a better website or a few automations would make the biggest difference. No pressure, no jargon.",
 } = Astro.props;
 ---
 
-<section class="container-page mt-24">
-  <div
-    class="relative overflow-hidden rounded-3xl border border-line bg-accent-soft px-6 py-14 text-center sm:px-12"
-    data-reveal
-  >
-    <div class="absolute -top-24 -left-24 size-72 rounded-full bg-accent opacity-10 blur-3xl" aria-hidden="true"></div>
-    <h2 class="relative mx-auto max-w-2xl text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-      {title}
-    </h2>
-    <p class="relative mx-auto mt-4 max-w-xl text-lg text-pretty text-muted">{text}</p>
-    <div class="relative mt-8 flex flex-wrap items-center justify-center gap-3">
-      <a href={ctaHref} class="btn-primary px-6 py-3 text-base" data-magnetic>
-        <Icon name="calendar" size={18} /> Book a free call
-      </a>
-      <a href={`mailto:${site.email}`} class="btn-secondary px-6 py-3 text-base" data-magnetic>
-        <Icon name="mail" size={18} /> Email me
-      </a>
+<section data-surface="dark" data-band class="relative mt-24 overflow-hidden bg-bg py-20 sm:py-28">
+  <Starfield count={60} seed={41} />
+  <div class="container-page relative" data-reveal>
+    <p class="eyebrow">Next step</p>
+    <a href={ctaHref} class="group mt-6 flex items-start gap-3 sm:gap-6">
+      <h2 class="monument monument-fade text-[clamp(72px,16vw,224px)]">{title}</h2>
+      <span
+        class="monument text-[clamp(48px,10vw,140px)] text-accent transition-transform duration-500 ease-[var(--ease-settle)] group-hover:translate-x-2 group-hover:-translate-y-2"
+        aria-hidden="true">↗</span
+      >
+    </a>
+    <div class="mt-10 grid gap-6 border-t border-line pt-6 md:grid-cols-[1fr_auto] md:items-center">
+      <p class="max-w-xl text-pretty text-muted">{text}</p>
+      <div class="flex flex-wrap gap-3">
+        <a href={ctaHref} class="btn-signal" data-magnetic>
+          Book a free call <span class="text-accent" aria-hidden="true">↗</span>
+        </a>
+        <a href={`mailto:${site.email}`} class="btn-ghost" data-magnetic>Email me</a>
+      </div>
     </div>
   </div>
 </section>

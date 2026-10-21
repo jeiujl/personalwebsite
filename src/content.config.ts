@@ -1,6 +1,7 @@
 import { defineCollection, reference } from 'astro:content';
 import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { disciplineKeys } from './lib/disciplines';
 import { inquiryTypes } from './lib/inquiry';
 
 // `sample: true` marks placeholder content. It shows a small "Sample" badge on
@@ -15,7 +16,7 @@ const projects = defineCollection({
       title: z.string(),
       client: z.string(),
       summary: z.string(),
-      category: z.enum(['website', 'app', 'automation']),
+      category: z.enum(disciplineKeys),
       role: z.string(),
       tools: z.array(z.string()).default([]),
       year: z.number().int(),
@@ -54,6 +55,7 @@ const services = defineCollection({
   loader: glob({ pattern: '**/*.yaml', base: './src/content/services' }),
   schema: z.object({
     pillar: z.enum(['design', 'automation']),
+    discipline: z.enum(disciplineKeys),
     title: z.string(),
     summary: z.string(),
     deliverables: z.array(z.string()),

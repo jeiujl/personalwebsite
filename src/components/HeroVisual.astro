@@ -1,50 +1,71 @@
 ---
-// Illustration for the homepage hero: a website on one side, and the kind of
-// automated messages a client's business could be sending on the other.
-import Icon from './Icon.astro';
+// Static version of the automation network, shown when the 3D scene doesn't
+// run (reduced motion, Save-Data, no GPU acceleration, no JavaScript).
+import { iconPaths, type IconName } from '../lib/icons';
+
+interface Props {
+  nodes: { icon: IconName; label: string }[];
+}
+const { nodes } = Astro.props;
+// Tile centers as percentages of the box (zig-zag, left to right)
+const points = [
+  [9, 62],
+  [29, 28],
+  [50, 70],
+  [71, 30],
+  [91, 64],
+];
+const curve = (a: number[], b: number[]) => {
+  const mx = (a[0] + b[0]) / 2;
+  const my = Math.min(a[1], b[1]) - 8;
+  return `M ${a[0]} ${a[1]} Q ${mx} ${my} ${b[0]} ${b[1]}`;
+};
 ---
 
-<div class="relative mx-auto w-full max-w-md lg:max-w-none" aria-hidden="true">
-  <div class="absolute -inset-3 rounded-[2rem] bg-accent-soft sm:-inset-6"></div>
-  <div class="absolute -top-10 right-0 size-48 rounded-full bg-accent opacity-15 blur-3xl"></div>
-
-  <div class="relative overflow-hidden rounded-2xl border border-line bg-surface shadow-xl">
-    <div class="flex items-center gap-1.5 border-b border-line px-4 py-3">
-      <span class="size-2.5 rounded-full bg-line"></span>
-      <span class="size-2.5 rounded-full bg-line"></span>
-      <span class="size-2.5 rounded-full bg-line"></span>
-      <span class="ml-3 h-2.5 w-40 rounded-full bg-surface-2"></span>
-    </div>
-    <div class="space-y-3 p-6 pb-28 sm:p-8 sm:pb-32">
-      <div class="h-4 w-3/4 rounded-full bg-ink/85"></div>
-      <div class="h-4 w-1/2 rounded-full bg-ink/85"></div>
-      <div class="h-2.5 w-full rounded-full bg-line"></div>
-      <div class="h-2.5 w-5/6 rounded-full bg-line"></div>
-      <div class="flex gap-2 pt-2">
-        <div class="h-8 w-28 rounded-full bg-accent"></div>
-        <div class="h-8 w-24 rounded-full border border-line"></div>
+<div class="relative aspect-[2.2/1] w-full" aria-hidden="true">
+  <svg class="absolute inset-0 h-full w-full overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none">
+    {
+      points.slice(1).map((p, i) => (
+        <path
+          d={curve(points[i], p)}
+          fill="none"
+          stroke={i === 0 ? 'var(--accent)' : 'var(--ink)'}
+          stroke-opacity={i === 0 ? 1 : 0.2}
+          stroke-width="1.2"
+          vector-effect="non-scaling-stroke"
+        />
+      ))
+    }
+  </svg>
+  {
+    nodes.map((node, i) => (
+      <div
+        class="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-2"
+        style={`left:${points[i][0]}%;top:${points[i][1]}%`}
+      >
+        <span
+          class:list={[
+            'flex size-11 items-center justify-center border bg-[#121311] sm:size-14',
+            i < 2 ? 'border-accent text-accent' : 'border-line text-ink',
+          ]}
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d={iconPaths[node.icon]} />
+          </svg>
+        </span>
+        <span class="mono hidden text-[10px] whitespace-nowrap text-muted sm:block">
+          {String(i + 1).padStart(2, '0')} {node.label}
+        </span>
       </div>
-    </div>
-  </div>
-
-  <div class="absolute right-3 -bottom-8 left-10 space-y-2.5 sm:right-6 sm:left-16">
-    <div class="flex items-start gap-3 rounded-2xl border border-line bg-surface p-3.5 shadow-lg">
-      <span class="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-surface-2 text-muted">
-        <Icon name="phone" size={16} />
-      </span>
-      <div class="text-sm">
-        <p class="font-semibold">Missed call · 2:14 PM</p>
-        <p class="text-muted">Auto-text sent: "Sorry we missed you! How can we help?"</p>
-      </div>
-    </div>
-    <div class="flex items-start gap-3 rounded-2xl border border-accent/40 bg-surface p-3.5 shadow-lg">
-      <span class="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-accent text-accent-ink">
-        <Icon name="check" size={16} />
-      </span>
-      <div class="text-sm">
-        <p class="font-semibold">Appointment booked</p>
-        <p class="text-muted">Tue 10:00 AM · reminder scheduled</p>
-      </div>
-    </div>
-  </div>
+    ))
+  }
 </div>

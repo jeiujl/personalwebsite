@@ -1,0 +1,83 @@
+---
+// GSAP-style "tool feature" row: a soft 3D shape in the service color, the
+// colored service label, a heading, copy and an outlined Explore pill.
+import type { CollectionEntry } from 'astro:content';
+import { disciplines } from '../lib/disciplines';
+
+interface Props {
+  service: CollectionEntry<'services'>;
+  index: number;
+}
+const { service, index } = Astro.props;
+const { title, summary, idealFor, discipline } = service.data;
+const { label, hue } = disciplines[discipline];
+const flip = index % 2 === 1;
+---
+
+<article class="grid items-center gap-10 border-t border-line py-14 md:grid-cols-12 md:gap-12 md:py-20" data-reveal>
+  <div class:list={['md:col-span-5', flip && 'md:order-2 md:col-start-8']}>
+    <div class="shape-stage relative mx-auto aspect-square w-full max-w-[22rem]" style={`--hue:${hue}`} aria-hidden="true">
+      <div class:list={['shape', `shape-${discipline}`]}></div>
+    </div>
+  </div>
+  <div class:list={['md:col-span-6', flip ? 'md:order-1 md:col-start-1' : 'md:col-start-7']}>
+    <p class="mono flex items-center gap-2 text-[12px]">
+      <span class="tag-dot size-2" style={`background:${hue}`}></span>
+      <span class="text-muted">{String(index + 1).padStart(2, '0')}</span>
+      {label}
+    </p>
+    <h3 class="heading mt-5 text-4xl sm:text-5xl">{title}</h3>
+    <p class="mt-5 max-w-xl text-lg text-muted">{summary}</p>
+    <p class="mt-4 max-w-xl text-[15px]"><span class="mono text-[11px] text-muted">Ideal for · </span>{idealFor}</p>
+    <div class="mt-8 flex flex-wrap items-center gap-5">
+      <a href={`/services#${service.id}`} class="btn-ghost">Explore <span class="text-accent" aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+</article>
+
+<style>
+  /* Soft "3D" shapes lit from within by layered gradients (no shadows) */
+  .shape {
+    position: absolute;
+    inset: 12%;
+    background:
+      radial-gradient(circle at 32% 28%, #fff 0%, color-mix(in srgb, var(--hue) 35%, #fff) 18%, transparent 46%),
+      radial-gradient(circle at 70% 78%, color-mix(in srgb, var(--hue) 70%, #000) 0%, transparent 58%),
+      var(--hue);
+  }
+  .shape-website {
+    border-radius: 50% 50% 18% 18% / 60% 60% 14% 14%;
+  }
+  .shape-app {
+    inset: 8% 26%;
+    border-radius: 34% / 18%;
+  }
+  .shape-crm {
+    border-radius: 50%;
+    mask: radial-gradient(circle, transparent 27%, #000 28%);
+  }
+  .shape-ai {
+    border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .shape-ai {
+      animation: morph 9s ease-in-out infinite alternate;
+    }
+    .shape-website,
+    .shape-app,
+    .shape-crm {
+      animation: float 7s ease-in-out infinite alternate;
+    }
+  }
+  @keyframes morph {
+    to {
+      border-radius: 58% 42% 38% 62% / 55% 61% 39% 45%;
+      transform: rotate(12deg);
+    }
+  }
+  @keyframes float {
+    to {
+      transform: translateY(-4%) rotate(-4deg);
+    }
+  }
+</style>

@@ -1,0 +1,33 @@
+---
+// Dark top band for inner pages: eyebrow, monument title, intro.
+import Starfield from './Starfield.astro';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  intro?: string;
+}
+const { eyebrow, title, intro } = Astro.props;
+---
+
+<section data-surface="dark" data-band class="relative overflow-hidden bg-bg pt-16 pb-14 sm:pt-24 sm:pb-20">
+  <Starfield count={70} seed={title.length * 13} />
+  <div class="container-page relative">
+    <p class="eyebrow" data-hero-item>{eyebrow}</p>
+    <h1 class="monument mt-6 text-[clamp(72px,17vw,232px)]" data-monument>
+      {title.split('\n').map((line) => (
+        <span class="block overflow-hidden pb-[0.04em]">
+          <span class="monument-fade block" data-monument-line>{line}</span>
+        </span>
+      ))}
+    </h1>
+    {
+      intro && (
+        <div class="mt-10 grid gap-6 border-t border-line pt-6 md:grid-cols-[1fr_auto] md:items-end" data-hero-item>
+          <p class="max-w-xl text-lg text-pretty text-muted">{intro}</p>
+          <slot />
+        </div>
+      )
+    }
+  </div>
+</section>

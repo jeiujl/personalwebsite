@@ -10,7 +10,7 @@ Almost everything you'll want to change lives in a few places. Search the projec
 
 | What | Where |
 |---|---|
-| Name, headline, email, booking link, photo, resume, socials, platform name | `src/config/site.ts` |
+| Name, giant homepage headline (`heroDisplay`), sentence under it, email, booking link, photo, resume, socials, platform name | `src/config/site.ts` |
 | Case studies (one Markdown file each) | `src/content/projects/*.md` |
 | Testimonials | `src/content/testimonials/*.yaml` |
 | Services (and optional starting prices) | `src/content/services/*.yaml` |
@@ -18,18 +18,22 @@ Almost everything you'll want to change lives in a few places. Search the projec
 | Experience timeline (About page) | `src/content/experience.yaml` |
 | Bio and skills | `src/pages/about.astro` |
 | FAQ | `src/pages/services.astro` |
-| Colors and theme | `src/styles/global.css` (the tokens at the top) |
+| Colors, fonts and the four service colors | `src/styles/global.css` (tokens at the top) and `src/lib/disciplines.ts` |
+| The five automation steps in the homepage story | `src/components/HeroScene.astro` (the `steps` list) |
 
 **Sample content:** placeholder projects, testimonials and experience entries have `sample: true`, which shows a "Sample" badge on the site. Replace them with real ones (and remove the flag), or delete the file.
 
-**Adding a project:** copy one of the files in `src/content/projects/`, rename it (the file name becomes the URL, e.g. `/work/my-project/`) and edit the frontmatter. To use a real screenshot, put the image next to the file and add `cover: ./my-image.png` and `coverAlt: "…"`. Automation projects can list `workflow` steps, which are drawn as a diagram.
+**Adding a project:** copy one of the files in `src/content/projects/`, rename it (the file name becomes the URL, e.g. `/work/my-project/`) and edit the frontmatter. `category` is one of `website`, `app`, `crm` or `ai`, which sets the project's color and work filter. To use a real screenshot, put the image next to the file and add `cover: ./my-image.png` and `coverAlt: "…"`. Automation projects can list `workflow` steps, which are drawn as a diagram.
 
 **Photo / resume:** put files in `public/` (e.g. `public/images/headshot.jpg`, `public/resume.pdf`) and set `photo` / `resumeUrl` in `src/config/site.ts`.
 
-## Motion & 3D
+## Design & motion
 
-- **3D hero** (`src/components/HeroScene.astro`, `src/scripts/automation-scene.ts`): an interactive Three.js "automation network". The tiles, labels and captions are defined at the top of `HeroScene.astro`. It loads after the page has finished loading, and only on devices with real GPU acceleration. Everyone else, including people who turn off motion and speed tests like Lighthouse, sees the static illustration in `HeroVisual.astro`. Add `?3d=1` to the URL to force the scene on.
-- **Scroll animations** (`src/scripts/motion.ts`): GSAP + Lenis. Add `data-reveal` to an element to fade it in on scroll, or `data-reveal-stagger` to a grid to reveal its children one by one. Also available: `data-count` (count-up numbers), `data-magnetic` (buttons) and `data-tilt` (cards). Everything is skipped when the visitor prefers reduced motion.
+**The look** combines three references: Decide AI (one mint signal color, step bars, square cards), GSAP (warm cream on near-black, a color per service, `{ curly }` labels, outlined pill buttons) and Dylan Brouwer (dark heroes over light pages, giant condensed headlines fading from dark to light, a small mono label layer). Every page opens with a dark band (`data-surface="dark"`) and continues on light pages. Components use the same color tokens and adapt to whichever surface they sit on.
+
+- **Homepage scroll story** (`src/components/HeroScene.astro`, `src/scripts/automation-scene.ts`): a night sky with the 3D automation network beside the giant headline. On devices with real GPU acceleration, scrolling pins the section and walks through the five steps (missed call → review). Everyone else, including people who turn off motion and speed tests like Lighthouse, gets the static network and the five steps as a list. Add `?3d=1` to the URL to force the 3D story on.
+- **Scroll animations** (`src/scripts/motion.ts`): GSAP + Lenis. Add `data-reveal` to an element to fade it in on scroll, or `data-reveal-stagger` to a grid to reveal its children one by one. Also available: `data-count` (count-up numbers) and `data-magnetic` (buttons). The giant headlines rise line by line, and the marquee band speeds up as you scroll. Everything is skipped when the visitor prefers reduced motion.
+- **Fonts** are self-hosted: Anton (giant headlines), Geist (text) and Geist Mono (labels).
 
 ## Referral links
 

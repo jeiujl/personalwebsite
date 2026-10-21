@@ -2,23 +2,26 @@
 import { nav, site } from '../config/site';
 ---
 
-<footer class="mt-24 border-t border-line">
-  <div class="container-page grid gap-10 py-12 md:grid-cols-[2fr_1fr_1fr]">
+<footer data-surface="dark" data-band class="overflow-hidden border-t border-line bg-surface-2">
+  <div class="container-page grid gap-10 pt-16 pb-10 md:grid-cols-[2fr_1fr_1fr]">
     <div>
-      <p class="font-semibold">{site.name}</p>
-      <p class="mt-2 max-w-sm text-sm text-muted">{site.tagline}</p>
-      <a href={`mailto:${site.email}`} class="mt-4 inline-block text-sm font-medium text-accent">
+      <p class="eyebrow">Get in touch</p>
+      <a
+        href={`mailto:${site.email}`}
+        class="mt-4 inline-block text-2xl font-medium tracking-[-0.02em] text-ink hover:text-accent sm:text-3xl"
+      >
         {site.email}
       </a>
+      <p class="mt-3 max-w-sm text-[15px] text-muted">{site.tagline}</p>
     </div>
     <nav aria-label="Footer">
-      <p class="text-sm font-semibold">Pages</p>
-      <ul class="mt-3 space-y-2 text-sm text-muted">
-        <li><a href="/" class="hover:text-ink">Home</a></li>
+      <p class="eyebrow">Pages</p>
+      <ul class="mt-4 space-y-2">
+        <li><a href="/" class="mono text-muted hover:text-ink">Home</a></li>
         {
           nav.map((item) => (
             <li>
-              <a href={item.href} class="hover:text-ink">
+              <a href={item.href} class="mono text-muted hover:text-ink">
                 {item.label}
               </a>
             </li>
@@ -27,13 +30,13 @@ import { nav, site } from '../config/site';
       </ul>
     </nav>
     <div>
-      <p class="text-sm font-semibold">Elsewhere</p>
-      <ul class="mt-3 space-y-2 text-sm text-muted">
+      <p class="eyebrow">Elsewhere</p>
+      <ul class="mt-4 space-y-2">
         {
           site.socials.map((s) => (
             <li>
-              <a href={s.href} class="hover:text-ink" rel="me noopener" target="_blank">
-                {s.label}
+              <a href={s.href} class="mono text-muted hover:text-ink" rel="me noopener" target="_blank">
+                {s.label} <span aria-hidden="true">↗</span>
               </a>
             </li>
           ))
@@ -41,7 +44,15 @@ import { nav, site } from '../config/site';
       </ul>
     </div>
   </div>
-  <div class="container-page border-t border-line py-6 text-xs text-muted">
-    © {new Date().getFullYear()} {site.name}. All rights reserved.
+
+  <div class="container-page" aria-hidden="true">
+    <p class="monument monument-fade text-[clamp(64px,15.5vw,210px)] whitespace-nowrap">
+      {site.name}<span class="ml-[0.06em] align-top text-[0.42em] text-accent">✦</span>
+    </p>
+  </div>
+
+  <div class="container-page mono flex flex-wrap justify-between gap-3 border-t border-line py-6 text-[11px] text-muted">
+    <span>© {new Date().getFullYear()} {site.name}</span>
+    <span>{site.location}</span>
   </div>
 </footer>

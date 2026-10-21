@@ -1,17 +1,17 @@
 ---
 import CTA from '../../components/CTA.astro';
+import PageHero from '../../components/PageHero.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
-import SectionHeading from '../../components/SectionHeading.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getProjects } from '../../lib/content';
+import { disciplines, getProjects } from '../../lib/content';
+import type { Discipline } from '../../lib/disciplines';
 
 const projects = await getProjects();
-const filterLabels = { website: 'Websites', app: 'App design', automation: 'Automations' };
 const filters = [
-  { value: 'all', label: 'All work' },
-  ...Object.entries(filterLabels)
-    .filter(([value]) => projects.some((p) => p.data.category === value))
-    .map(([value, label]) => ({ value, label })),
+  { value: 'all', label: 'All work', hue: '' },
+  ...(Object.keys(disciplines) as Discipline[])
+    .filter((key) => projects.some((p) => p.data.category === key))
+    .map((key) => ({ value: key, label: disciplines[key].label, hue: disciplines[key].hue })),
 ];
 ---
 
@@ -19,35 +19,37 @@ const filters = [
   title="Work"
   description="Websites, app designs and automations I've built for small businesses, and the results they delivered."
 >
-  <section class="container-page pt-14 sm:pt-20">
-    <SectionHeading
-      as="h1"
-      eyebrow="Work"
-      title="Projects & results"
-      intro="Each project starts with a real business problem. Here's what I did and what changed."
-    />
+  <PageHero
+    eyebrow="Selected projects"
+    title="Work"
+    intro="Each project starts with a real business problem. Here's what I did and what changed."
+  />
 
-    <div class="mt-10 flex flex-wrap gap-2" role="group" aria-label="Filter projects">
-      {
-        filters.map((f, i) => (
-          <button
-            type="button"
-            data-filter={f.value}
-            aria-pressed={i === 0 ? 'true' : 'false'}
-            class="rounded-full border border-line px-4 py-2 text-sm font-medium text-muted transition-colors hover:text-ink aria-pressed:border-ink aria-pressed:bg-ink aria-pressed:text-bg"
-          >
-            {f.label}
-          </button>
-        ))
-      }
-    </div>
+  <section class="grid-lines pt-12 pb-8">
+    <div class="container-page">
+      <div class="flex flex-wrap gap-2" role="group" aria-label="Filter projects">
+        {
+          filters.map((f, i) => (
+            <button
+              type="button"
+              data-filter={f.value}
+              aria-pressed={i === 0 ? 'true' : 'false'}
+              class="mono flex items-center gap-2 rounded-full border border-line px-3.5 py-2 text-[12px] leading-none text-muted transition-colors hover:text-ink aria-pressed:border-ink aria-pressed:text-ink"
+            >
+              {f.hue ? <span class="tag-dot" style={`background:${f.hue}`} /> : <span aria-hidden="true">+</span>}
+              {f.label}
+            </button>
+          ))
+        }
+      </div>
 
-    <div id="project-grid" class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
-      {projects.map((project) => <ProjectCard project={project} headingLevel="h2" />)}
+      <div id="project-grid" class="mt-12 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
+        {projects.map((project) => <ProjectCard project={project} headingLevel="h2" />)}
+      </div>
     </div>
   </section>
 
-  <CTA title="Want results like these?" />
+  <CTA title="Your project next" />
 </BaseLayout>
 
 <script>

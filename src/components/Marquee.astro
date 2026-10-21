@@ -1,0 +1,26 @@
+---
+// Full-bleed band of giant repeating words, the divider between the dark
+// opener and the light pages. Speed follows scroll velocity (motion.ts).
+interface Props {
+  items: string[];
+}
+const { items } = Astro.props;
+const run = [...items, ...items];
+---
+
+<section data-surface="dark" data-band class="overflow-hidden border-y border-line bg-black py-6 sm:py-8" aria-hidden="true">
+  <div class="flex w-max" data-marquee>
+    {
+      [0, 1].map(() => (
+        <div class="flex shrink-0 items-center">
+          {run.map((item) => (
+            <span class="flex items-center">
+              <span class="monument px-6 text-[clamp(64px,11vw,168px)] leading-none text-ink sm:px-10">{item}</span>
+              <span class="text-[clamp(28px,4vw,56px)] leading-none text-accent">✦</span>
+            </span>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+</section>

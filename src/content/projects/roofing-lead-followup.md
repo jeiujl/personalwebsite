@@ -3,7 +3,7 @@
 title: Never miss another lead
 client: Local roofing company
 summary: Set up a CRM with missed-call text-back and automatic follow-ups, so every caller gets a response within a minute, even when the crew is on a roof.
-category: automation
+category: crm
 role: CRM setup & automation
 tools: [CRM & pipelines, Two-way texting, Online booking]
 year: 2026

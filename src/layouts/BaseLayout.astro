@@ -37,8 +37,7 @@ const structuredData = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <meta name="theme-color" content="#fafaf9" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0f0e0d" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#0b0c0b" />
 
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content={site.name} />
@@ -54,6 +53,8 @@ const structuredData = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []
     <meta name="twitter:image" content={imageUrl} />
 
     <Font cssVariable="--font-geist" preload />
+    <Font cssVariable="--font-anton" preload />
+    <Font cssVariable="--font-geist-mono" />
 
     {
       structuredData.map((data) => (
@@ -62,12 +63,9 @@ const structuredData = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []
     }
 
     <script is:inline>
-      // Apply the saved or system theme before first paint, and remember the
-      // referrer from links like /?ref=dad so the contact form can include it.
+      // Remember the referrer from links like /?ref=dad so the contact form
+      // can include it.
       try {
-        const theme = localStorage.getItem('theme');
-        const dark = theme ? theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
-        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
         const ref = new URLSearchParams(location.search).get('ref');
         if (ref) localStorage.setItem('ref', ref.slice(0, 60));
       } catch {}
@@ -76,7 +74,7 @@ const structuredData = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []
   <body class="flex min-h-screen flex-col">
     <a
       href="#main"
-      class="sr-only z-50 rounded-full bg-accent px-4 py-2 text-accent-ink focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+      class="mono sr-only z-50 rounded-full bg-[#73ffb9] px-4 py-2 text-[#0b0c0b] focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
       >Skip to content</a
     >
     <Header />

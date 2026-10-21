@@ -15,18 +15,18 @@ const preselected = params.get('service') ?? '';
 const ref = params.get('ref') ?? '';
 
 const fieldClass =
-  'mt-1.5 block w-full rounded-xl border border-line bg-surface px-3.5 py-2.5 text-base text-ink placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/25';
-const labelClass = 'block text-sm font-medium';
-const errorClass = 'mt-1.5 text-sm text-red-600 dark:text-red-400';
+  'mt-2 block w-full border border-line bg-surface px-3.5 py-3 text-base text-ink placeholder:text-muted/70 focus:border-ink focus:outline-none';
+const labelClass = 'mono block text-[12px] text-ink';
+const errorClass = 'mt-1.5 text-sm text-danger';
 ---
 
 <div id="contact-success" class:list={['card p-8 text-center', !sent && 'hidden']} role="status">
   <span
-    class="mx-auto inline-flex size-12 items-center justify-center rounded-full bg-accent-soft text-accent"
+    class="mx-auto inline-flex size-12 items-center justify-center rounded-full border border-accent text-accent"
   >
     <Icon name="check" size={24} />
   </span>
-  <h2 class="mt-4 text-xl font-semibold">Thanks, your message is on its way.</h2>
+  <h2 class="heading mt-4 text-2xl">Thanks, your message is on its way.</h2>
   <p class="mt-2 text-muted">I'll get back to you within one business day.</p>
 </div>
 
@@ -52,7 +52,7 @@ const errorClass = 'mt-1.5 text-sm text-red-600 dark:text-red-400';
   <div class="grid gap-5 sm:grid-cols-2">
     <div>
       <label for="company" class={labelClass}>
-        Business name <span class="font-normal text-muted">(optional)</span>
+        Business name <span class="text-muted">(optional)</span>
       </label>
       <input id="company" name="company" type="text" autocomplete="organization" class={fieldClass} />
     </div>
@@ -75,7 +75,7 @@ const errorClass = 'mt-1.5 text-sm text-red-600 dark:text-red-400';
   <div class="grid gap-5 sm:grid-cols-2">
     <div>
       <label for="budget" class={labelClass}>
-        Budget <span class="font-normal text-muted">(optional)</span>
+        Budget <span class="text-muted">(optional)</span>
       </label>
       <select id="budget" name="budget" class={fieldClass}>
         <option value="">Prefer not to say</option>
@@ -84,7 +84,7 @@ const errorClass = 'mt-1.5 text-sm text-red-600 dark:text-red-400';
     </div>
     <div>
       <label for="timeline" class={labelClass}>
-        Timeline <span class="font-normal text-muted">(optional)</span>
+        Timeline <span class="text-muted">(optional)</span>
       </label>
       <select id="timeline" name="timeline" class={fieldClass}>
         <option value="">Not sure</option>
@@ -116,9 +116,9 @@ const errorClass = 'mt-1.5 text-sm text-red-600 dark:text-red-400';
 
   <p id="form-error" class={errorClass} role="alert">{formError}</p>
 
-  <button type="submit" class="btn-primary w-full py-3 text-base sm:w-auto">
+  <button type="submit" class="btn-signal w-full py-3.5 text-base sm:w-auto">
     <span class="submit-label">Send message</span>
-    <Icon name="arrow-right" size={18} />
+    <span class="text-accent" aria-hidden="true">↗</span>
   </button>
 </form>
 

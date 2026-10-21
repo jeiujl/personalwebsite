@@ -1,10 +1,6 @@
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 
-export const categoryLabels = {
-  website: 'Website',
-  app: 'App design',
-  automation: 'Automation',
-} as const satisfies Record<CollectionEntry<'projects'>['data']['category'], string>;
+export { disciplines } from './disciplines';
 
 const byOrder = <T extends { data: { order: number } }>(a: T, b: T) => a.data.order - b.data.order;
 

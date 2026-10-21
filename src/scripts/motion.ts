@@ -1,13 +1,17 @@
-// Site-wide motion: smooth scrolling, scroll reveals, the hero headline,
-// workflow diagrams that light up, counting metrics, magnetic buttons and
-// card tilt. Nothing here runs for people who prefer reduced motion, and
-// "before" states are only set by JavaScript, so content is never stuck hidden.
+// Site-wide motion: smooth scrolling, monument headline reveals, scroll
+// reveals, the marquee, workflow diagrams that light up, counting metrics and
+// magnetic buttons. Nothing here runs for people who prefer reduced motion,
+// and "before" states are only set by JavaScript, so content is never stuck
+// hidden. (The homepage scroll story lives in HeroScene.astro.)
 import { gsap } from 'gsap';
+import { CustomEase } from 'gsap/CustomEase';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { SplitText } from 'gsap/SplitText';
 import Lenis from 'lenis';
 
-const EASE = 'power3.out';
+// Weighted, never bouncy: fast start with a gentle settle, and a slow start
+// with a decisive finish.
+const EASE = 'settle';
+const DECISIVE = 'decisive';
 
 function smoothScroll() {
   const lenis = new Lenis({ lerp: 0.12, autoRaf: false });
@@ -16,16 +20,42 @@ function smoothScroll() {
   gsap.ticker.lagSmoothing(0);
 }
 
-function heroTitle() {
-  const title = document.querySelector<HTMLElement>('[data-hero-title]');
-  if (!title) return;
-  const split = SplitText.create(title, { type: 'words', mask: 'words', aria: 'auto' });
-  const items = document.querySelectorAll('[data-hero-item]');
-  gsap
-    .timeline({ defaults: { ease: EASE } })
-    .from(split.words, { yPercent: 110, duration: 0.9, stagger: 0.045 })
-    .from(items, { opacity: 0, y: 18, duration: 0.7, stagger: 0.08 }, '-=0.5')
-    .add(() => split.revert());
+function monuments() {
+  // Each line slides up out of its own mask (the parent clips it).
+  document.querySelectorAll<HTMLElement>('[data-monument]').forEach((title) => {
+    const lines = title.querySelectorAll('[data-monument-line]');
+    const hero = title.closest('[data-band]');
+    const items = hero ? hero.querySelectorAll('[data-hero-item]') : [];
+    const inView = title.getBoundingClientRect().top < innerHeight;
+    gsap
+      .timeline({
+        defaults: { ease: EASE },
+        scrollTrigger: inView ? undefined : { trigger: title, start: 'top 85%', once: true },
+      })
+      .from(lines, { yPercent: 105, duration: 1.1, stagger: 0.09 })
+      .from(items, { opacity: 0, y: 18, duration: 0.75, stagger: 0.08 }, '-=0.75');
+  });
+}
+
+function marquees() {
+  document.querySelectorAll<HTMLElement>('[data-marquee]').forEach((track) => {
+    const loop = gsap.to(track, { xPercent: -50, ease: 'none', duration: 32, repeat: -1 });
+    // Scrolling speeds the band up, then it eases back to cruising speed.
+    ScrollTrigger.create({
+      trigger: track,
+      start: 'top bottom',
+      end: 'bottom top',
+      onUpdate: (self) => {
+        const boost = gsap.utils.clamp(1, 6, 1 + Math.abs(self.getVelocity()) / 500);
+        gsap.to(loop, {
+          timeScale: boost,
+          duration: 0.2,
+          overwrite: true,
+          onComplete: () => void gsap.to(loop, { timeScale: 1, duration: 1, ease: DECISIVE }),
+        });
+      },
+    });
+  });
 }
 
 function reveals() {
@@ -68,7 +98,7 @@ function workflows() {
       });
       steps.forEach((step, i) => {
         tl.from(step, { opacity: 0.15, y: 14, duration: 0.45 }, i === 0 ? 0 : '>-0.1');
-        tl.from(badges[i], { scale: 0.6, duration: 0.4, ease: 'back.out(2.5)' }, '<');
+        if (badges[i]) tl.from(badges[i], { scaleY: 0, transformOrigin: 'bottom', duration: 0.4, ease: DECISIVE }, '<');
         if (lines[i]) tl.from(lines[i], { [wide ? 'scaleX' : 'scaleY']: 0, duration: 0.35 }, '>-0.15');
       });
     });
@@ -105,8 +135,8 @@ function pointerEffects() {
   if (!matchMedia('(pointer: fine)').matches) return;
 
   document.querySelectorAll<HTMLElement>('[data-magnetic]').forEach((el) => {
-    const x = gsap.quickTo(el, 'x', { duration: 0.4, ease: 'power3.out' });
-    const y = gsap.quickTo(el, 'y', { duration: 0.4, ease: 'power3.out' });
+    const x = gsap.quickTo(el, 'x', { duration: 0.4, ease: 'settle' });
+    const y = gsap.quickTo(el, 'y', { duration: 0.4, ease: 'settle' });
     el.addEventListener('pointermove', (e) => {
       const r = el.getBoundingClientRect();
       x((e.clientX - (r.left + r.width / 2)) * 0.25);
@@ -118,26 +148,16 @@ function pointerEffects() {
     });
   });
 
-  document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((el) => {
-    gsap.set(el, { transformPerspective: 900 });
-    const rx = gsap.quickTo(el, 'rotationX', { duration: 0.5, ease: 'power3.out' });
-    const ry = gsap.quickTo(el, 'rotationY', { duration: 0.5, ease: 'power3.out' });
-    el.addEventListener('pointermove', (e) => {
-      const r = el.getBoundingClientRect();
-      rx(-((e.clientY - r.top) / r.height - 0.5) * 6);
-      ry(((e.clientX - r.left) / r.width - 0.5) * 6);
-    });
-    el.addEventListener('pointerleave', () => {
-      rx(0);
-      ry(0);
-    });
-  });
 }
 
 if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  gsap.registerPlugin(ScrollTrigger, SplitText);
+  gsap.registerPlugin(ScrollTrigger, CustomEase);
+  CustomEase.create('settle', '0.32,0.72,0,1');
+  CustomEase.create('decisive', '0.19,1,0.22,1');
+  ScrollTrigger.config({ ignoreMobileResize: true });
   smoothScroll();
-  heroTitle();
+  monuments();
+  marquees();
   reveals();
   workflows();
   counters();

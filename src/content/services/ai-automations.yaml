@@ -10,5 +10,6 @@ deliverables:
 idealFor: Teams spending hours a week on copy-paste work, email triage or manual data entry.
 exampleResult: A property manager that saves 10 hours a week on email and never misses an urgent request.
 # TODO: optional, e.g. 'From $1,000'. Leave out to show "Custom quote".
+discipline: ai
 inquiryType: AI automation
 order: 4

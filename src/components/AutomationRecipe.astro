@@ -1,27 +1,43 @@
 ---
+// Decide-style dark product card used as punctuation on the light pages,
+// with a geometric line-art icon.
 import type { CollectionEntry } from 'astro:content';
-import Icon from './Icon.astro';
 
 interface Props {
   recipe: CollectionEntry<'automations'>;
+  index: number;
 }
-const { name, trigger, action, benefit } = Astro.props.recipe.data;
+const { recipe, index } = Astro.props;
+const { name, trigger, action, benefit } = recipe.data;
+// A different arrangement of rings and lines per card
+const variant = index % 4;
 ---
 
-<article class="card flex h-full flex-col p-6">
-  <span class="inline-flex size-10 items-center justify-center rounded-xl bg-accent-soft text-accent">
-    <Icon name="bolt" size={20} />
-  </span>
-  <h3 class="mt-4 font-semibold">{name}</h3>
-  <dl class="mt-3 flex-1 space-y-2 text-sm">
+<article data-surface="dark" class="flex h-full flex-col border border-line bg-bg p-6">
+  <div class="flex items-start justify-between">
+    <p class="mono text-[11px] text-muted">Automation {String(index + 1).padStart(2, '0')}</p>
+    <svg class="size-14 text-ink" viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
+      <circle cx="28" cy="28" r="26" />
+      {variant === 0 && <><circle cx="28" cy="28" r="14" /><path d="M2 28h52M28 2v52" /></>}
+      {variant === 1 && <><circle cx="28" cy="28" r="18" /><circle cx="28" cy="28" r="9" /></>}
+      {variant === 2 && <><path d="M8 40a26 26 0 0 1 40 0M8 16a26 26 0 0 0 40 0" /><circle cx="28" cy="28" r="3" /></>}
+      {variant === 3 && <><path d="M10 10l36 36M46 10L10 46" /><circle cx="28" cy="28" r="12" /></>}
+      <circle cx="28" cy="2" r="2" fill="#73ffb9" stroke="none" />
+    </svg>
+  </div>
+  <h3 class="heading mt-8 text-2xl">{name}</h3>
+  <dl class="mt-4 flex-1 space-y-3 text-[15px]">
     <div>
-      <dt class="inline font-medium">When: </dt>
-      <dd class="inline text-muted">{trigger}</dd>
+      <dt class="mono text-[11px] text-muted">When</dt>
+      <dd class="mt-0.5 text-ink/85">{trigger}</dd>
     </div>
     <div>
-      <dt class="inline font-medium">Then: </dt>
-      <dd class="inline text-muted">{action}</dd>
+      <dt class="mono text-[11px] text-muted">Then</dt>
+      <dd class="mt-0.5 text-ink/85">{action}</dd>
     </div>
   </dl>
-  <p class="mt-4 border-t border-line pt-4 text-sm font-semibold text-accent">{benefit}</p>
+  <p class="mt-6 flex items-center gap-2 border-t border-line pt-4 text-[15px] font-medium">
+    <span class="text-accent" aria-hidden="true">↗</span>
+    {benefit}
+  </p>
 </article>

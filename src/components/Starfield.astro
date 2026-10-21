@@ -1,0 +1,45 @@
+---
+// Static night sky for dark bands (Lucid Dreams). Deterministic positions so
+// every build renders the same sky; stars twinkle unless motion is reduced.
+interface Props {
+  count?: number;
+  seed?: number;
+  class?: string;
+}
+const { count = 90, seed = 7, class: className = '' } = Astro.props;
+
+let state = seed;
+const random = () => {
+  state = (state * 16807) % 2147483647;
+  return (state - 1) / 2147483646;
+};
+const stars = Array.from({ length: count }, () => ({
+  x: random() * 100,
+  y: random() * 100,
+  size: random() < 0.85 ? 1 : 2,
+  delay: random() * 6,
+  duration: 3 + random() * 5,
+  opacity: 0.25 + random() * 0.6,
+}));
+---
+
+<div class:list={['starfield pointer-events-none absolute inset-0 overflow-hidden', className]} aria-hidden="true">
+  {
+    stars.map((s) => (
+      <span
+        class="star absolute rounded-full bg-[#fffce1]"
+        style={`left:${s.x.toFixed(2)}%;top:${s.y.toFixed(2)}%;width:${s.size}px;height:${s.size}px;opacity:${s.opacity.toFixed(2)};animation-delay:${s.delay.toFixed(2)}s;animation-duration:${s.duration.toFixed(2)}s`}
+      />
+    ))
+  }
+</div>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .star {
+      animation-name: twinkle;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+    }
+  }
+</style>

@@ -3,7 +3,7 @@
 title: An AI assistant that sorts the inbox
 client: Property management company
 summary: Built a custom AI automation that reads incoming emails, sorts them by urgency, drafts replies and logs maintenance requests automatically.
-category: automation
+category: ai
 role: Custom AI automation
 tools: [Claude AI, Email, Spreadsheets]
 year: 2026

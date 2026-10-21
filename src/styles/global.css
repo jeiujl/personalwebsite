@@ -1,50 +1,47 @@
 @import 'tailwindcss';
 
-/* `dark:` utilities follow the theme toggle (data-theme on <html>) */
-@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
-
 /* ─── Design tokens ────────────────────────────────────────────────────────
-   Change these to re-theme the whole site. Light values first, dark below. */
+   Two surfaces: light pages (default) and dark bands ([data-surface="dark"]:
+   heroes, the scroll story, marquee, CTA and footer). Components use the same
+   semantic tokens everywhere and adapt to whichever surface they sit on. */
 :root {
-  --bg: #fafaf9;
+  --bg: #f8f8f8;
   --surface: #ffffff;
-  --surface-2: #f5f5f4;
-  --ink: #1c1917;
-  --muted: #57534e;
-  --line: #e7e5e4;
-  --accent: #c2410c;
+  --surface-2: #f1f1f1;
+  --ink: #2d2c2f;
+  --muted: #6b6a6d;
+  --line: #cfcdd2;
+  --accent: #0a7a49; /* mint, deepened for contrast on light */
   --accent-ink: #ffffff;
-  --accent-soft: #fff1e6;
+  --ghost: #ebeaec;
+  --grid: rgb(60 58 62 / 0.05);
+  --danger: #b42318;
+  --signal-gradient: linear-gradient(114deg, #0a7a49 15%, #0ae448 75%);
+
+  /* One color per service (GSAP-style taxonomy) */
+  --hue-website: #ff8709;
+  --hue-app: #9d95ff;
+  --hue-crm: #00bae2;
+  --hue-ai: #fec5fb;
+
   color-scheme: light;
 }
 
-:root[data-theme='dark'] {
-  --bg: #0f0e0d;
-  --surface: #181716;
-  --surface-2: #211f1d;
-  --ink: #f5f5f4;
-  --muted: #a8a29e;
-  --line: #2e2b28;
-  --accent: #fb923c;
-  --accent-ink: #1c1917;
-  --accent-soft: #2a1a0e;
+[data-surface='dark'] {
+  --bg: #0b0c0b;
+  --surface: #141513;
+  --surface-2: #191919;
+  --ink: #fffce1;
+  --muted: #8f8f82;
+  --line: #3a3b35;
+  --accent: #73ffb9; /* mint signal */
+  --accent-ink: #0b0c0b;
+  --ghost: rgb(255 252 225 / 0.05);
+  --grid: rgb(255 252 225 / 0.04);
+  --danger: #ff8a7a;
+  --signal-gradient: linear-gradient(114deg, #0ae448 20%, #73ffb9 65%);
   color-scheme: dark;
-}
-
-/* No-JS fallback: follow the OS setting unless light was chosen explicitly */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --bg: #0f0e0d;
-    --surface: #181716;
-    --surface-2: #211f1d;
-    --ink: #f5f5f4;
-    --muted: #a8a29e;
-    --line: #2e2b28;
-    --accent: #fb923c;
-    --accent-ink: #1c1917;
-    --accent-soft: #2a1a0e;
-    color-scheme: dark;
-  }
+  color: var(--ink);
 }
 
 @theme inline {
@@ -56,8 +53,17 @@
   --color-line: var(--line);
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
-  --color-accent-soft: var(--accent-soft);
+  --color-ghost: var(--ghost);
+  --color-danger: var(--danger);
+  --color-hue-website: var(--hue-website);
+  --color-hue-app: var(--hue-app);
+  --color-hue-crm: var(--hue-crm);
+  --color-hue-ai: var(--hue-ai);
   --font-sans: var(--font-geist);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-anton);
+  --ease-settle: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-decisive: cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 @layer base {
@@ -69,15 +75,16 @@
   }
   body {
     @apply bg-bg font-sans text-ink;
+    font-size: 17px;
+    line-height: 1.6;
   }
   ::selection {
-    background: var(--accent);
-    color: var(--accent-ink);
+    background: #73ffb9;
+    color: #0b0c0b;
   }
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
-    border-radius: 4px;
   }
   @media (prefers-reduced-motion: no-preference) {
     html:not(.lenis) {
@@ -94,45 +101,155 @@
   }
 }
 
+/* Reusable type utilities (also usable inside @apply) */
+@utility mono {
+  /* Small uppercase mono layer: nav, tags, labels, metadata */
+  font-family: var(--font-geist-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+@utility monument {
+  /* Condensed monument display type */
+  font-family: var(--font-anton);
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 0.86;
+  letter-spacing: -0.005em;
+}
+@utility heading {
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
 @layer components {
   .container-page {
-    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+    @apply mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8;
   }
+
+  /* Section eyebrow rendered as { Label } */
   .eyebrow {
-    @apply text-sm font-medium tracking-wide text-accent uppercase;
+    @apply mono text-muted;
   }
-  .btn-primary,
-  .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors duration-150;
+  .eyebrow::before {
+    content: '{ ' / '';
   }
-  .btn-primary {
-    @apply bg-accent text-accent-ink hover:opacity-90;
+  .eyebrow::after {
+    content: ' }' / '';
   }
-  .btn-secondary {
-    @apply border border-line bg-surface text-ink hover:border-muted;
+
+  /* Letters emerging from the dark into cream light (dark surfaces) */
+  .monument-fade {
+    background: linear-gradient(180deg, #3b3b35 0%, #8e8c7f 32%, #e6e3c8 68%, #fffce1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
+  /* Giant, nearly invisible section label */
+  .ghost-title {
+    @apply monument pointer-events-none text-ghost select-none;
+    font-size: clamp(88px, 21vw, 300px);
+    line-height: 0.8;
+  }
+
+  /* Buttons: outlined pills only */
+  .btn-ghost,
+  .btn-signal {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-[15px] leading-none font-medium whitespace-nowrap transition-colors duration-200;
+  }
+  .btn-ghost {
+    @apply border text-ink;
+    border-color: color-mix(in srgb, var(--ink) 28%, transparent);
+  }
+  .btn-ghost:hover {
+    border-color: var(--ink);
+  }
+  .btn-signal {
+    @apply text-ink;
+    border: 1.5px solid transparent;
+    background:
+      linear-gradient(var(--btn-fill, var(--bg)), var(--btn-fill, var(--bg))) padding-box,
+      var(--signal-gradient) border-box;
+  }
+  .btn-signal:hover {
+    --btn-fill: var(--surface-2);
+  }
+
+  /* Underlined text link with an accent arrow */
+  .arrow-link {
+    @apply inline-flex items-center gap-1.5 font-medium text-ink underline decoration-1 underline-offset-[5px];
+    text-decoration-color: color-mix(in srgb, var(--ink) 35%, transparent);
+  }
+  .arrow-link:hover {
+    text-decoration-color: var(--ink);
+  }
+  .arrow-link .arrow {
+    @apply text-accent no-underline;
+  }
+
+  /* Rectangular mono tag; the square shows the service color */
+  .tag {
+    @apply inline-flex w-fit items-center gap-1.5 bg-[#161616] px-1.5 py-[3px] font-mono text-[11px] leading-none font-medium tracking-[0.03em] text-[#f1f1f1] uppercase;
+  }
+  [data-surface='dark'] .tag {
+    @apply border border-white/15 bg-white/5 text-white/75;
+  }
+  .tag-dot {
+    @apply inline-block size-1.5 shrink-0;
+  }
+
   .card {
-    @apply rounded-2xl border border-line bg-surface;
+    @apply border border-line bg-surface;
   }
-  .badge {
-    @apply inline-flex items-center rounded-full border border-line bg-surface-2 px-2.5 py-0.5 text-xs font-medium text-muted;
+
+  /* Faint 12-column hairline grid behind light sections */
+  .grid-lines {
+    position: relative;
+    isolation: isolate;
+  }
+  .grid-lines::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    margin-inline: auto;
+    max-width: 1200px;
+    background-image: linear-gradient(to right, var(--grid) 1px, transparent 1px);
+    background-size: calc(100% / 6) 100%;
+    border-right: 1px solid var(--grid);
+    pointer-events: none;
+  }
+  @media (min-width: 1024px) {
+    .grid-lines::before {
+      background-size: calc(100% / 12) 100%;
+    }
   }
 
   /* Long-form text in case studies */
   .prose-body {
-    @apply max-w-2xl text-lg leading-relaxed text-muted;
+    @apply max-w-2xl text-lg leading-relaxed text-ink;
   }
   .prose-body h2 {
-    @apply mt-12 mb-4 text-2xl font-semibold tracking-tight text-ink;
+    @apply heading mt-14 mb-4 text-3xl;
   }
   .prose-body h3 {
-    @apply mt-8 mb-3 text-xl font-semibold text-ink;
+    @apply mt-8 mb-3 text-xl font-medium;
   }
   .prose-body p {
     @apply mb-5;
   }
   .prose-body ul {
-    @apply mb-5 list-disc space-y-2 pl-6 marker:text-accent;
+    @apply mb-5 list-none space-y-3 pl-0;
+  }
+  .prose-body ul > li {
+    @apply relative pl-6;
+  }
+  .prose-body ul > li::before {
+    content: '';
+    @apply absolute top-[0.7em] left-0 h-px w-3 bg-accent;
   }
   .prose-body ol {
     @apply mb-5 list-decimal space-y-2 pl-6;
@@ -141,6 +258,26 @@
     @apply font-medium text-accent underline underline-offset-4;
   }
   .prose-body strong {
-    @apply font-semibold text-ink;
+    @apply font-semibold;
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.9;
   }
 }

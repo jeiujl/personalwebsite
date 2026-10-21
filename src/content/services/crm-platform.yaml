@@ -11,5 +11,6 @@ deliverables:
 idealFor: Service businesses that lose leads to slow replies or keep customer info in notebooks and spreadsheets.
 exampleResult: A roofing company that now answers every lead in under a minute and books 35% more estimates.
 # TODO: optional, e.g. 'From $297/mo'. Leave out to show "Custom quote".
+discipline: crm
 inquiryType: CRM platform
 order: 3

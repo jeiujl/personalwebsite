@@ -10,7 +10,9 @@ export const site = {
   initials: 'YN',
   // TODO: one line that says what you do and for whom
   tagline: 'Websites, apps & automations for small businesses',
-  // TODO: the homepage headline. Keep it about outcomes, not tools.
+  // The giant homepage headline, one entry per line. Short words work best.
+  heroDisplay: ['Websites,', 'apps &', 'automations'],
+  // TODO: the sentence under it. Keep it about outcomes, not tools.
   headline: 'I design websites & apps, and automate the busywork that slows your business down.',
   // Shown under the headline and used as the default meta description
   description:
