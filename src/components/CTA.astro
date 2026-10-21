@@ -1,0 +1,33 @@
+---
+import { ctaHref, site } from '../config/site';
+import Icon from './Icon.astro';
+
+interface Props {
+  title?: string;
+  text?: string;
+}
+const {
+  title = "Let's talk about your business",
+  text = "Tell me what's slowing you down. In a free 20-minute call I'll suggest where a better website or a few automations would make the biggest difference. No pressure, no jargon.",
+} = Astro.props;
+---
+
+<section class="container-page mt-24">
+  <div
+    class="relative overflow-hidden rounded-3xl border border-line bg-accent-soft px-6 py-14 text-center sm:px-12"
+  >
+    <div class="absolute -top-24 -left-24 size-72 rounded-full bg-accent opacity-10 blur-3xl" aria-hidden="true"></div>
+    <h2 class="relative mx-auto max-w-2xl text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+      {title}
+    </h2>
+    <p class="relative mx-auto mt-4 max-w-xl text-lg text-pretty text-muted">{text}</p>
+    <div class="relative mt-8 flex flex-wrap items-center justify-center gap-3">
+      <a href={ctaHref} class="btn-primary px-6 py-3 text-base">
+        <Icon name="calendar" size={18} /> Book a free call
+      </a>
+      <a href={`mailto:${site.email}`} class="btn-secondary px-6 py-3 text-base">
+        <Icon name="mail" size={18} /> Email me
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,199 @@
+---
+import { getCollection } from 'astro:content';
+import AutomationRecipe from '../components/AutomationRecipe.astro';
+import CTA from '../components/CTA.astro';
+import HeroVisual from '../components/HeroVisual.astro';
+import Icon from '../components/Icon.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import TestimonialCard from '../components/TestimonialCard.astro';
+import { ctaHref, site } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getProjects, getServices, getTestimonials } from '../lib/content';
+
+const featured = (await getProjects()).filter((p) => p.data.featured).slice(0, 3);
+const services = await getServices();
+const testimonials = (await getTestimonials()).slice(0, 3);
+const recipes = (await getCollection('automations')).sort((a, b) => a.data.order - b.data.order);
+
+const pillars = [
+  {
+    key: 'design',
+    icon: 'layout',
+    title: 'Design',
+    text: 'Websites and apps that make your business look as good as the work you do, and turn visitors into customers.',
+  },
+  {
+    key: 'automation',
+    icon: 'sparkle',
+    title: 'Automation',
+    text: 'Your own CRM, plus AI automations that answer leads, follow up, book appointments and send reminders while you work.',
+  },
+] as const;
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  jobTitle: 'Website & app designer, automation specialist',
+  description: site.description,
+  email: `mailto:${site.email}`,
+  url: Astro.site?.href,
+  sameAs: site.socials.map((s) => s.href),
+};
+---
+
+<BaseLayout jsonLd={personSchema}>
+  <!-- Hero -->
+  <section class="container-page grid items-center gap-16 pt-14 pb-20 sm:pt-20 lg:grid-cols-[1.1fr_1fr] lg:gap-12">
+    <div>
+      <p class="badge">
+        <span class="mr-1.5 size-1.5 rounded-full bg-accent"></span>
+        Taking on new clients
+      </p>
+      <h1 class="mt-5 text-4xl leading-[1.08] font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
+        {site.headline}
+      </h1>
+      <p class="mt-6 max-w-xl text-lg text-pretty text-muted">{site.description}</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href={ctaHref} class="btn-primary px-6 py-3 text-base">
+          Book a free call <Icon name="arrow-right" size={18} />
+        </a>
+        <a href="/work" class="btn-secondary px-6 py-3 text-base">See my work</a>
+      </div>
+      <p class="mt-8 text-sm text-muted">Websites · App design · CRM & AI automations</p>
+    </div>
+    <HeroVisual />
+  </section>
+
+  <!-- Two pillars -->
+  <section class="container-page py-16">
+    <SectionHeading
+      eyebrow="What I do"
+      title="Two ways I help your business grow"
+      intro="Most small businesses need the same two things: to look professional online, and to stop letting leads slip through the cracks."
+    />
+    <div class="mt-10 grid gap-6 md:grid-cols-2">
+      {
+        pillars.map((pillar) => (
+          <div class="card p-8">
+            <span class="inline-flex size-11 items-center justify-center rounded-xl bg-accent-soft text-accent">
+              <Icon name={pillar.icon} size={22} />
+            </span>
+            <h3 class="mt-5 text-2xl font-semibold tracking-tight">{pillar.title}</h3>
+            <p class="mt-2 text-muted">{pillar.text}</p>
+            <ul class="mt-6 divide-y divide-line border-t border-line">
+              {services
+                .filter((s) => s.data.pillar === pillar.key)
+                .map((s) => (
+                  <li>
+                    <a
+                      href={`/services#${s.id}`}
+                      class="group flex items-center justify-between gap-4 py-3.5 font-medium hover:text-accent"
+                    >
+                      {s.data.title}
+                      <Icon name="arrow-right" size={18} class="shrink-0 text-muted group-hover:text-accent" />
+                    </a>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Featured work -->
+  <section class="container-page py-16">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <SectionHeading
+        eyebrow="Selected work"
+        title="Real problems, solved"
+        intro="A few projects and the difference they made."
+      />
+      <a href="/work" class="inline-flex items-center gap-1.5 font-semibold text-accent">
+        See all work <Icon name="arrow-right" size={18} />
+      </a>
+    </div>
+    <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {featured.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <!-- Automation recipes -->
+  <section class="container-page py-16">
+    <SectionHeading
+      eyebrow="Automations I set up"
+      title="Work that happens while you're busy"
+      intro="A few of the most popular automations. Each one runs in the background, so you and your team can focus on the job in front of you."
+    />
+    <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {recipes.map((recipe) => <AutomationRecipe recipe={recipe} />)}
+      <a
+        href="/contact?service=Not%20sure%20yet"
+        class="card flex flex-col justify-center border-dashed p-6 transition-colors hover:border-accent"
+      >
+        <p class="font-semibold">Have something else in mind?</p>
+        <p class="mt-2 text-sm text-muted">
+          If a task is repetitive, it can probably be automated. Tell me about it.
+        </p>
+        <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent">
+          Ask me <Icon name="arrow-right" size={16} />
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  {
+    testimonials.length > 0 && (
+      <section class="container-page py-16">
+        <SectionHeading eyebrow="Kind words" title="What clients say" />
+        <div class="mt-10 grid gap-6 md:grid-cols-3">
+          {testimonials.map((t) => (
+            <TestimonialCard testimonial={t} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- About snippet -->
+  <section class="container-page py-16">
+    <div class="card grid items-center gap-8 p-8 sm:p-10 md:grid-cols-[auto_1fr]">
+      {
+        site.photo ? (
+          <img
+            src={site.photo}
+            alt={`Photo of ${site.name}`}
+            width="160"
+            height="160"
+            loading="lazy"
+            class="size-32 rounded-2xl object-cover sm:size-40"
+          />
+        ) : (
+          <span
+            class="inline-flex size-32 items-center justify-center rounded-2xl bg-accent text-4xl font-bold text-accent-ink sm:size-40"
+            aria-hidden="true"
+          >
+            {site.initials}
+          </span>
+        )
+      }
+      <div>
+        <p class="eyebrow">About me</p>
+        <h2 class="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">Hi, I'm {site.name}.</h2>
+        <!-- TODO: a short, friendly intro in your own words -->
+        <p class="mt-3 max-w-2xl text-muted">
+          I'm a designer and automation specialist who helps small businesses get more out of their
+          time online. I explain everything in plain English, and I don't disappear after launch.
+        </p>
+        <a href="/about" class="mt-5 inline-flex items-center gap-1.5 font-semibold text-accent">
+          More about me <Icon name="arrow-right" size={18} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <CTA />
+</BaseLayout>

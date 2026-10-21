@@ -1,0 +1,44 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Icon from './Icon.astro';
+
+interface Props {
+  service: CollectionEntry<'services'>;
+}
+const { service } = Astro.props;
+const { title, summary, deliverables, idealFor, exampleResult, startingAt } = service.data;
+---
+
+<article id={service.id} class="card flex scroll-mt-24 flex-col p-6 sm:p-8">
+  <h3 class="text-xl font-semibold tracking-tight">{title}</h3>
+  <p class="mt-3 text-muted">{summary}</p>
+  <ul class="mt-6 space-y-2.5 text-sm">
+    {
+      deliverables.map((item) => (
+        <li class="flex gap-2.5">
+          <Icon name="check" size={18} class="mt-px shrink-0 text-accent" />
+          <span>{item}</span>
+        </li>
+      ))
+    }
+  </ul>
+  <dl class="mt-6 space-y-4 border-t border-line pt-6 text-sm">
+    <div>
+      <dt class="font-semibold">Ideal for</dt>
+      <dd class="mt-1 text-muted">{idealFor}</dd>
+    </div>
+    <div>
+      <dt class="font-semibold">Example result</dt>
+      <dd class="mt-1 text-muted">{exampleResult}</dd>
+    </div>
+  </dl>
+  <div class="mt-auto flex items-center justify-between gap-4 pt-6">
+    <span class="text-sm font-semibold">{startingAt ?? 'Custom quote'}</span>
+    <a
+      href={`/contact?service=${encodeURIComponent(service.data.inquiryType)}`}
+      class="inline-flex items-center gap-1.5 text-sm font-semibold text-accent"
+    >
+      Get started <Icon name="arrow-right" size={16} />
+    </a>
+  </div>
+</article>

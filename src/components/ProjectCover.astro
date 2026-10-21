@@ -1,0 +1,85 @@
+---
+// A drawn preview used when a project has no cover image. Three variants that
+// hint at the kind of work: a browser window, a phone, or a workflow.
+interface Props {
+  category: 'website' | 'app' | 'automation';
+  class?: string;
+}
+const { category, class: className = '' } = Astro.props;
+---
+
+<div
+  class:list={[
+    'relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-accent-soft',
+    className,
+  ]}
+  aria-hidden="true"
+>
+  <div
+    class="absolute -top-16 -right-16 size-56 rounded-full bg-accent opacity-15 blur-2xl"
+  >
+  </div>
+  {
+    category === 'website' && (
+      <div class="relative w-[78%] overflow-hidden rounded-lg border border-line bg-surface shadow-lg">
+        <div class="flex items-center gap-1.5 border-b border-line px-3 py-2">
+          <span class="size-2 rounded-full bg-line" />
+          <span class="size-2 rounded-full bg-line" />
+          <span class="size-2 rounded-full bg-line" />
+          <span class="ml-3 h-2 w-1/3 rounded-full bg-surface-2" />
+        </div>
+        <div class="grid grid-cols-[1.4fr_1fr] gap-4 p-5">
+          <div class="space-y-2.5">
+            <div class="h-3 w-11/12 rounded-full bg-ink/80" />
+            <div class="h-3 w-3/4 rounded-full bg-ink/80" />
+            <div class="h-2 w-full rounded-full bg-line" />
+            <div class="h-2 w-5/6 rounded-full bg-line" />
+            <div class="mt-3 h-5 w-24 rounded-full bg-accent" />
+          </div>
+          <div class="rounded-md bg-surface-2" />
+        </div>
+      </div>
+    )
+  }
+  {
+    category === 'app' && (
+      <div class="relative flex items-end gap-4">
+        <div class="h-44 w-24 translate-y-3 rounded-[1.25rem] border border-line bg-surface p-2 shadow-md">
+          <div class="h-full space-y-1.5 rounded-xl bg-surface-2 p-2">
+            <div class="h-10 rounded-md bg-accent/25" />
+            <div class="h-2 w-3/4 rounded-full bg-line" />
+            <div class="h-2 w-1/2 rounded-full bg-line" />
+          </div>
+        </div>
+        <div class="h-52 w-28 rounded-[1.4rem] border border-line bg-surface p-2 shadow-lg">
+          <div class="flex h-full flex-col gap-1.5 rounded-xl bg-surface-2 p-2">
+            <div class="h-2 w-1/2 rounded-full bg-ink/70" />
+            <div class="h-8 rounded-md border border-line bg-surface" />
+            <div class="h-8 rounded-md border-2 border-accent bg-surface" />
+            <div class="h-8 rounded-md border border-line bg-surface" />
+            <div class="mt-auto h-5 rounded-full bg-accent" />
+          </div>
+        </div>
+      </div>
+    )
+  }
+  {
+    category === 'automation' && (
+      <div class="relative flex w-[82%] items-center">
+        {[0, 1, 2, 3].map((i) => (
+          <>
+            {i > 0 && <div class="h-0.5 flex-1 bg-accent/50" />}
+            <div
+              class:list={[
+                'flex size-12 shrink-0 items-center justify-center rounded-xl border bg-surface shadow-sm sm:size-14',
+                i === 3 ? 'border-accent' : 'border-line',
+              ]}
+            >
+              <div class:list={['size-4 rounded-full', i === 3 ? 'bg-accent' : 'bg-line']} />
+            </div>
+          </>
+        ))}
+      </div>
+    )
+  }
+</div>

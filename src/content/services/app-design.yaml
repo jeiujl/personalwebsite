@@ -1,0 +1,13 @@
+pillar: design
+title: App design
+summary: Clear, easy-to-use app designs, from rough idea to a clickable prototype you can test and hand to developers.
+deliverables:
+  - User flows that map out every step
+  - Polished screens for iPhone, Android or web
+  - Clickable prototype for testing and pitching
+  - Developer-ready design files
+idealFor: Founders and businesses with an app idea, or an existing app that's confusing to use.
+exampleResult: A booking app design that took customers from opening the app to booked in three taps.
+# TODO: optional, e.g. 'From $2,500'. Leave out to show "Custom quote".
+inquiryType: App design
+order: 2

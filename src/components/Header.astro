@@ -1,0 +1,80 @@
+---
+import { ctaHref, nav, site } from '../config/site';
+import Icon from './Icon.astro';
+import ThemeToggle from './ThemeToggle.astro';
+
+const current = Astro.url.pathname;
+const isActive = (href: string) => current === href || current.startsWith(`${href}/`);
+---
+
+<header class="sticky top-0 z-40 border-b border-line/70 bg-bg/85 backdrop-blur">
+  <div class="container-page flex h-16 items-center justify-between gap-4">
+    <a href="/" class="flex items-center gap-2.5 font-semibold tracking-tight">
+      <span
+        class="inline-flex size-8 items-center justify-center rounded-full bg-accent text-xs font-bold text-accent-ink"
+        aria-hidden="true">{site.initials}</span
+      >
+      <span>{site.name}</span>
+    </a>
+
+    <nav aria-label="Main" class="hidden items-center gap-1 md:flex">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+            class:list={[
+              'rounded-full px-3.5 py-2 text-sm font-medium transition-colors',
+              isActive(item.href) ? 'text-ink' : 'text-muted hover:text-ink',
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <ThemeToggle />
+      <a href={ctaHref} class="btn-primary hidden sm:inline-flex">Book a free call</a>
+      <button
+        type="button"
+        id="menu-button"
+        class="inline-flex size-9 items-center justify-center rounded-full border border-line md:hidden"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+        aria-label="Open menu"
+      >
+        <Icon name="menu" size={18} />
+      </button>
+    </div>
+  </div>
+
+  <nav id="mobile-menu" aria-label="Mobile" class="hidden border-t border-line md:hidden">
+    <div class="container-page flex flex-col py-3">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+            class="rounded-lg px-2 py-3 text-base font-medium text-ink hover:bg-surface-2"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <a href={ctaHref} class="btn-primary mt-2">Book a free call</a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const button = document.getElementById('menu-button');
+  const menu = document.getElementById('mobile-menu');
+  button?.addEventListener('click', () => {
+    const open = button.getAttribute('aria-expanded') === 'true';
+    button.setAttribute('aria-expanded', String(!open));
+    button.setAttribute('aria-label', open ? 'Open menu' : 'Close menu');
+    menu?.classList.toggle('hidden', open);
+  });
+</script>

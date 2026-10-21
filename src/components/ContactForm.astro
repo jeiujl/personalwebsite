@@ -1,0 +1,178 @@
+---
+import { actions, isInputError } from 'astro:actions';
+import { budgetRanges, inquiryTypes, timelines } from '../lib/inquiry';
+import Icon from './Icon.astro';
+
+// Without JavaScript the form posts to the action and this (server-rendered)
+// page shows the result. With JavaScript the script below submits in place.
+const result = Astro.getActionResult(actions.contact);
+const fieldErrors = result?.error && isInputError(result.error) ? result.error.fields : {};
+const formError = result?.error && !isInputError(result.error) ? result.error.message : '';
+const sent = result?.data?.ok === true;
+
+const params = Astro.url.searchParams;
+const preselected = params.get('service') ?? '';
+const ref = params.get('ref') ?? '';
+
+const fieldClass =
+  'mt-1.5 block w-full rounded-xl border border-line bg-surface px-3.5 py-2.5 text-base text-ink placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/25';
+const labelClass = 'block text-sm font-medium';
+const errorClass = 'mt-1.5 text-sm text-red-600 dark:text-red-400';
+---
+
+<div id="contact-success" class:list={['card p-8 text-center', !sent && 'hidden']} role="status">
+  <span
+    class="mx-auto inline-flex size-12 items-center justify-center rounded-full bg-accent-soft text-accent"
+  >
+    <Icon name="check" size={24} />
+  </span>
+  <h2 class="mt-4 text-xl font-semibold">Thanks, your message is on its way.</h2>
+  <p class="mt-2 text-muted">I'll get back to you within one business day.</p>
+</div>
+
+<form
+  id="contact-form"
+  method="POST"
+  action={actions.contact}
+  class:list={['card space-y-5 p-6 sm:p-8', sent && 'hidden']}
+>
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div>
+      <label for="name" class={labelClass}>Your name</label>
+      <input id="name" name="name" type="text" autocomplete="name" required minlength="2" class={fieldClass} />
+      <p class={errorClass} data-error-for="name">{fieldErrors.name?.[0]}</p>
+    </div>
+    <div>
+      <label for="email" class={labelClass}>Email</label>
+      <input id="email" name="email" type="email" autocomplete="email" required class={fieldClass} />
+      <p class={errorClass} data-error-for="email">{fieldErrors.email?.[0]}</p>
+    </div>
+  </div>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div>
+      <label for="company" class={labelClass}>
+        Business name <span class="font-normal text-muted">(optional)</span>
+      </label>
+      <input id="company" name="company" type="text" autocomplete="organization" class={fieldClass} />
+    </div>
+    <div>
+      <label for="service" class={labelClass}>What do you need?</label>
+      <select id="service" name="service" required class={fieldClass}>
+        <option value="" disabled selected={!preselected}>Choose one…</option>
+        {
+          inquiryTypes.map((type) => (
+            <option value={type} selected={type === preselected}>
+              {type}
+            </option>
+          ))
+        }
+      </select>
+      <p class={errorClass} data-error-for="service">{fieldErrors.service?.[0]}</p>
+    </div>
+  </div>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div>
+      <label for="budget" class={labelClass}>
+        Budget <span class="font-normal text-muted">(optional)</span>
+      </label>
+      <select id="budget" name="budget" class={fieldClass}>
+        <option value="">Prefer not to say</option>
+        {budgetRanges.map((b) => <option value={b}>{b}</option>)}
+      </select>
+    </div>
+    <div>
+      <label for="timeline" class={labelClass}>
+        Timeline <span class="font-normal text-muted">(optional)</span>
+      </label>
+      <select id="timeline" name="timeline" class={fieldClass}>
+        <option value="">Not sure</option>
+        {timelines.map((t) => <option value={t}>{t}</option>)}
+      </select>
+    </div>
+  </div>
+
+  <div>
+    <label for="message" class={labelClass}>Tell me about your business and what you'd like to fix</label>
+    <textarea
+      id="message"
+      name="message"
+      rows="5"
+      required
+      minlength="10"
+      class={fieldClass}
+      placeholder="e.g. We miss a lot of calls during the day and our website is outdated…"></textarea>
+    <p class={errorClass} data-error-for="message">{fieldErrors.message?.[0]}</p>
+  </div>
+
+  <!-- Referral source (from links like /?ref=dad) and spam traps -->
+  <input type="hidden" name="ref" value={ref} />
+  <input type="hidden" name="startedAt" value={Date.now()} />
+  <div class="absolute -left-[9999px]" aria-hidden="true">
+    <label for="website">Leave this empty</label>
+    <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <p id="form-error" class={errorClass} role="alert">{formError}</p>
+
+  <button type="submit" class="btn-primary w-full py-3 text-base sm:w-auto">
+    <span class="submit-label">Send message</span>
+    <Icon name="arrow-right" size={18} />
+  </button>
+</form>
+
+<script>
+  import { actions, isInputError } from 'astro:actions';
+
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const success = document.getElementById('contact-success');
+  const formError = document.getElementById('form-error');
+
+  if (form) {
+    const refInput = form.elements.namedItem('ref') as HTMLInputElement;
+    try {
+      refInput.value ||= localStorage.getItem('ref') ?? '';
+    } catch {}
+
+    const showErrors = (fields: Record<string, string[] | undefined>) => {
+      form.querySelectorAll<HTMLElement>('[data-error-for]').forEach((el) => {
+        const message = fields[el.dataset.errorFor!]?.[0] ?? '';
+        el.textContent = message;
+        const input = form.elements.namedItem(el.dataset.errorFor!) as HTMLElement | null;
+        input?.setAttribute('aria-invalid', message ? 'true' : 'false');
+      });
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const button = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+      const label = button.querySelector('.submit-label')!;
+      button.disabled = true;
+      label.textContent = 'Sending…';
+      formError!.textContent = '';
+
+      const { data, error } = await actions.contact(new FormData(form));
+
+      button.disabled = false;
+      label.textContent = 'Send message';
+
+      if (error) {
+        if (isInputError(error)) {
+          showErrors(error.fields);
+          form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+        } else {
+          showErrors({});
+          formError!.textContent = error.message || 'Something went wrong. Please try again.';
+        }
+        return;
+      }
+
+      if (data?.ok) {
+        form.classList.add('hidden');
+        success?.classList.remove('hidden');
+        success?.scrollIntoView({ block: 'center' });
+      }
+    });
+  }
+</script>

@@ -1,0 +1,14 @@
+pillar: design
+title: Website design
+summary: A modern, fast website that makes you look established and turns visitors into calls, bookings and sales.
+deliverables:
+  - Custom design for desktop and mobile
+  - Copywriting help so your message is clear
+  - Online booking, contact forms or a shop
+  - Google-friendly setup (SEO basics, speed, analytics)
+  - Hosting setup and launch
+idealFor: Businesses with no website, an outdated one, or one that doesn't bring in customers.
+exampleResult: A practice that went from phone-only bookings to taking appointments online around the clock.
+# TODO: optional, e.g. 'From $1,500'. Leave out to show "Custom quote".
+inquiryType: Website
+order: 1

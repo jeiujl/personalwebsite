@@ -1,0 +1,127 @@
+---
+import { getCollection } from 'astro:content';
+import CTA from '../components/CTA.astro';
+import Icon from '../components/Icon.astro';
+import SampleBadge from '../components/SampleBadge.astro';
+import { site } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const experience = (await getCollection('experience')).sort((a, b) => a.data.order - b.data.order);
+
+// TODO: your skills and the tools you use
+const skills = [
+  { group: 'Design', items: ['Website design', 'App & UI design', 'Prototyping', 'Branding basics'] },
+  { group: 'Build', items: ['Websites', 'Online booking', 'Forms & payments', 'SEO basics'] },
+  {
+    group: 'Automation',
+    items: ['CRM setup', 'Text & email follow-up', 'AI automations (Claude)', 'Integrations'],
+  },
+  { group: 'Tools', items: ['Figma', 'Claude', 'Zapier', 'Google Workspace'] },
+];
+---
+
+<BaseLayout
+  title="About"
+  description={`About ${site.name}: designer and automation specialist helping small businesses grow.`}
+>
+  <section class="container-page grid gap-12 pt-14 sm:pt-20 lg:grid-cols-[1fr_320px]">
+    <div>
+      <p class="eyebrow">About</p>
+      <h1 class="mt-2 text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
+        Hi, I'm {site.name}.
+      </h1>
+      <!-- TODO: replace with your story, in your own voice -->
+      <div class="prose-body mt-6">
+        <p>
+          I design websites and apps, and I build the automations that keep small businesses running
+          smoothly behind the scenes: answering leads, following up, booking appointments and sending
+          reminders.
+        </p>
+        <p>
+          I got into this because I kept seeing great businesses lose customers for fixable reasons: an
+          outdated website, a missed call, a follow-up nobody had time to send. My job is to fix those
+          things so you can focus on the work you're good at.
+        </p>
+        <p>
+          I keep things simple, explain everything in plain English, and stay around after launch. Most
+          of my clients come through referrals, and I'd like to keep it that way.
+        </p>
+      </div>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/contact" class="btn-primary">Work with me <Icon name="arrow-right" size={16} /></a>
+        {
+          site.resumeUrl && (
+            <a href={site.resumeUrl} class="btn-secondary" download>
+              <Icon name="download" size={16} /> Download resume
+            </a>
+          )
+        }
+      </div>
+    </div>
+
+    <div class="order-first lg:order-none">
+      {
+        site.photo ? (
+          <img
+            src={site.photo}
+            alt={`Photo of ${site.name}`}
+            width="320"
+            height="400"
+            class="aspect-[4/5] w-full max-w-xs rounded-3xl border border-line object-cover"
+          />
+        ) : (
+          <div
+            class="flex aspect-[4/5] w-full max-w-xs items-center justify-center rounded-3xl bg-accent text-6xl font-bold text-accent-ink"
+            aria-hidden="true"
+          >
+            {site.initials}
+          </div>
+        )
+      }
+      <p class="mt-4 text-sm text-muted">{site.location}</p>
+    </div>
+  </section>
+
+  <section class="container-page mt-20">
+    <h2 class="text-2xl font-semibold tracking-tight">Skills & tools</h2>
+    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        skills.map((s) => (
+          <div class="card p-5">
+            <h3 class="font-semibold">{s.group}</h3>
+            <ul class="mt-3 space-y-1.5 text-sm text-muted">
+              {s.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  {
+    experience.length > 0 && (
+      <section class="container-page mt-20">
+        <h2 class="text-2xl font-semibold tracking-tight">Experience</h2>
+        <ol class="mt-8 max-w-3xl border-l border-line">
+          {experience.map((item) => (
+            <li class="relative pb-10 pl-8 last:pb-0">
+              <span class="absolute top-1.5 -left-[5px] size-2.5 rounded-full bg-accent" aria-hidden="true" />
+              <div class="flex flex-wrap items-center gap-2">
+                <p class="text-sm text-muted">{item.data.period}</p>
+                {item.data.sample && <SampleBadge />}
+              </div>
+              <h3 class="mt-1 font-semibold">
+                {item.data.role} <span class="font-normal text-muted">· {item.data.org}</span>
+              </h3>
+              <p class="mt-2 text-muted">{item.data.summary}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )
+  }
+
+  <CTA />
+</BaseLayout>

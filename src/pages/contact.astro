@@ -1,0 +1,74 @@
+---
+import ContactForm from '../components/ContactForm.astro';
+import Icon from '../components/Icon.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { site } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Rendered on request so the form works without JavaScript and can read
+// ?service= and ?ref= from the URL.
+export const prerender = false;
+
+const nextSteps = [
+  { title: 'I reply within one business day', text: 'Usually much sooner.' },
+  { title: 'We have a free 20-minute call', text: 'You tell me about your business and goals.' },
+  { title: 'You get a clear proposal', text: 'What I recommend, the timeline and the price.' },
+];
+---
+
+<BaseLayout
+  title="Contact"
+  description={`Get in touch with ${site.name} about a website, app design or automations for your business.`}
+>
+  <section class="container-page grid gap-12 pt-14 sm:pt-20 lg:grid-cols-[1fr_1.4fr]">
+    <div>
+      <SectionHeading
+        as="h1"
+        eyebrow="Contact"
+        title="Let's talk about your business"
+        intro="Tell me a little about what you need. There's no commitment, and no question is too basic."
+      />
+
+      <ol class="mt-10 space-y-5">
+        {
+          nextSteps.map((step, i) => (
+            <li class="flex gap-4">
+              <span class="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-accent-soft text-sm font-semibold text-accent">
+                {i + 1}
+              </span>
+              <div>
+                <p class="font-semibold">{step.title}</p>
+                <p class="text-sm text-muted">{step.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="mt-10 space-y-3 border-t border-line pt-8">
+        <p class="text-sm text-muted">Prefer email?</p>
+        <a href={`mailto:${site.email}`} class="inline-flex items-center gap-2 font-semibold hover:text-accent">
+          <Icon name="mail" size={18} />
+          {site.email}
+        </a>
+        {
+          site.bookingUrl && (
+            <a
+              href={site.bookingUrl}
+              target="_blank"
+              rel="noopener"
+              class="flex items-center gap-2 font-semibold hover:text-accent"
+            >
+              <Icon name="calendar" size={18} />
+              Book a call directly
+            </a>
+          )
+        }
+      </div>
+    </div>
+
+    <div>
+      <ContactForm />
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,22 @@
+# TODO: sample timeline. Replace with your own experience (newest first), or delete entries.
+- id: freelance
+  role: Freelance designer & automation specialist
+  org: Self-employed
+  period: 2024 – Present
+  summary: Designing websites and apps and building CRM and AI automations for small businesses.
+  order: 1
+  sample: true
+- id: previous-role
+  role: Your previous role
+  org: Company name
+  period: 2022 – 2024
+  summary: One or two lines about what you did and what you're proud of.
+  order: 2
+  sample: true
+- id: education
+  role: Degree, course or certification
+  org: School or provider
+  period: 2020 – 2022
+  summary: Anything relevant you studied or completed.
+  order: 3
+  sample: true

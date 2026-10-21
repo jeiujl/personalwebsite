@@ -1,0 +1,138 @@
+@import 'tailwindcss';
+
+/* `dark:` utilities follow the theme toggle (data-theme on <html>) */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* ─── Design tokens ────────────────────────────────────────────────────────
+   Change these to re-theme the whole site. Light values first, dark below. */
+:root {
+  --bg: #fafaf9;
+  --surface: #ffffff;
+  --surface-2: #f5f5f4;
+  --ink: #1c1917;
+  --muted: #57534e;
+  --line: #e7e5e4;
+  --accent: #c2410c;
+  --accent-ink: #ffffff;
+  --accent-soft: #fff1e6;
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg: #0f0e0d;
+  --surface: #181716;
+  --surface-2: #211f1d;
+  --ink: #f5f5f4;
+  --muted: #a8a29e;
+  --line: #2e2b28;
+  --accent: #fb923c;
+  --accent-ink: #1c1917;
+  --accent-soft: #2a1a0e;
+  color-scheme: dark;
+}
+
+/* No-JS fallback: follow the OS setting unless light was chosen explicitly */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0f0e0d;
+    --surface: #181716;
+    --surface-2: #211f1d;
+    --ink: #f5f5f4;
+    --muted: #a8a29e;
+    --line: #2e2b28;
+    --accent: #fb923c;
+    --accent-ink: #1c1917;
+    --accent-soft: #2a1a0e;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --font-sans: var(--font-geist);
+}
+
+@layer base {
+  html {
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-bg font-sans text-ink;
+  }
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+  .eyebrow {
+    @apply text-sm font-medium tracking-wide text-accent uppercase;
+  }
+  .btn-primary,
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors duration-150;
+  }
+  .btn-primary {
+    @apply bg-accent text-accent-ink hover:opacity-90;
+  }
+  .btn-secondary {
+    @apply border border-line bg-surface text-ink hover:border-muted;
+  }
+  .card {
+    @apply rounded-2xl border border-line bg-surface;
+  }
+  .badge {
+    @apply inline-flex items-center rounded-full border border-line bg-surface-2 px-2.5 py-0.5 text-xs font-medium text-muted;
+  }
+
+  /* Long-form text in case studies */
+  .prose-body {
+    @apply max-w-2xl text-lg leading-relaxed text-muted;
+  }
+  .prose-body h2 {
+    @apply mt-12 mb-4 text-2xl font-semibold tracking-tight text-ink;
+  }
+  .prose-body h3 {
+    @apply mt-8 mb-3 text-xl font-semibold text-ink;
+  }
+  .prose-body p {
+    @apply mb-5;
+  }
+  .prose-body ul {
+    @apply mb-5 list-disc space-y-2 pl-6 marker:text-accent;
+  }
+  .prose-body ol {
+    @apply mb-5 list-decimal space-y-2 pl-6;
+  }
+  .prose-body a {
+    @apply font-medium text-accent underline underline-offset-4;
+  }
+  .prose-body strong {
+    @apply font-semibold text-ink;
+  }
+}

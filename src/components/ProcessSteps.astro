@@ -1,0 +1,36 @@
+---
+const steps = [
+  {
+    title: 'Free call',
+    text: "A relaxed 20-minute chat about your business, what's working and what isn't.",
+  },
+  {
+    title: 'Clear proposal',
+    text: "A plan in plain English: what I'll build, how long it takes, and the price. No surprises.",
+  },
+  {
+    title: 'Design & build',
+    text: 'I do the work and share progress along the way so you can give feedback early.',
+  },
+  {
+    title: 'Launch & training',
+    text: 'We go live together, and I show you and your team how everything works.',
+  },
+  {
+    title: 'Ongoing support',
+    text: "I'm here for changes, new automations and questions after launch.",
+  },
+];
+---
+
+<ol class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+  {
+    steps.map((step, i) => (
+      <li class="card p-5">
+        <span class="text-sm font-semibold text-accent">Step {i + 1}</span>
+        <h3 class="mt-2 font-semibold">{step.title}</h3>
+        <p class="mt-2 text-sm leading-relaxed text-muted">{step.text}</p>
+      </li>
+    ))
+  }
+</ol>
