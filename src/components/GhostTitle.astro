@@ -1,0 +1,12 @@
+---
+interface Props {
+  text: string;
+  class?: string;
+}
+const { text, class: className = '' } = Astro.props;
+---
+
+{/* The section heading overlaps the lower half of the giant word */}
+<p class:list={['ghost-title -mb-[0.45em] overflow-hidden whitespace-nowrap', className]} aria-hidden="true">
+  {text}
+</p>

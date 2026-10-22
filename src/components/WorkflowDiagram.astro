@@ -1,0 +1,29 @@
+---
+// Trigger → steps → result for automation case studies, drawn as Decide-style
+// step bars on a dark panel. The bars grow in as it scrolls into view.
+interface Props {
+  steps: { label: string; detail?: string }[];
+}
+const { steps } = Astro.props;
+---
+
+<figure data-surface="dark" class="bg-bg p-6 sm:p-10" data-workflow>
+  <figcaption class="eyebrow">How it works</figcaption>
+  <ol class="mt-8 grid gap-6 lg:grid-flow-col lg:auto-cols-fr lg:gap-0">
+    {
+      steps.map((step, i) => {
+        const last = i === steps.length - 1;
+        return (
+          <li class="flex gap-4 lg:flex-col lg:gap-5 lg:border-l lg:border-line lg:px-5 lg:first:border-l-0 lg:first:pl-0" data-workflow-step>
+            <span data-workflow-badge class:list={['block h-12 w-[3px] shrink-0', last ? 'bg-accent' : 'bg-accent/45']} />
+            <div>
+              <p class="mono text-[11px] text-muted">{String(i + 1).padStart(2, '0')}</p>
+              <p class="mt-1.5 font-medium text-ink">{step.label}</p>
+              {step.detail && <p class="mt-1 text-[15px] text-muted">{step.detail}</p>}
+            </div>
+          </li>
+        );
+      })
+    }
+  </ol>
+</figure>

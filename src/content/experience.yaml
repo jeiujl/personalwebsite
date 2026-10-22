@@ -1,0 +1,28 @@
+# Experience on the About page. `kind` is `work` (default) or `education`;
+# `period` and `summary` are optional. Lists are sorted by `order`.
+# TODO: add dates for Flowa AI, HayesX, IPMD and Alpha Futures, and say what you
+# did with Alpha Futures.
+- id: flowa
+  role: Founder
+  org: Flowa AI
+  summary: Started Flowa AI, a company that sets up automations for businesses, including missed-call text-back for a dental services company.
+  order: 1
+- id: hayesx
+  role: App designer, developer & project manager
+  org: HayesX
+  summary: Designed, built and managed the HayesX pilot companion app, with a preflight checklist, digital logbook, manuals and messages in one place.
+  order: 2
+- id: ipmd
+  role: Project Manager
+  org: IPMD, Inc.
+  order: 3
+- id: alpha-futures
+  role: Worked with the team
+  org: Alpha Futures
+  order: 4
+- id: waterloo
+  kind: education
+  role: Financial Analysis & Risk Management (FARM)
+  org: University of Waterloo
+  period: 2026 – Present
+  order: 5

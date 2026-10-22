@@ -1,0 +1,16 @@
+pillar: automation
+title: Your all-in-one CRM & marketing platform
+summary: One place for your leads, texts, emails, calendar and reviews, set up and managed for you, with the automations already running.
+deliverables:
+  - CRM and sales pipeline set up for your business
+  - Missed-call text-back and two-way texting
+  - Automatic lead follow-up by text and email
+  - Online booking with appointment reminders
+  - Review requests after every job
+  - Mobile app for you and your team
+idealFor: Service businesses that lose leads to slow replies or keep customer info in notebooks and spreadsheets.
+exampleResult: "Missed-call text-back for a dental services company, so callers who can't get through still get a text."
+# TODO: optional, e.g. 'From $297/mo'. Leave out to show "Custom quote".
+discipline: crm
+inquiryType: CRM platform
+order: 3

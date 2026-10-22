@@ -1,0 +1,149 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import AutomationRecipe from '../components/AutomationRecipe.astro';
+import CTA from '../components/CTA.astro';
+import GhostTitle from '../components/GhostTitle.astro';
+import HeroScene from '../components/HeroScene.astro';
+import Marquee from '../components/Marquee.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ServiceBlock from '../components/ServiceBlock.astro';
+import StatsBand from '../components/StatsBand.astro';
+import TestimonialCard from '../components/TestimonialCard.astro';
+import { site } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { disciplines, getProjects, getServices, getTestimonials } from '../lib/content';
+
+const projects = await getProjects();
+const featured = projects.filter((p) => p.data.featured).slice(0, 6);
+const services = await getServices();
+const testimonials = (await getTestimonials()).slice(0, 3);
+const recipes = (await getCollection('automations')).sort((a, b) => a.data.order - b.data.order);
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  jobTitle: 'Website & app designer, founder of Flowa AI',
+  description: site.description,
+  ...(site.email ? { email: `mailto:${site.email}` } : {}),
+  url: Astro.site?.href,
+  sameAs: site.socials.map((s) => s.href),
+};
+---
+
+<BaseLayout jsonLd={personSchema}>
+  <HeroScene />
+
+  <Marquee items={Object.values(disciplines).map((d) => d.label)} />
+
+  <StatsBand />
+
+  <!-- Selected work -->
+  <section class="grid-lines py-20 sm:py-24">
+    <GhostTitle text="Work" class="container-page" />
+    <div class="container-page">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <SectionHeading eyebrow="Selected work" title="Selected projects" intro="A few things I've designed, built and set up." />
+        <a href="/work" class="arrow-link">See all work <span class="arrow" aria-hidden="true">↗</span></a>
+      </div>
+      <div class="mt-14 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
+        {featured.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Services: one feature row per service -->
+  <section class="grid-lines border-t border-line bg-surface-2 py-20 sm:py-24">
+    <GhostTitle text="Services" class="container-page" />
+    <div class="container-page">
+      <SectionHeading
+        eyebrow="What I do"
+        title="Four ways I help your business grow"
+        intro="Look professional online, and stop letting leads slip through the cracks. Pick one, or combine them."
+      />
+      <div class="mt-14">
+        {services.map((service, i) => <ServiceBlock service={service} index={i} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Automation recipes -->
+  <section class="grid-lines border-t border-line py-20 sm:py-24">
+    <div class="container-page">
+      <SectionHeading
+        eyebrow="Automations I offer"
+        title="Work that happens while you're busy"
+        intro="A few common automations I can set up. Each one runs in the background, so you and your team can focus on the job in front of you."
+      />
+      <div class="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
+        {recipes.map((recipe, i) => <AutomationRecipe recipe={recipe} index={i} />)}
+        <a
+          href="/contact?service=Not%20sure%20yet"
+          class="group flex flex-col justify-between border border-dashed border-line p-6 transition-colors hover:border-ink"
+        >
+          <p class="mono text-[11px] text-muted">Your idea</p>
+          <div>
+            <p class="heading text-2xl">Have something else in mind?</p>
+            <p class="mt-3 text-[15px] text-muted">If a task is repetitive, it can probably be automated. Tell me about it.</p>
+            <span class="arrow-link mt-6">Ask me <span class="arrow" aria-hidden="true">↗</span></span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  {
+    testimonials.length > 0 && (
+      <section class="grid-lines border-t border-line py-20 sm:py-24">
+        <div class="container-page">
+          <SectionHeading eyebrow="Kind words" title="What clients say" />
+          <div class="mt-14 grid gap-10 md:grid-cols-3" data-reveal-stagger>
+            {testimonials.map((t) => (
+              <TestimonialCard testimonial={t} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- About snippet -->
+  <section class="border-t border-line">
+    <div class="container-page grid items-center gap-10 pt-20 sm:pt-24 md:grid-cols-[auto_1fr]" data-reveal>
+      {
+        site.photo ? (
+          <Image
+            src={site.photo}
+            alt={site.photoAlt}
+            widths={[192, 384]}
+            sizes="192px"
+            class="aspect-[4/5] w-40 object-cover transition-[filter] duration-700 sm:w-48 [@media(hover:hover)]:grayscale [@media(hover:hover)]:hover:grayscale-0"
+          />
+        ) : (
+          <span
+            data-surface="dark"
+            class="monument flex aspect-[4/5] w-40 items-center justify-center bg-bg text-6xl text-ink sm:w-48"
+            aria-hidden="true"
+          >
+            {site.initials}
+          </span>
+        )
+      }
+      <div>
+        <p class="eyebrow">About me</p>
+        <h2 class="heading mt-4 text-4xl sm:text-5xl">Hi, I'm {site.name}.</h2>
+        <p class="mt-4 max-w-2xl text-lg text-muted">
+          I'm the founder of Flowa AI. I design and build websites and apps, and set up automations, like missed-call
+          text-back, so callers who can't get through still hear back. I also study Financial Analysis &amp; Risk
+          Management at the University of Waterloo.
+        </p>
+        <a href="/about" class="arrow-link mt-6">More about me <span class="arrow" aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </section>
+
+  <CTA />
+</BaseLayout>

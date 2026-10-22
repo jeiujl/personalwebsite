@@ -1,0 +1,15 @@
+pillar: automation
+title: Custom AI automations
+summary: AI-powered automations built around how your business already works, handling the repetitive tasks that eat your week.
+deliverables:
+  - Inbox sorting and drafted replies
+  - Lead qualification and routing
+  - Data entry from emails, forms and documents
+  - Automatic reports and summaries
+  - Website chat assistants trained on your business
+idealFor: Teams spending hours a week on copy-paste work, email triage or manual data entry.
+exampleResult: 'Flowa AI, the company I started to set up automations for businesses.'
+# TODO: optional, e.g. 'From $1,000'. Leave out to show "Custom quote".
+discipline: ai
+inquiryType: AI automation
+order: 4

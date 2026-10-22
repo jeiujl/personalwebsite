@@ -1,0 +1,307 @@
+---
+// Homepage opener. A dark night-sky hero (step bars, monument headline, CTA)
+// that, on capable devices, pins while scrolling and becomes the story of one
+// automation: the 3D network centers and lights up step by step.
+// Everywhere else it's a normal hero followed by the five steps as a list.
+import { ctaHref, site } from '../config/site';
+import type { IconName } from '../lib/icons';
+import HeroVisual from './HeroVisual.astro';
+import Starfield from './Starfield.astro';
+import StatusDot from './StatusDot.astro';
+import StepBars from './StepBars.astro';
+
+const steps: { icon: IconName; label: string; bar: string; title: string; text: string }[] = [
+  {
+    icon: 'phone-call',
+    label: 'Missed call',
+    bar: 'Call',
+    title: 'A customer calls, nobody can pick up',
+    text: 'Usually they would call the next business on Google.',
+  },
+  {
+    icon: 'message',
+    label: 'Text back',
+    bar: 'Text',
+    title: 'They get a text within seconds',
+    text: '"Sorry we missed you! How can we help?" The conversation continues by text.',
+  },
+  {
+    icon: 'users',
+    label: 'CRM',
+    bar: 'CRM',
+    title: 'The lead lands in your CRM',
+    text: 'Name, number and what they need, tagged and placed in your pipeline.',
+  },
+  {
+    icon: 'calendar',
+    label: 'Booked',
+    bar: 'Booked',
+    title: 'They book a time themselves',
+    text: 'Online booking, a confirmation and a reminder the day before.',
+  },
+  {
+    icon: 'star',
+    label: 'Review',
+    bar: 'Review',
+    title: 'A review request goes out after the job',
+    text: 'More 5-star reviews, without anyone having to remember.',
+  },
+];
+---
+
+<section
+  data-surface="dark"
+  data-band
+  data-story
+  data-steps={JSON.stringify(steps.map(({ icon, label }) => ({ icon, label })))}
+  class="relative overflow-hidden bg-bg"
+>
+  <div data-story-stage class="relative">
+    <Starfield count={150} seed={3} class="story-css-stars transition-opacity duration-1000" />
+    <div data-hero-canvas class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-1000" aria-hidden="true"></div>
+    <p data-story-ghost class="ghost-title absolute inset-x-0 top-[38%] hidden -translate-y-1/2 text-center" aria-hidden="true">
+      <span data-story-ghost-text></span>
+    </p>
+
+    <div class="story-hero container-page relative flex min-h-[calc(100svh-4rem)] flex-col pt-8 pb-10 sm:pt-10">
+      <div class="flex items-start justify-between gap-6">
+        <StepBars steps={steps.map((s) => s.bar)} active={1} />
+        <div class="hidden sm:block"><StatusDot label="Taking on new clients" /></div>
+      </div>
+
+      <div data-hero-fallback class="story-fallback my-12 transition-opacity duration-700 lg:absolute lg:top-28 lg:right-8 lg:my-0 lg:w-[48%]">
+        <HeroVisual nodes={steps} />
+      </div>
+
+      <div data-hero-copy class="mt-auto pt-10">
+        <p class="eyebrow" data-hero-item>Design × Automation</p>
+        {/* Sized by width and height, so the CTA stays above the fold on short laptops */}
+        <h1 class="monument mt-5 text-[length:clamp(56px,min(11vw,16.5svh),172px)]" data-monument>
+          {
+            site.heroDisplay.map((line) => (
+              <span class="block overflow-hidden pb-[0.04em]">
+                <span class="monument-fade block" data-monument-line>
+                  {line}
+                </span>
+              </span>
+            ))
+          }
+        </h1>
+        <div class="mt-8 grid gap-6 border-t border-line pt-6 md:grid-cols-[1fr_auto] md:items-end" data-hero-item>
+          <p class="max-w-xl text-lg text-pretty text-muted">{site.headline}</p>
+          <div class="flex flex-wrap items-center gap-5">
+            <a href={ctaHref} class="btn-signal" data-magnetic>
+              Book a free call <span class="text-accent" aria-hidden="true">↗</span>
+            </a>
+            <a href="#how-it-works" class="arrow-link">See how it works <span class="arrow" aria-hidden="true">↓</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="how-it-works" data-story-block class="story-block container-page relative scroll-mt-16 pb-20">
+      <p class="eyebrow">How an automation works</p>
+      <h2 class="heading mt-3 max-w-xl text-3xl sm:text-4xl">One missed call, handled from start to finish.</h2>
+      <ol data-story-steps class="mt-8 grid gap-px border border-line bg-line sm:grid-cols-5">
+        {
+          steps.map((step, i) => (
+            <li class="bg-bg p-5" data-story-step>
+              <p class="mono text-accent">{String(i + 1).padStart(2, '0')} / 05</p>
+              <p class="mt-3 font-medium text-ink">{step.title}</p>
+              <p class="mt-2 text-[15px] text-muted">{step.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  /* Story mode (set by the script on capable devices). The stage fills the
+     viewport below the sticky header and pins there. */
+  [data-story].is-story [data-story-stage] {
+    height: calc(100svh - 4rem);
+  }
+  [data-story].is-story .story-hero {
+    min-height: calc(100svh - 4rem);
+    padding-top: 2.5rem;
+  }
+  [data-story].is-story [data-story-ghost] {
+    display: block;
+  }
+  [data-story].is-story .story-block {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 2.5rem;
+    padding-bottom: 0;
+    opacity: 0;
+  }
+  [data-story].is-story .story-block h2 {
+    font-size: 1.125rem;
+    margin-top: 0.5rem;
+  }
+  [data-story].is-story [data-story-steps] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 28rem;
+    margin-top: 1.25rem;
+    border: 0;
+    background: none;
+  }
+  [data-story].is-story [data-story-step] {
+    grid-area: 1 / 1;
+    padding: 0;
+    background: none;
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 0.45s var(--ease-settle),
+      transform 0.45s var(--ease-settle);
+  }
+  [data-story].is-story [data-story-step].is-current {
+    opacity: 1;
+    transform: none;
+  }
+  [data-story].is-3d .story-css-stars,
+  [data-story].is-3d .story-fallback {
+    opacity: 0;
+  }
+  [data-story].is-3d [data-hero-canvas] {
+    opacity: 1;
+  }
+  @media (max-width: 1023.98px) {
+    [data-story].is-story .story-fallback {
+      position: absolute;
+      inset-inline: 1rem;
+      top: 22%;
+      margin: 0;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import type { AutomationScene, SceneNode } from '../scripts/automation-scene';
+
+  const section = document.querySelector<HTMLElement>('[data-story]');
+
+  function canRun() {
+    // ?3d=1 forces the scene on (handy for demos and testing).
+    if (new URLSearchParams(location.search).get('3d') === '1') return true;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+    const nav = navigator as Navigator & { connection?: { saveData?: boolean }; deviceMemory?: number };
+    if (nav.connection?.saveData) return false;
+    if ((nav.hardwareConcurrency ?? 4) <= 2 || (nav.deviceMemory ?? 4) < 2) return false;
+    try {
+      // Skip devices without real GPU acceleration: software rendering would
+      // make the page sluggish (it is also what speed tests like Lighthouse use).
+      const canvas = document.createElement('canvas');
+      const attrs = { failIfMajorPerformanceCaveat: true };
+      const gl = (canvas.getContext('webgl2', attrs) ?? canvas.getContext('webgl', attrs)) as WebGLRenderingContext | null;
+      if (!gl) return false;
+      const info = gl.getExtension('WEBGL_debug_renderer_info');
+      const renderer = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : '';
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      return !/swiftshader|llvmpipe|software/i.test(renderer);
+    } catch {
+      return false;
+    }
+  }
+
+  function whenIdle(fn: () => void) {
+    const run = () => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 1500 }) : setTimeout(fn, 200));
+    document.readyState === 'complete' ? run() : addEventListener('load', run, { once: true });
+  }
+
+  if (section && canRun()) {
+    gsap.registerPlugin(ScrollTrigger);
+    section.classList.add('is-story');
+
+    const nodes: SceneNode[] = JSON.parse(section.dataset.steps ?? '[]');
+    const stage = section.querySelector<HTMLElement>('[data-story-stage]')!;
+    const copy = section.querySelector<HTMLElement>('[data-hero-copy]')!;
+    const block = section.querySelector<HTMLElement>('[data-story-block]')!;
+    const ghost = section.querySelector<HTMLElement>('[data-story-ghost]')!;
+    const ghostText = section.querySelector<HTMLElement>('[data-story-ghost-text]')!;
+    const canvasHost = section.querySelector<HTMLElement>('[data-hero-canvas]')!;
+    const bars = [...section.querySelectorAll<HTMLElement>('[data-step-bar]')];
+    const items = [...section.querySelectorAll<HTMLElement>('[data-story-step]')];
+
+    let current = -1;
+    const showStep = (i: number) => {
+      if (i === current) return;
+      current = i;
+      bars.forEach((bar, b) => {
+        bar.classList.toggle('bg-accent', b <= i);
+        bar.classList.toggle('bg-line', b > i);
+      });
+      items.forEach((item, s) => item.classList.toggle('is-current', s === i));
+      ghostText.textContent = nodes[i].label;
+      ghostText.animate([{ opacity: 0.3 }, { opacity: 1 }], { duration: 500, easing: 'ease-out' });
+    };
+    showStep(0);
+
+    let scene: AutomationScene | null = null;
+    const state = { focus: 0, progress: 0 };
+    const stepFor = (p: number) => Math.min(nodes.length - 1, Math.floor(p * (nodes.length - 1) + 1e-4));
+
+    const tl = gsap.timeline({
+      defaults: { ease: 'none' },
+      scrollTrigger: {
+        trigger: stage,
+        pin: true,
+        // Pin just below the sticky header, not behind it
+        start: () => `top ${document.getElementById('site-header')?.offsetHeight ?? 64}px`,
+        end: '+=260%',
+        scrub: 0.6,
+        anticipatePin: 1,
+        refreshPriority: 1,
+        onUpdate: (self) => {
+          // Back at the top: let the network auto-play again.
+          if (self.progress < 0.002) scene?.play();
+        },
+      },
+    });
+    tl.to(copy, { opacity: 0, y: -60, duration: 0.14 }, 0)
+      .to(state, { focus: 1, duration: 0.14, onUpdate: () => scene?.setFocus(state.focus) }, 0)
+      .fromTo(block, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08 }, 0.1)
+      .fromTo(ghost, { opacity: 0 }, { opacity: 1, duration: 0.08 }, 0.12)
+      .to(
+        state,
+        {
+          progress: 1,
+          duration: 0.8,
+          onUpdate: () => {
+            scene?.setProgress(state.progress);
+            showStep(stepFor(state.progress));
+          },
+        },
+        0.16,
+      )
+      .to({}, { duration: 0.04 });
+
+    const io = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      io.disconnect();
+      whenIdle(async () => {
+        try {
+          const { mount } = await import('../scripts/automation-scene');
+          scene = mount(canvasHost, {
+            nodes,
+            // While auto-playing at the top, the bars follow the network.
+            onStep: (i) => tl.scrollTrigger!.progress < 0.002 && showStep(i),
+            onReady: () => section.classList.add('is-3d'),
+          });
+          scene.setFocus(state.focus);
+          if (tl.scrollTrigger!.progress > 0.002) scene.setProgress(state.progress);
+        } catch (error) {
+          // Keep the static network if anything goes wrong.
+          console.warn('Hero scene unavailable', error);
+        }
+      });
+    });
+    io.observe(section);
+  }
+</script>

@@ -1,0 +1,14 @@
+pillar: design
+title: App design
+summary: Clear, easy-to-use app designs, from rough idea to a clickable prototype you can test and hand to developers.
+deliverables:
+  - User flows that map out every step
+  - Polished screens for iPhone, Android or web
+  - Clickable prototype for testing and pitching
+  - Developer-ready design files
+idealFor: Founders and businesses with an app idea, or an existing app that's confusing to use.
+exampleResult: 'The HayesX pilot companion app: designed, built and managed, with a preflight checklist, logbook and manuals.'
+# TODO: optional, e.g. 'From $2,500'. Leave out to show "Custom quote".
+discipline: app
+inquiryType: App design
+order: 2

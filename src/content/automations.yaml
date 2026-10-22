@@ -1,0 +1,31 @@
+# Automation "recipes" shown on the homepage: simple, common wins clients recognise.
+- id: missed-call-text-back
+  name: Missed-call text-back
+  trigger: A customer calls and nobody can answer
+  action: They get a friendly text within seconds, and the conversation continues by text
+  benefit: Stop losing leads to voicemail
+  order: 1
+- id: lead-follow-up
+  name: Automatic lead follow-up
+  trigger: Someone fills out a form or sends a message
+  action: A sequence of texts and emails checks in until they reply or book
+  benefit: Every lead gets followed up, every time
+  order: 2
+- id: appointment-reminders
+  name: Appointment reminders
+  trigger: A customer books an appointment
+  action: Confirmation right away, reminders the day before and the hour before
+  benefit: Fewer no-shows
+  order: 3
+- id: review-requests
+  name: Review requests
+  trigger: A job is marked complete
+  action: The customer gets a text asking for a Google review, with a direct link
+  benefit: More 5-star reviews on autopilot
+  order: 4
+- id: ai-inbox-triage
+  name: AI inbox assistant
+  trigger: An email lands in your inbox
+  action: AI sorts it, logs requests and drafts a reply for you to approve
+  benefit: Hours of email work back every week
+  order: 5

@@ -1,0 +1,42 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import DisciplineTag from './DisciplineTag.astro';
+
+interface Props {
+  service: CollectionEntry<'services'>;
+}
+const { service } = Astro.props;
+const { title, summary, deliverables, idealFor, exampleResult, startingAt, discipline, inquiryType } = service.data;
+---
+
+<article id={service.id} class="card flex scroll-mt-24 flex-col p-6 sm:p-8">
+  <DisciplineTag discipline={discipline} />
+  <h3 class="heading mt-5 text-3xl">{title}</h3>
+  <p class="mt-3 text-muted">{summary}</p>
+  <ul class="mt-6 space-y-2.5 text-[15px]">
+    {
+      deliverables.map((item) => (
+        <li class="flex gap-3">
+          <span class="mt-[0.7em] h-px w-3 shrink-0 bg-accent" aria-hidden="true" />
+          <span>{item}</span>
+        </li>
+      ))
+    }
+  </ul>
+  <dl class="mt-6 space-y-4 border-t border-line pt-6 text-[15px]">
+    <div>
+      <dt class="mono text-[11px] text-muted">Ideal for</dt>
+      <dd class="mt-1">{idealFor}</dd>
+    </div>
+    <div>
+      <dt class="mono text-[11px] text-muted">Related work</dt>
+      <dd class="mt-1">{exampleResult}</dd>
+    </div>
+  </dl>
+  <div class="mt-auto flex items-center justify-between gap-4 pt-8">
+    <span class="mono text-[12px]">{startingAt ?? 'Custom quote'}</span>
+    <a href={`/contact?service=${encodeURIComponent(inquiryType)}`} class="btn-ghost">
+      Get started <span class="text-accent" aria-hidden="true">↗</span>
+    </a>
+  </div>
+</article>

@@ -1,0 +1,26 @@
+---
+// Decide-style step indicator: thin vertical bars with mono labels. The first
+// `active` bars are lit; the scroll story lights the rest as it plays.
+interface Props {
+  steps: string[];
+  active?: number;
+  class?: string;
+}
+const { steps, active = 1, class: className = '' } = Astro.props;
+---
+
+<ol class:list={['flex gap-3 sm:gap-6', className]} data-step-bars>
+  {
+    steps.map((step, i) => (
+      <li class="flex items-end gap-2">
+        <span
+          data-step-bar
+          class:list={['block h-9 w-[3px] transition-colors duration-300 sm:h-11', i < active ? 'bg-accent' : 'bg-line']}
+        />
+        <span class="mono text-[10px] leading-none text-muted sm:text-[11px]">
+          {String(i + 1).padStart(2, '0')}.{step}
+        </span>
+      </li>
+    ))
+  }
+</ol>

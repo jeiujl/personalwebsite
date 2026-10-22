@@ -1,0 +1,10 @@
+---
+import { disciplines, type Discipline } from '../lib/disciplines';
+
+interface Props {
+  discipline: Discipline;
+}
+const { label, hue } = disciplines[Astro.props.discipline];
+---
+
+<span class="tag"><span class="tag-dot" style={`background:${hue}`}></span>{label}</span>

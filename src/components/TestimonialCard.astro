@@ -1,0 +1,20 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import SampleBadge from './SampleBadge.astro';
+
+interface Props {
+  testimonial: CollectionEntry<'testimonials'>;
+}
+const { quote, name, title, company, sample } = Astro.props.testimonial.data;
+---
+
+<figure class="flex h-full flex-col border-t border-ink/80 pt-6">
+  <blockquote class="flex-1 text-xl leading-snug font-medium tracking-[-0.02em] text-pretty sm:text-2xl">
+    <p><span class="text-accent" aria-hidden="true">“</span>{quote}<span class="text-accent" aria-hidden="true">”</span></p>
+  </blockquote>
+  <figcaption class="mt-8 flex flex-wrap items-center gap-2">
+    <span class="mono text-[12px] text-ink">{name}</span>
+    <span class="mono text-[12px] text-muted">· {title}, {company}</span>
+    {sample && <SampleBadge />}
+  </figcaption>
+</figure>

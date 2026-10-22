@@ -1,0 +1,51 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import DisciplineTag from './DisciplineTag.astro';
+import ProjectCover from './ProjectCover.astro';
+import SampleBadge from './SampleBadge.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { project, headingLevel: Heading = 'h3' } = Astro.props;
+const { title, client, summary, category, cover, coverAlt, sample, year } = project.data;
+---
+
+<article class="group relative flex h-full flex-col" data-category={category}>
+  <div class="overflow-hidden border border-line">
+    <div class="transition-transform duration-700 ease-[var(--ease-settle)] group-hover:scale-[1.03]">
+      {
+        cover ? (
+          <Image
+            src={cover}
+            alt={coverAlt ?? ''}
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            class="aspect-[16/10] w-full object-cover"
+          />
+        ) : (
+          <ProjectCover category={category} />
+        )
+      }
+    </div>
+  </div>
+  <div class="mt-4 flex flex-wrap items-center gap-2">
+    <DisciplineTag discipline={category} />
+    {sample && <SampleBadge />}
+    {year && <span class="mono ml-auto text-[11px] text-muted">{year}</span>}
+  </div>
+  <Heading class="mt-3 text-xl leading-snug font-medium tracking-[-0.02em] text-balance">
+    <a href={`/work/${project.id}/`} class="after:absolute after:inset-0">
+      {title}
+    </a>
+  </Heading>
+  <p class="mt-1 text-[15px] text-muted">{client}</p>
+  <p class="mt-3 line-clamp-3 text-[15px] leading-relaxed text-muted">{summary}</p>
+  {/* mt-auto lines the links up across a row */}
+  <span class="arrow-link mt-auto self-start pt-4 text-[15px]" aria-hidden="true">
+    View project <span class="arrow">↗</span>
+  </span>
+</article>

@@ -1,0 +1,77 @@
+---
+import ContactForm from '../components/ContactForm.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Rendered on request so the form works without JavaScript and can read
+// ?service= and ?ref= from the URL.
+export const prerender = false;
+
+const nextSteps = [
+  { title: 'I read it and get back to you', text: 'By email, as soon as I can.' },
+  { title: 'We have a free 20-minute call', text: 'You tell me about your business and goals.' },
+  { title: 'You get a clear proposal', text: 'What I recommend, the timeline and the price.' },
+];
+---
+
+<BaseLayout
+  title="Contact"
+  description={`Get in touch with ${site.name} about a website, app design or automations for your business.`}
+>
+  <PageHero
+    compact
+    eyebrow="Contact"
+    title="Let's talk"
+    intro="Tell me a little about what you need. There's no commitment, and no question is too basic."
+  />
+
+  <section class="grid-lines pt-16 pb-24">
+    <div class="container-page grid gap-12 lg:grid-cols-[1fr_1.5fr]">
+      <div>
+        <p class="eyebrow">What happens next</p>
+        <ol class="mt-6 border-t border-line">
+          {
+            nextSteps.map((step, i) => (
+              <li class="flex gap-5 border-b border-line py-5">
+                <span class:list={['block h-10 w-[3px] shrink-0', i === 0 ? 'bg-accent' : 'bg-line']} aria-hidden="true" />
+                <div>
+                  <p class="mono text-[11px] text-muted">{String(i + 1).padStart(2, '0')}</p>
+                  <p class="mt-1 font-medium">{step.title}</p>
+                  <p class="text-[15px] text-muted">{step.text}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+
+        {
+          (site.email || site.bookingUrl) && (
+            <div class="mt-10 space-y-3">
+              {site.email && (
+                <>
+                  <p class="eyebrow">Prefer email?</p>
+                  <a href={`mailto:${site.email}`} class="arrow-link text-lg">
+                    {site.email} <span class="arrow" aria-hidden="true">↗</span>
+                  </a>
+                </>
+              )}
+              {site.bookingUrl && (
+                <p>
+                  <a href={site.bookingUrl} target="_blank" rel="noopener" class="arrow-link text-lg">
+                    Book a call directly <span class="arrow" aria-hidden="true">↗</span>
+                  </a>
+                </p>
+              )}
+            </div>
+          )
+        }
+      </div>
+
+      {/* On phones the form comes first; the steps follow it */}
+      <div class="order-first lg:order-none">
+        <ContactForm />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
