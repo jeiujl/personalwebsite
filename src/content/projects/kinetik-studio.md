@@ -9,12 +9,12 @@ concept: true
 featured: true
 order: 12
 cover: ./images/concept-kinetik-studio-cover.webp
-coverAlt: "Three phone screens of the Kinetik booking app: a weekly class schedule with spots left, the Reformer Flow class detail with a Book class button, and a booking confirmation with Add to calendar."
+coverAlt: "Three phone screens of the Kinetik app on black with a warm amber glow: a Discover screen with Yoga, Pilates, HIIT and Recover photo tiles, the Reformer Flow class page with a Book class button, and a You're booked confirmation with Add to calendar."
 gallery:
   - src: ./images/concept-kinetik-studio-1.webp
-    alt: "Three phone screens: membership with a 10-class pack and plan options, a dark-mode profile with a ring showing classes attended this month, and a waitlist screen showing the member is second in line."
+    alt: "Three dark phone screens: a weekly schedule with spots left on each class, a progress screen with an amber ring showing 9 of 12 classes this month, and a membership screen with credits left and plan options."
   - src: ./images/concept-kinetik-studio-2.webp
-    alt: "Kinetik design system board with the logo and app icons, a sand, clay and blue palette with contrast checks, the type scale, buttons and status pills, the class card in light and dark, and custom icons."
+    alt: "Kinetik design system board with the logo and app icons, a black, bone and amber palette with sand, terracotta and olive tile tones, the type scale, the four photo tiles, buttons, rows and line icons."
 ---
 
 ## The brief
@@ -23,10 +23,10 @@ Kinetik is a boutique pilates and mobility studio. Small studios often take book
 
 ## My approach
 
-- **Calm, not clinical:** soft sand and clay neutrals with one bright blue for anything you can tap.
-- **Spots left at a glance:** every class card shows how many spots are left before you open it.
-- **Boutique, not gym chain:** an elegant serif for headlines next to a clean sans for the details.
-- **Light and dark mode:** both built from the same set of colours.
+- **Dark and calm:** a pure black UI with a soft amber glow at the top, so the app feels like a dimmed studio.
+- **Photo-led:** big, warm photo tiles for Yoga, Pilates, HIIT and Recover do the talking.
+- **Quiet type:** one light sans for everything, with small uppercase labels for lists.
+- **One warm accent:** amber is kept for booking, spots left and progress.
 
 ## What's inside
 
