@@ -6,6 +6,12 @@ category: website
 role: Social media content & website
 tools: [Social media content, Website / landing page]
 liveUrl: https://www.pursueplay.com
+cover: ./images/pursue-play-cover.webp
+coverAlt: "The Pursue Play homepage: a misty forest hero with the Pursue Play wordmark, 'Discover your unique style' and a Shop now button."
+gallery:
+  - src: ./images/pursue-play-1.webp
+    alt: "The Pursue Play About page, with the brand story laid out over a black-and-white architecture photo."
+featured: true
 order: 4
 ---
 

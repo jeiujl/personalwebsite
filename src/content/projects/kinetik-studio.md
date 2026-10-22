@@ -6,7 +6,7 @@ category: app
 role: "Brand, UI design & prototype"
 tools: [UI/UX design, Mobile app design, Booking flow, Design system]
 concept: true
-featured: false
+featured: true
 order: 12
 cover: ./images/concept-kinetik-studio-cover.webp
 coverAlt: "Three phone screens of the Kinetik booking app: a weekly class schedule with spots left, the Reformer Flow class detail with a Book class button, and a booking confirmation with Add to calendar."

@@ -16,8 +16,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { disciplines, getProjects, getServices, getTestimonials } from '../lib/content';
 
 const projects = await getProjects();
-// Featured work first, then the rest, six cards in one grid
-const featured = [...projects.filter((p) => p.data.featured), ...projects.filter((p) => !p.data.featured && p.data.cover)].slice(0, 6);
+const featured = projects.filter((p) => p.data.featured).slice(0, 6);
 const services = await getServices();
 const testimonials = (await getTestimonials()).slice(0, 3);
 const recipes = (await getCollection('automations')).sort((a, b) => a.data.order - b.data.order);

@@ -6,7 +6,7 @@ category: crm
 role: "Brand, UI design & automation design"
 tools: [UI/UX design, Dashboard design, Automation design, Booking flow, Mobile app design]
 concept: true
-featured: false
+featured: true
 order: 13
 cover: ./images/concept-brightgate-realty-cover.webp
 coverAlt: "Brightgate Realty CRM on a desktop browser: a pipeline with New lead, Contacted, Showing booked and Offer columns, with the selected lead in Showing booked and a conversation panel showing the instant text reply, its Book a showing button and the booking it led to. A phone beside it shows a showing-booked notification and the agent's inbox."
