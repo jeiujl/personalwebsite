@@ -3,14 +3,20 @@
 // that, on capable devices, pins while scrolling and becomes the story of one
 // automation: the 3D network centers and lights up step by step.
 // Everywhere else it's a normal hero followed by the five steps as a list.
-import { ctaHref, site } from '../config/site';
+import { getCtaHref, getSite } from '../config/site';
+import { getLang, pick } from '../i18n';
 import type { IconName } from '../lib/icons';
 import HeroVisual from './HeroVisual.astro';
 import Starfield from './Starfield.astro';
 import StatusDot from './StatusDot.astro';
 import StepBars from './StepBars.astro';
 
-const steps: { icon: IconName; label: string; bar: string; title: string; text: string }[] = [
+const lang = getLang(Astro.url);
+const site = getSite(lang);
+const ctaHref = getCtaHref(lang);
+
+type Step = { icon: IconName; label: string; bar: string; title: string; text: string };
+const stepsEn: Step[] = [
   {
     icon: 'phone-call',
     label: 'Missed call',
@@ -47,6 +53,62 @@ const steps: { icon: IconName; label: string; bar: string; title: string; text: 
     text: 'More 5-star reviews, without anyone having to remember.',
   },
 ];
+const stepsZh: Step[] = [
+  {
+    icon: 'phone-call',
+    label: '未接来电',
+    bar: '来电',
+    title: '客户来电，却没人能接',
+    text: '通常他们会直接打给 Google 上的下一家。',
+  },
+  {
+    icon: 'message',
+    label: '短信回复',
+    bar: '短信',
+    title: '几秒内收到一条短信',
+    text: '“抱歉错过了您的来电！有什么可以帮您？”对话通过短信继续。',
+  },
+  {
+    icon: 'users',
+    label: 'CRM',
+    bar: 'CRM',
+    title: '潜在客户进入你的 CRM',
+    text: '姓名、电话和需求，自动打好标签并放进你的销售管道。',
+  },
+  {
+    icon: 'calendar',
+    label: '已预约',
+    bar: '预约',
+    title: '客户自己预约时间',
+    text: '在线预约、确认信息，以及前一天的提醒。',
+  },
+  {
+    icon: 'star',
+    label: '评价',
+    bar: '评价',
+    title: '服务完成后发送评价邀请',
+    text: '更多五星好评，不需要任何人记着去做。',
+  },
+];
+const steps = pick(lang, { en: stepsEn, zh: stepsZh });
+const t = pick(lang, {
+  en: {
+    status: 'Taking on new clients',
+    eyebrow: 'Design × Automation',
+    book: 'Book a free call',
+    how: 'See how it works',
+    blockEyebrow: 'How an automation works',
+    blockTitle: 'One missed call, handled from start to finish.',
+  },
+  zh: {
+    status: '正在接受新客户',
+    eyebrow: '设计 × 自动化',
+    book: '预约免费通话',
+    how: '看看如何运作',
+    blockEyebrow: '自动化如何运作',
+    blockTitle: '一通未接来电，从头到尾自动处理。',
+  },
+});
 ---
 
 <section
@@ -66,7 +128,7 @@ const steps: { icon: IconName; label: string; bar: string; title: string; text: 
     <div class="story-hero container-page relative flex min-h-[calc(100svh-4rem)] flex-col pt-8 pb-10 sm:pt-10">
       <div class="flex items-start justify-between gap-6">
         <StepBars steps={steps.map((s) => s.bar)} active={1} />
-        <div class="hidden sm:block"><StatusDot label="Taking on new clients" /></div>
+        <div class="hidden sm:block"><StatusDot label={t.status} /></div>
       </div>
 
       <div data-hero-fallback class="story-fallback my-12 transition-opacity duration-700 lg:absolute lg:top-28 lg:right-8 lg:my-0 lg:w-[48%]">
@@ -74,7 +136,7 @@ const steps: { icon: IconName; label: string; bar: string; title: string; text: 
       </div>
 
       <div data-hero-copy class="mt-auto pt-10">
-        <p class="eyebrow" data-hero-item>Design × Automation</p>
+        <p class="eyebrow" data-hero-item>{t.eyebrow}</p>
         {/* Sized by width and height, so the CTA stays above the fold on short laptops */}
         <h1 class="monument mt-5 text-[length:clamp(56px,min(11vw,16.5svh),172px)]" data-monument>
           {
@@ -91,17 +153,17 @@ const steps: { icon: IconName; label: string; bar: string; title: string; text: 
           <p class="max-w-xl text-lg text-pretty text-muted">{site.headline}</p>
           <div class="flex flex-wrap items-center gap-5">
             <a href={ctaHref} class="btn-signal" data-magnetic>
-              Book a free call <span class="text-accent" aria-hidden="true">↗</span>
+              {t.book} <span class="text-accent" aria-hidden="true">↗</span>
             </a>
-            <a href="#how-it-works" class="arrow-link">See how it works <span class="arrow" aria-hidden="true">↓</span></a>
+            <a href="#how-it-works" class="arrow-link">{t.how} <span class="arrow" aria-hidden="true">↓</span></a>
           </div>
         </div>
       </div>
     </div>
 
     <div id="how-it-works" data-story-block class="story-block container-page relative scroll-mt-16 pb-20">
-      <p class="eyebrow">How an automation works</p>
-      <h2 class="heading mt-3 max-w-xl text-3xl sm:text-4xl">One missed call, handled from start to finish.</h2>
+      <p class="eyebrow">{t.blockEyebrow}</p>
+      <h2 class="heading mt-3 max-w-xl text-3xl sm:text-4xl">{t.blockTitle}</h2>
       <ol data-story-steps class="mt-8 grid gap-px border border-line bg-line sm:grid-cols-5">
         {
           steps.map((step, i) => (

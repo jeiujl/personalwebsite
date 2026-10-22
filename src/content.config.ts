@@ -41,6 +41,26 @@ const projects = defineCollection({
     }),
 });
 
+// Chinese versions of the projects, one file per project with the same file
+// name (e.g. projects-zh/flowa-ai.md). The body is the translated write-up;
+// any field left out falls back to the English one.
+const projectsZh = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/projects-zh' }),
+  schema: z.object({
+    title: z.string(),
+    client: z.string().optional(),
+    summary: z.string(),
+    role: z.string().optional(),
+    tools: z.array(z.string()).optional(),
+    duration: z.string().optional(),
+    coverAlt: z.string().optional(),
+    // Alt text for each gallery image, in the same order as the English file
+    galleryAlts: z.array(z.string()).optional(),
+    workflow: z.array(z.object({ label: z.string(), detail: z.string().optional() })).optional(),
+    metrics: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
+  }),
+});
+
 const testimonials = defineCollection({
   loader: glob({ pattern: '**/*.yaml', base: './src/content/testimonials' }),
   schema: z.object({
@@ -69,6 +89,18 @@ const services = defineCollection({
     // Preselected option when someone clicks "Get started" on this service
     inquiryType: z.enum(inquiryTypes),
     order: z.number().default(100),
+    // Chinese text for the /zh pages
+    zh: z
+      .object({
+        title: z.string(),
+        summary: z.string(),
+        deliverables: z.array(z.string()),
+        idealFor: z.string(),
+        exampleResult: z.string(),
+        startingAt: z.string(),
+      })
+      .partial()
+      .optional(),
   }),
 });
 
@@ -80,6 +112,10 @@ const automations = defineCollection({
     action: z.string(),
     benefit: z.string(),
     order: z.number().default(100),
+    zh: z
+      .object({ name: z.string(), trigger: z.string(), action: z.string(), benefit: z.string() })
+      .partial()
+      .optional(),
   }),
 });
 
@@ -94,7 +130,11 @@ const experience = defineCollection({
     summary: z.string().optional(),
     order: z.number(),
     sample,
+    zh: z
+      .object({ role: z.string(), org: z.string(), period: z.string(), summary: z.string() })
+      .partial()
+      .optional(),
   }),
 });
 
-export const collections = { projects, testimonials, services, automations, experience };
+export const collections = { projects, projectsZh, testimonials, services, automations, experience };

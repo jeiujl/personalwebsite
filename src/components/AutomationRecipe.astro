@@ -2,6 +2,7 @@
 // Decide-style dark product card used as punctuation on the light pages,
 // with a geometric line-art icon.
 import type { CollectionEntry } from 'astro:content';
+import { getLang, pick } from '../i18n';
 
 interface Props {
   recipe: CollectionEntry<'automations'>;
@@ -11,11 +12,15 @@ const { recipe, index } = Astro.props;
 const { name, trigger, action, benefit } = recipe.data;
 // A different arrangement of rings and lines per card
 const variant = index % 4;
+const t = pick(getLang(Astro.url), {
+  en: { automation: 'Automation', when: 'When', then: 'Then' },
+  zh: { automation: '自动化', when: '当', then: '就会' },
+});
 ---
 
 <article data-surface="dark" class="flex h-full flex-col border border-line bg-bg p-6">
   <div class="flex items-start justify-between">
-    <p class="mono text-[11px] text-muted">Automation {String(index + 1).padStart(2, '0')}</p>
+    <p class="mono text-[11px] text-muted">{t.automation} {String(index + 1).padStart(2, '0')}</p>
     <svg class="size-14 text-ink" viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
       <circle cx="28" cy="28" r="26" />
       {variant === 0 && <><circle cx="28" cy="28" r="14" /><path d="M2 28h52M28 2v52" /></>}
@@ -28,11 +33,11 @@ const variant = index % 4;
   <h3 class="heading mt-8 text-2xl">{name}</h3>
   <dl class="mt-4 flex-1 space-y-3 text-[15px]">
     <div>
-      <dt class="mono text-[11px] text-muted">When</dt>
+      <dt class="mono text-[11px] text-muted">{t.when}</dt>
       <dd class="mt-0.5 text-ink/85">{trigger}</dd>
     </div>
     <div>
-      <dt class="mono text-[11px] text-muted">Then</dt>
+      <dt class="mono text-[11px] text-muted">{t.then}</dt>
       <dd class="mt-0.5 text-ink/85">{action}</dd>
     </div>
   </dl>

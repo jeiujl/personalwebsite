@@ -1,0 +1,174 @@
+---
+import { Image } from 'astro:assets';
+import CTA from '../components/CTA.astro';
+import PageHero from '../components/PageHero.astro';
+import SampleBadge from '../components/SampleBadge.astro';
+import { getSite } from '../config/site';
+import { getLang, localizePath, pick } from '../i18n';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getExperience } from '../lib/content';
+
+const lang = getLang(Astro.url);
+const site = getSite(lang);
+const t = pick(lang, {
+  en: {
+    title: 'About',
+    description: `About ${site.name}: founder of Flowa AI and University of Waterloo FARM student who designs websites and apps and sets up automations.`,
+    hi: `Hi, I'm ${site.name}`,
+    heading: 'Design and automation for businesses that would rather be doing the work.',
+    bio: [
+      "I'm Jerry, founder of Flowa AI. I design and build websites and apps, and set up automations that save small businesses time, like missed-call text-back for a dental services company.",
+      'I designed, built and managed the HayesX pilot companion app, promoted the clothing brand Pursue Play with social media content and a website, and have worked as a project manager at IPMD, Inc.',
+      "Whether it's a website, an app or a few automations, I keep things simple and explain everything in plain English. I also study Financial Analysis & Risk Management at the University of Waterloo.",
+    ],
+    work: 'Work with me',
+    resume: 'Download resume',
+    skills: 'Skills & tools',
+    experience: 'Experience',
+    education: 'Education',
+  },
+  zh: {
+    title: '关于',
+    description: `关于 ${site.name}：Flowa AI 创始人，滑铁卢大学金融分析与风险管理专业学生，设计网站和应用并搭建自动化。`,
+    hi: `你好，我是 ${site.name}`,
+    heading: '为更想专注本职工作的企业提供设计与自动化。',
+    bio: [
+      '我是 Jerry，Flowa AI 的创始人。我设计和开发网站与应用，并为小企业搭建省时的自动化，比如为一家牙科服务公司设置未接来电自动回短信。',
+      '我设计、开发并管理了 HayesX 飞行员配套应用，用社交媒体内容和网站推广了服装品牌 Pursue Play，也曾在 IPMD, Inc. 担任项目经理。',
+      '无论是网站、应用还是几个自动化，我都会让事情保持简单，并用大白话解释清楚。我目前在滑铁卢大学攻读金融分析与风险管理。',
+    ],
+    work: '和我合作',
+    resume: '下载简历',
+    skills: '技能与工具',
+    experience: '经历',
+    education: '教育背景',
+  },
+});
+
+const entries = await getExperience(lang);
+const lists = [
+  { title: t.experience, items: entries.filter((e) => e.data.kind === 'work') },
+  { title: t.education, items: entries.filter((e) => e.data.kind === 'education') },
+].filter((list) => list.items.length > 0);
+
+// Skills and tools, based on the work above. Edit freely (in both languages).
+const skillsEn = [
+  { group: 'Design', items: ['Website design', 'App & UI/UX design', 'Clickable prototypes'] },
+  { group: 'Build', items: ['Websites & landing pages', 'Web apps (PWA)', 'Next.js'] },
+  { group: 'Automation', items: ['Missed-call text-back', 'CRM setup', 'AI automations (Claude)'] },
+  { group: 'Management & marketing', items: ['Project management', 'Social media content'] },
+];
+const skillsZh = [
+  { group: '设计', items: ['网站设计', '应用与 UI/UX 设计', '可点击原型'] },
+  { group: '开发', items: ['网站与落地页', '网页应用（PWA）', 'Next.js'] },
+  { group: '自动化', items: ['未接来电自动回短信', 'CRM 搭建', 'AI 自动化（Claude）'] },
+  { group: '管理与营销', items: ['项目管理', '社交媒体内容'] },
+];
+const skills = pick(lang, { en: skillsEn, zh: skillsZh });
+---
+
+<BaseLayout title={t.title} description={t.description}>
+  <PageHero eyebrow={t.hi} title={t.title} />
+
+  <div class="grid-lines">
+    <section class="container-page grid gap-12 pt-16 lg:grid-cols-[1fr_320px]">
+      <div data-reveal>
+        <h2 class="heading text-3xl sm:text-5xl">{t.heading}</h2>
+        <div class="prose-body mt-8">
+          {t.bio.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+        <div class="mt-10 flex flex-wrap items-center gap-5">
+          <a href={localizePath('/contact', lang)} class="btn-signal" data-magnetic>
+            {t.work} <span class="text-accent" aria-hidden="true">↗</span>
+          </a>
+          {
+            site.resumeUrl && (
+              <a href={site.resumeUrl} class="arrow-link" download>
+                {t.resume} <span class="arrow" aria-hidden="true">↓</span>
+              </a>
+            )
+          }
+        </div>
+      </div>
+
+      <div class="order-first lg:order-none" data-reveal>
+        {
+          site.photo ? (
+            <Image
+              src={site.photo}
+              alt={site.photoAlt}
+              widths={[320, 640]}
+              sizes="320px"
+              loading="eager"
+              class="aspect-[4/5] w-full max-w-xs border border-line object-cover transition-[filter] duration-700 [@media(hover:hover)]:grayscale [@media(hover:hover)]:hover:grayscale-0"
+            />
+          ) : (
+            <div
+              data-surface="dark"
+              class="monument flex aspect-[4/5] w-full max-w-xs items-center justify-center bg-bg text-8xl text-ink"
+              aria-hidden="true"
+            >
+              {site.initials}
+            </div>
+          )
+        }
+        <p class="mono mt-4 text-[11px] text-muted">{site.location}</p>
+      </div>
+    </section>
+
+    <section class="container-page pt-28">
+      <div class="flex items-baseline justify-between gap-3 border-b border-ink/80 pb-4" data-reveal>
+        <h2 class="heading text-4xl sm:text-5xl">{t.skills}</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4" data-reveal-stagger>
+        {
+          skills.map((s, i) => (
+            <div class="border-b border-line py-6 sm:pr-6 lg:border-b-0 lg:border-l lg:px-5 lg:first:border-l-0 lg:first:pl-0">
+              <p class="mono text-[11px] text-muted">{String(i + 1).padStart(2, '0')}</p>
+              <h3 class="mt-2 font-medium">{s.group}</h3>
+              <ul class="mt-3 space-y-1.5 text-[15px] text-muted">
+                {s.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    {
+      lists.length > 0 && (
+        <section class="container-page grid gap-16 pt-28 lg:grid-cols-[1.6fr_1fr] lg:gap-12">
+          {lists.map((list) => (
+            <div>
+              <div class="border-b border-ink/80 pb-4" data-reveal>
+                <h2 class="heading text-4xl sm:text-5xl">{list.title}</h2>
+              </div>
+              <ol data-reveal-stagger>
+                {list.items.map((item, i) => (
+                  <li class="grid grid-cols-[2rem_1fr] gap-x-3 border-b border-line py-6">
+                    <span class="mono pt-1 text-[11px] text-muted" aria-hidden="true">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <div>
+                      <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                        <h3 class="text-xl font-medium tracking-[-0.02em]">{item.data.org}</h3>
+                        {item.data.period && <p class="mono text-[11px] text-muted">{item.data.period}</p>}
+                        {item.data.sample && <SampleBadge />}
+                      </div>
+                      <p class="mt-1 text-[15px] text-ink/80">{item.data.role}</p>
+                      {item.data.summary && <p class="mt-3 text-[15px] text-muted">{item.data.summary}</p>}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ))}
+        </section>
+      )
+    }
+  </div>
+
+  <CTA />
+</BaseLayout>

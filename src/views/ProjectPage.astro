@@ -1,0 +1,199 @@
+---
+import { Image } from 'astro:assets';
+import { render, type CollectionEntry } from 'astro:content';
+import CTA from '../components/CTA.astro';
+import DisciplineTag from '../components/DisciplineTag.astro';
+import Metrics from '../components/Metrics.astro';
+import ProjectCover from '../components/ProjectCover.astro';
+import SampleBadge from '../components/SampleBadge.astro';
+import Starfield from '../components/Starfield.astro';
+import TestimonialCard from '../components/TestimonialCard.astro';
+import WorkflowDiagram from '../components/WorkflowDiagram.astro';
+import { site } from '../config/site';
+import { getLang, localizePath, pick } from '../i18n';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getProjectBody, getTestimonials } from '../lib/content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  next: CollectionEntry<'projects'>;
+}
+
+const lang = getLang(Astro.url);
+const { project, next } = Astro.props;
+const { Content } = await render(await getProjectBody(project, lang));
+const data = project.data;
+const testimonial = (await getTestimonials()).find((t) => t.data.project?.id === project.id);
+const t = pick(lang, {
+  en: {
+    allWork: 'All work',
+    company: 'Company',
+    role: 'My role',
+    year: 'Year',
+    timeline: 'Timeline',
+    tools: 'Tools & features',
+    live: 'View live project',
+    next: 'Next project',
+    cta: 'Your turn',
+  },
+  zh: {
+    allWork: '全部作品',
+    company: '公司',
+    role: '我的角色',
+    year: '年份',
+    timeline: '周期',
+    tools: '工具与功能',
+    live: '查看上线项目',
+    next: '下一个项目',
+    cta: '轮到你了',
+  },
+});
+
+const facts = [
+  { label: t.company, value: data.client },
+  { label: t.role, value: data.role },
+  ...(data.year ? [{ label: t.year, value: String(data.year) }] : []),
+  ...(data.duration ? [{ label: t.timeline, value: data.duration }] : []),
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: data.title,
+  description: data.summary,
+  ...(data.year ? { dateCreated: String(data.year) } : {}),
+  creator: { '@type': 'Person', name: site.name },
+  url: new URL(Astro.url.pathname, Astro.site).href,
+};
+---
+
+<BaseLayout title={data.title} description={data.summary} type="article" jsonLd={schema}>
+  <article>
+    <header data-surface="dark" data-band class="relative overflow-hidden bg-bg pt-12 pb-12 sm:pt-16">
+      <Starfield count={60} seed={data.title.length} />
+      <div class="container-page relative">
+        <a href={localizePath('/work', lang)} class="mono text-muted hover:text-ink"><span aria-hidden="true">←</span> {t.allWork}</a>
+        {/* Title on the left, facts in a column on the right, so the cover shows sooner */}
+        <div class="lg:grid lg:grid-cols-[1fr_320px] lg:items-end lg:gap-16">
+          <div>
+            <div class="mt-10 flex flex-wrap items-center gap-2" data-hero-item>
+              <DisciplineTag discipline={data.category} />
+              {data.sample && <SampleBadge />}
+            </div>
+            <h1 class="heading mt-5 max-w-4xl text-5xl sm:text-6xl lg:text-7xl" data-hero-item>{data.title}</h1>
+            <p class="mt-6 max-w-2xl text-lg text-pretty text-muted" data-hero-item>{data.summary}</p>
+          </div>
+
+          <dl class="mt-10 grid grid-cols-1 border-t border-line sm:grid-cols-2 lg:mt-0 lg:grid-cols-1" data-hero-item>
+            {
+              facts.map((f) => (
+                <div class="border-b border-line py-4">
+                  <dt class="mono text-[11px] text-muted">{f.label}</dt>
+                  <dd class="mt-1.5 font-medium">{f.value}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid-lines pt-12">
+      <div class="container-page space-y-12">
+        {
+          data.cover ? (
+            <Image
+              src={data.cover}
+              alt={data.coverAlt ?? ''}
+              widths={[800, 1200, 1600]}
+              sizes="(min-width: 1200px) 1200px, 100vw"
+              loading="eager"
+              class="w-full border border-line"
+              data-reveal
+            />
+          ) : data.workflow.length === 0 ? (
+            <div data-reveal>
+              <ProjectCover category={data.category} large class="aspect-[16/10] border border-line sm:aspect-[21/9]" />
+            </div>
+          ) : null
+        }
+
+        {data.workflow.length > 0 && <WorkflowDiagram steps={data.workflow} />}
+
+        <Metrics metrics={data.metrics} />
+      </div>
+
+      <div class="container-page mt-8 grid gap-12 lg:grid-cols-[1fr_300px]">
+        <div class="prose-body" data-reveal>
+          <Content />
+        </div>
+        <aside class="space-y-8 lg:pt-14" data-reveal>
+          {
+            data.tools.length > 0 && (
+              <div>
+                <h2 class="eyebrow">{t.tools}</h2>
+                <ul class="mt-4 flex flex-wrap gap-2">
+                  {data.tools.map((tool) => (
+                    <li class="mono rounded-full border border-line px-3 py-1.5 text-[11px] leading-none">{tool}</li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+          {
+            data.liveUrl && (
+              <a href={data.liveUrl} target="_blank" rel="noopener" class="btn-ghost">
+                {t.live} <span class="text-accent" aria-hidden="true">↗</span>
+              </a>
+            )
+          }
+        </aside>
+      </div>
+
+      {
+        data.gallery.length > 0 && (
+          <div class="container-page mt-14 grid gap-6 sm:grid-cols-2" data-reveal-stagger>
+            {data.gallery.map((img) => (
+              <Image
+                src={img.src}
+                alt={img.alt}
+                widths={[600, 1000]}
+                sizes="(min-width: 640px) 50vw, 100vw"
+                class="w-full border border-line"
+              />
+            ))}
+          </div>
+        )
+      }
+
+      {
+        testimonial && (
+          <div class="container-page mt-20">
+            <div class="max-w-3xl" data-reveal>
+              <TestimonialCard testimonial={testimonial} />
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </article>
+
+  {
+    next.id !== project.id && (
+      <nav class="container-page mt-20" aria-label={t.next} data-reveal>
+        <a href={localizePath(`/work/${next.id}/`, lang)} class="group flex items-end justify-between gap-6 border-t border-ink/80 pt-6">
+          <span>
+            <span class="eyebrow">{t.next}</span>
+            <span class="heading mt-3 block text-3xl sm:text-4xl">{next.data.title}</span>
+          </span>
+          <span
+            class="monument text-5xl text-accent transition-transform duration-500 ease-[var(--ease-settle)] group-hover:translate-x-2"
+            aria-hidden="true">→</span
+          >
+        </a>
+      </nav>
+    )
+  }
+
+  <CTA title={t.cta} />
+</BaseLayout>

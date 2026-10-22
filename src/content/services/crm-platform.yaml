@@ -14,3 +14,16 @@ exampleResult: "Missed-call text-back for a dental services company, so callers 
 discipline: crm
 inquiryType: CRM platform
 order: 3
+# Chinese text for the /zh pages
+zh:
+  title: 你的一站式 CRM 与营销平台
+  summary: 把潜在客户、短信、邮件、日历和评价集中在一个地方，由我为你搭建和管理，自动化开箱即用。
+  deliverables:
+    - 为你的业务搭建 CRM 和销售管道
+    - 未接来电自动回短信和双向短信
+    - 通过短信和邮件自动跟进潜在客户
+    - 在线预约和预约提醒
+    - 每次服务后自动邀请评价
+    - 供你和团队使用的手机应用
+  idealFor: 因回复太慢而流失客户，或仍用笔记本和表格记录客户信息的服务型企业。
+  exampleResult: 为一家牙科服务公司设置未接来电自动回短信，让打不进来的患者也能收到短信。

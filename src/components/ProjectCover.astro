@@ -3,6 +3,7 @@
 // hairlines, tinted with the project's service color. `large` scales the
 // drawing up for the wide cover on a project page. CRM is a pipeline board
 // (leads moving to Booked); AI is an inbox with a drafted reply to approve.
+import { getLang } from '../i18n';
 import { disciplines, type Discipline } from '../lib/disciplines';
 
 interface Props {
@@ -12,10 +13,11 @@ interface Props {
 }
 const { category, large = false, class: className = '' } = Astro.props;
 const hue = disciplines[category].hue;
+const zh = getLang(Astro.url) === 'zh';
 const pipeline = [
-  { title: 'New', cards: 3 },
-  { title: 'Replied', cards: 2 },
-  { title: 'Booked', cards: 1 },
+  { title: zh ? '新客户' : 'New', cards: 3 },
+  { title: zh ? '已回复' : 'Replied', cards: 2 },
+  { title: zh ? '已预约' : 'Booked', cards: 1 },
 ];
 ---
 
@@ -98,7 +100,7 @@ const pipeline = [
           >
             <div class="h-1.5 flex-1 bg-line" />
             <span class="mono shrink-0 rounded-full border border-accent px-2 py-1 text-[8px] leading-none text-accent">
-              Approve
+              {zh ? '确认' : 'Approve'}
             </span>
           </div>
         </div>

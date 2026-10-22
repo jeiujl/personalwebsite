@@ -1,0 +1,194 @@
+---
+import { Image } from 'astro:assets';
+import AutomationRecipe from '../components/AutomationRecipe.astro';
+import CTA from '../components/CTA.astro';
+import GhostTitle from '../components/GhostTitle.astro';
+import HeroScene from '../components/HeroScene.astro';
+import Marquee from '../components/Marquee.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ServiceBlock from '../components/ServiceBlock.astro';
+import StatsBand from '../components/StatsBand.astro';
+import TestimonialCard from '../components/TestimonialCard.astro';
+import { getSite } from '../config/site';
+import { getLang, localizePath, pick } from '../i18n';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getAutomations, getProjects, getServices, getTestimonials } from '../lib/content';
+import { disciplineKeys, disciplineLabel } from '../lib/disciplines';
+
+const lang = getLang(Astro.url);
+const site = getSite(lang);
+const projects = await getProjects(lang);
+const featured = projects.filter((p) => p.data.featured).slice(0, 6);
+const services = await getServices(lang);
+const testimonials = (await getTestimonials()).slice(0, 3);
+const recipes = await getAutomations(lang);
+
+const t = pick(lang, {
+  en: {
+    jobTitle: 'Website & app designer, founder of Flowa AI',
+    workGhost: 'Work',
+    workEyebrow: 'Selected work',
+    workTitle: 'Selected projects',
+    workIntro: "A few things I've designed, built and set up.",
+    allWork: 'See all work',
+    servicesGhost: 'Services',
+    servicesEyebrow: 'What I do',
+    servicesTitle: 'Four ways I help your business grow',
+    servicesIntro: 'Look professional online, and stop letting leads slip through the cracks. Pick one, or combine them.',
+    recipesEyebrow: 'Automations I offer',
+    recipesTitle: "Work that happens while you're busy",
+    recipesIntro:
+      'A few common automations I can set up. Each one runs in the background, so you and your team can focus on the job in front of you.',
+    ideaLabel: 'Your idea',
+    ideaTitle: 'Have something else in mind?',
+    ideaText: 'If a task is repetitive, it can probably be automated. Tell me about it.',
+    ideaLink: 'Ask me',
+    reviewsEyebrow: 'Kind words',
+    reviewsTitle: 'What clients say',
+    aboutEyebrow: 'About me',
+    hi: `Hi, I'm ${site.name}.`,
+    bio: "I'm the founder of Flowa AI. I design and build websites and apps, and set up automations, like missed-call text-back, so callers who can't get through still hear back. I also study Financial Analysis & Risk Management at the University of Waterloo.",
+    more: 'More about me',
+  },
+  zh: {
+    jobTitle: '网站与应用设计师，Flowa AI 创始人',
+    workGhost: '作品',
+    workEyebrow: '精选作品',
+    workTitle: '精选项目',
+    workIntro: '一些我设计、开发和搭建的项目。',
+    allWork: '查看全部作品',
+    servicesGhost: '服务',
+    servicesEyebrow: '我能做什么',
+    servicesTitle: '帮助你的业务成长的四种方式',
+    servicesIntro: '在网上展现专业形象，不再让潜在客户悄悄流失。可以单选，也可以组合。',
+    recipesEyebrow: '我提供的自动化',
+    recipesTitle: '在你忙碌时自动完成的工作',
+    recipesIntro: '一些我可以帮你搭建的常见自动化。它们都在后台运行，让你和团队专注于手头的工作。',
+    ideaLabel: '你的想法',
+    ideaTitle: '有其他想法？',
+    ideaText: '只要是重复性的工作，基本都可以自动化。和我说说吧。',
+    ideaLink: '问问我',
+    reviewsEyebrow: '客户评价',
+    reviewsTitle: '客户怎么说',
+    aboutEyebrow: '关于我',
+    hi: `你好，我是 ${site.name}。`,
+    bio: '我是 Flowa AI 的创始人。我设计和开发网站与应用，也搭建自动化（比如未接来电自动回短信），让打不进来的客户也能收到回复。我目前在滑铁卢大学攻读金融分析与风险管理。',
+    more: '更多关于我',
+  },
+});
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  jobTitle: t.jobTitle,
+  description: site.description,
+  ...(site.email ? { email: `mailto:${site.email}` } : {}),
+  url: Astro.site?.href,
+  sameAs: site.socials.map((s) => s.href),
+};
+---
+
+<BaseLayout jsonLd={personSchema}>
+  <HeroScene />
+
+  <Marquee items={disciplineKeys.map((key) => disciplineLabel(key, lang))} />
+
+  <StatsBand />
+
+  <!-- Selected work -->
+  <section class="grid-lines py-20 sm:py-24">
+    <GhostTitle text={t.workGhost} class="container-page" />
+    <div class="container-page">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <SectionHeading eyebrow={t.workEyebrow} title={t.workTitle} intro={t.workIntro} />
+        <a href={localizePath('/work', lang)} class="arrow-link">{t.allWork} <span class="arrow" aria-hidden="true">↗</span></a>
+      </div>
+      <div class="mt-14 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
+        {featured.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Services: one feature row per service -->
+  <section class="grid-lines border-t border-line bg-surface-2 py-20 sm:py-24">
+    <GhostTitle text={t.servicesGhost} class="container-page" />
+    <div class="container-page">
+      <SectionHeading eyebrow={t.servicesEyebrow} title={t.servicesTitle} intro={t.servicesIntro} />
+      <div class="mt-14">
+        {services.map((service, i) => <ServiceBlock service={service} index={i} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Automation recipes -->
+  <section class="grid-lines border-t border-line py-20 sm:py-24">
+    <div class="container-page">
+      <SectionHeading eyebrow={t.recipesEyebrow} title={t.recipesTitle} intro={t.recipesIntro} />
+      <div class="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
+        {recipes.map((recipe, i) => <AutomationRecipe recipe={recipe} index={i} />)}
+        <a
+          href={localizePath('/contact?service=Not%20sure%20yet', lang)}
+          class="group flex flex-col justify-between border border-dashed border-line p-6 transition-colors hover:border-ink"
+        >
+          <p class="mono text-[11px] text-muted">{t.ideaLabel}</p>
+          <div>
+            <p class="heading text-2xl">{t.ideaTitle}</p>
+            <p class="mt-3 text-[15px] text-muted">{t.ideaText}</p>
+            <span class="arrow-link mt-6">{t.ideaLink} <span class="arrow" aria-hidden="true">↗</span></span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  {
+    testimonials.length > 0 && (
+      <section class="grid-lines border-t border-line py-20 sm:py-24">
+        <div class="container-page">
+          <SectionHeading eyebrow={t.reviewsEyebrow} title={t.reviewsTitle} />
+          <div class="mt-14 grid gap-10 md:grid-cols-3" data-reveal-stagger>
+            {testimonials.map((t) => (
+              <TestimonialCard testimonial={t} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- About snippet -->
+  <section class="border-t border-line">
+    <div class="container-page grid items-center gap-10 pt-20 sm:pt-24 md:grid-cols-[auto_1fr]" data-reveal>
+      {
+        site.photo ? (
+          <Image
+            src={site.photo}
+            alt={site.photoAlt}
+            widths={[192, 384]}
+            sizes="192px"
+            class="aspect-[4/5] w-40 object-cover transition-[filter] duration-700 sm:w-48 [@media(hover:hover)]:grayscale [@media(hover:hover)]:hover:grayscale-0"
+          />
+        ) : (
+          <span
+            data-surface="dark"
+            class="monument flex aspect-[4/5] w-40 items-center justify-center bg-bg text-6xl text-ink sm:w-48"
+            aria-hidden="true"
+          >
+            {site.initials}
+          </span>
+        )
+      }
+      <div>
+        <p class="eyebrow">{t.aboutEyebrow}</p>
+        <h2 class="heading mt-4 text-4xl sm:text-5xl">{t.hi}</h2>
+        <p class="mt-4 max-w-2xl text-lg text-muted">{t.bio}</p>
+        <a href={localizePath('/about', lang)} class="arrow-link mt-6">{t.more} <span class="arrow" aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </section>
+
+  <CTA />
+</BaseLayout>

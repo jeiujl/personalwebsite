@@ -7,22 +7,36 @@
   org: Flowa AI
   summary: Started Flowa AI, a company that sets up automations for businesses, including missed-call text-back for a dental services company.
   order: 1
+  zh:
+    role: 创始人
+    summary: 创立了 Flowa AI，为企业搭建自动化，包括为一家牙科服务公司设置未接来电自动回短信。
 - id: hayesx
   role: App designer, developer & project manager
   org: HayesX
   summary: Designed, built and managed the HayesX pilot companion app, with a preflight checklist, digital logbook, manuals and messages in one place.
   order: 2
+  zh:
+    role: 应用设计、开发与项目经理
+    summary: 设计、开发并管理了 HayesX 飞行员配套应用，把飞行前检查清单、电子飞行日志、手册和消息集中在一处。
 - id: ipmd
   role: Project Manager
   org: IPMD, Inc.
   order: 3
+  zh:
+    role: 项目经理
 - id: alpha-futures
   role: Worked with the team
   org: Alpha Futures
   order: 4
+  zh:
+    role: 参与团队工作
 - id: waterloo
   kind: education
   role: Financial Analysis & Risk Management (FARM)
   org: University of Waterloo
   period: 2026 – Present
   order: 5
+  zh:
+    role: 金融分析与风险管理（FARM）
+    org: 滑铁卢大学
+    period: 2026 – 至今

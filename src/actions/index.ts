@@ -32,6 +32,8 @@ export const server = {
         .min(10, 'Please add a few words about your project.')
         .max(5000, 'Please keep your message under 5,000 characters.'),
       ref: optionalText(60),
+      // Which version of the site the form was sent from
+      lang: z.enum(['en', 'zh']).optional(),
       // Spam traps: a field humans never see, and the time the form was shown.
       website: optionalText(200),
       startedAt: z.coerce.number().optional(),
@@ -43,18 +45,24 @@ export const server = {
         return { ok: true };
       }
 
+      const zh = input.lang === 'zh';
       if (!RESEND_API_KEY || !CONTACT_TO_EMAIL) {
         console.error('Contact form: RESEND_API_KEY or CONTACT_TO_EMAIL is not set.');
         throw new ActionError({
           code: 'INTERNAL_SERVER_ERROR',
-          message: site.email
-            ? `The form isn't connected yet. Please email me directly at ${site.email}.`
-            : "The form isn't connected yet. Please try again a little later.",
+          message: zh
+            ? site.email
+              ? `表单还未接通，请直接发邮件到 ${site.email}。`
+              : '表单还未接通，请稍后再试。'
+            : site.email
+              ? `The form isn't connected yet. Please email me directly at ${site.email}.`
+              : "The form isn't connected yet. Please try again a little later.",
         });
       }
 
       const ref = (input.ref ?? '').replace(/[^\w\s.@-]/g, '').trim();
-      const subject = `New inquiry${ref ? ` (ref: ${ref})` : ''}: ${input.service} from ${input.name}`;
+      // Inquiries from the Chinese site are marked, so you know to reply in Chinese.
+      const subject = `New inquiry${zh ? ' [中文]' : ''}${ref ? ` (ref: ${ref})` : ''}: ${input.service} from ${input.name}`;
       const rows: [string, string][] = [
         ['Name', input.name],
         ['Email', input.email],
@@ -63,6 +71,7 @@ export const server = {
         ['Budget', input.budget ?? '—'],
         ['Timeline', input.timeline ?? '—'],
         ['Referred by', ref || '—'],
+        ['Site language', zh ? 'Chinese' : 'English'],
       ];
 
       const text = `${rows.map(([k, v]) => `${k}: ${v}`).join('\n')}\n\n${input.message}`;
@@ -86,9 +95,13 @@ export const server = {
         console.error('Contact form: Resend error', error);
         throw new ActionError({
           code: 'INTERNAL_SERVER_ERROR',
-          message: site.email
-            ? `Something went wrong sending your message. Please email me directly at ${site.email}.`
-            : 'Something went wrong sending your message. Please try again in a moment.',
+          message: zh
+            ? site.email
+              ? `发送消息时出了点问题，请直接发邮件到 ${site.email}。`
+              : '发送消息时出了点问题，请稍后再试。'
+            : site.email
+              ? `Something went wrong sending your message. Please email me directly at ${site.email}.`
+              : 'Something went wrong sending your message. Please try again in a moment.',
         });
       }
 

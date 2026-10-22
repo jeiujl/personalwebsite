@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { getLang, localizePath, pick } from '../i18n';
 import DisciplineTag from './DisciplineTag.astro';
 
 interface Props {
@@ -7,6 +8,11 @@ interface Props {
 }
 const { service } = Astro.props;
 const { title, summary, deliverables, idealFor, exampleResult, startingAt, discipline, inquiryType } = service.data;
+const lang = getLang(Astro.url);
+const t = pick(lang, {
+  en: { ideal: 'Ideal for', related: 'Related work', quote: 'Custom quote', start: 'Get started' },
+  zh: { ideal: '适合', related: '相关项目', quote: '按需报价', start: '开始合作' },
+});
 ---
 
 <article id={service.id} class="card flex scroll-mt-24 flex-col p-6 sm:p-8">
@@ -25,18 +31,18 @@ const { title, summary, deliverables, idealFor, exampleResult, startingAt, disci
   </ul>
   <dl class="mt-6 space-y-4 border-t border-line pt-6 text-[15px]">
     <div>
-      <dt class="mono text-[11px] text-muted">Ideal for</dt>
+      <dt class="mono text-[11px] text-muted">{t.ideal}</dt>
       <dd class="mt-1">{idealFor}</dd>
     </div>
     <div>
-      <dt class="mono text-[11px] text-muted">Related work</dt>
+      <dt class="mono text-[11px] text-muted">{t.related}</dt>
       <dd class="mt-1">{exampleResult}</dd>
     </div>
   </dl>
   <div class="mt-auto flex items-center justify-between gap-4 pt-8">
-    <span class="mono text-[12px]">{startingAt ?? 'Custom quote'}</span>
-    <a href={`/contact?service=${encodeURIComponent(inquiryType)}`} class="btn-ghost">
-      Get started <span class="text-accent" aria-hidden="true">↗</span>
+    <span class="mono text-[12px]">{startingAt ?? t.quote}</span>
+    <a href={localizePath(`/contact?service=${encodeURIComponent(inquiryType)}`, lang)} class="btn-ghost">
+      {t.start} <span class="text-accent" aria-hidden="true">↗</span>
     </a>
   </div>
 </article>

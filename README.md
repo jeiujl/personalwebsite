@@ -16,10 +16,21 @@ Almost everything you'll want to change lives in a few places. Search the projec
 | Services (and optional starting prices) | `src/content/services/*.yaml` |
 | Automation examples on the homepage | `src/content/automations.yaml` |
 | Experience and education (About page) | `src/content/experience.yaml` |
-| Bio and skills | `src/pages/about.astro` |
-| FAQ | `src/pages/services.astro` |
+| Bio and skills | `src/views/AboutPage.astro` |
+| FAQ | `src/views/ServicesPage.astro` |
 | Colors, fonts and the four service colors | `src/styles/global.css` (tokens at the top) and `src/lib/disciplines.ts` |
 | The five automation steps in the homepage story | `src/components/HeroScene.astro` (the `steps` list) |
+
+**Chinese version:** every page also exists in Simplified Chinese under `/zh` (e.g. `/zh/work`), and the 中文 / EN button in the header switches between them. When you change English text, update the Chinese next to it:
+
+| What | Where the Chinese lives |
+|---|---|
+| Site text (tagline, headline, stats…) | `siteZh` in `src/config/site.ts` |
+| Page and component text | the `zh` side of `pick(lang, { en, zh })` near the top of each file in `src/views/` and `src/components/` |
+| Projects | `src/content/projects-zh/` (same file names as `src/content/projects/`) |
+| Services, automations, experience | the `zh:` block in each YAML entry |
+
+Referral links work in both languages, e.g. `/zh/?ref=dad` for Chinese-speaking clients. Inquiries sent from the Chinese site are marked `[中文]` in the email subject.
 
 **Testimonials:** the reviews sections stay hidden until `src/content/testimonials/` has at least one quote. Only add quotes a client has approved word for word (see the README in that folder).
 
@@ -72,6 +83,6 @@ For the contact form locally, copy `.env.example` to `.env` and fill it in.
 
 ## Deployment
 
-Vercel builds the site automatically on every push. The `main` branch is production, and other branches get preview URLs. Every page is static except `/contact` and the form handler, which run as one serverless function.
+Vercel builds the site automatically on every push. The `main` branch is production, and other branches get preview URLs. Every page is static except `/contact`, `/zh/contact` and the form handler, which run as one serverless function.
 
 When you connect a custom domain, set `SITE_URL=https://yourdomain.com` in Vercel so canonical links and the sitemap use it.

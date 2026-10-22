@@ -1,5 +1,17 @@
 ---
-import { ctaHref, nav, site } from '../config/site';
+import { getCtaHref, getNav, site } from '../config/site';
+import { getLang, languages, localizePath, pick, switchLangPath } from '../i18n';
+
+const lang = getLang(Astro.url);
+const other = lang === 'en' ? 'zh' : 'en';
+const nav = getNav(lang);
+const ctaHref = getCtaHref(lang);
+const home = localizePath('/', lang);
+const switchHref = switchLangPath(Astro.url.pathname, other);
+const t = pick(lang, {
+  en: { book: 'Book a call', bookFree: 'Book a free call', home: 'Home', menu: 'Menu', close: 'Close', switchTo: 'Switch to Chinese' },
+  zh: { book: '预约通话', bookFree: '预约免费通话', home: '首页', menu: '菜单', close: '关闭', switchTo: '切换到英文' },
+});
 
 const current = Astro.url.pathname;
 const isActive = (href: string) => current === href || current.startsWith(`${href}/`);
@@ -11,7 +23,7 @@ const isActive = (href: string) => current === href || current.startsWith(`${hre
   class="sticky top-0 z-50 border-b border-line/50 bg-bg transition-colors duration-300"
 >
   <div class="container-page flex h-16 items-center justify-between gap-4">
-    <a href="/" class="flex items-center gap-2 text-[16px] font-semibold tracking-[-0.02em] text-ink">
+    <a href={home} class="flex items-center gap-2 text-[16px] font-semibold tracking-[-0.02em] text-ink">
       {site.name}
       <span class="text-accent" aria-hidden="true">✦</span>
     </a>
@@ -40,8 +52,20 @@ const isActive = (href: string) => current === href || current.startsWith(`${hre
     </nav>
 
     <div class="flex items-center gap-2">
+      {/* Language toggle: the same page in the other language */}
+      <a
+        href={switchHref}
+        hreflang={languages[other].hreflang}
+        lang={languages[other].htmlLang}
+        aria-label={t.switchTo}
+        title={t.switchTo}
+        data-lang-switch={other}
+        class="mono flex min-h-10 min-w-10 items-center justify-center rounded-full border border-line px-3 py-2 text-[12px] leading-none text-ink transition-colors hover:border-ink"
+      >
+        {languages[other].label}
+      </a>
       <a href={ctaHref} class="btn-signal min-h-10 px-3.5 py-2 text-[13px] sm:px-4 sm:text-[14px]">
-        Book a call <span class="hidden text-accent sm:inline" aria-hidden="true">↗</span>
+        {t.book} <span class="hidden text-accent sm:inline" aria-hidden="true">↗</span>
       </a>
       <button
         type="button"
@@ -49,8 +73,10 @@ const isActive = (href: string) => current === href || current.startsWith(`${hre
         class="mono min-h-10 rounded-full border border-line px-4 py-2 text-[12px] leading-none text-ink md:hidden"
         aria-controls="mobile-menu"
         aria-expanded="false"
+        data-open-label={t.close}
+        data-closed-label={t.menu}
       >
-        Menu
+        {t.menu}
       </button>
     </div>
   </div>
@@ -62,10 +88,10 @@ const isActive = (href: string) => current === href || current.startsWith(`${hre
   class="fixed inset-0 z-40 hidden flex-col bg-bg pt-20 md:hidden"
   role="dialog"
   aria-modal="true"
-  aria-label="Menu"
+  aria-label={t.menu}
 >
   <nav aria-label="Mobile" class="container-page flex flex-1 flex-col justify-center gap-1">
-    <a href="/" class="monument text-[clamp(56px,17vw,96px)] text-ink">Home</a>
+    <a href={home} class="monument text-[clamp(56px,17vw,96px)] text-ink">{t.home}</a>
     {
       nav.map((item) => (
         <a
@@ -79,7 +105,7 @@ const isActive = (href: string) => current === href || current.startsWith(`${hre
     }
   </nav>
   <div class="container-page flex flex-wrap items-center gap-3 border-t border-line py-6">
-    <a href={ctaHref} class="btn-signal">Book a free call <span class="text-accent" aria-hidden="true">↗</span></a>
+    <a href={ctaHref} class="btn-signal">{t.bookFree} <span class="text-accent" aria-hidden="true">↗</span></a>
     {site.email && <a href={`mailto:${site.email}`} class="arrow-link">{site.email}</a>}
   </div>
 </div>
@@ -90,7 +116,7 @@ const isActive = (href: string) => current === href || current.startsWith(`${hre
   const menu = document.getElementById('mobile-menu')!;
   const setOpen = (open: boolean) => {
     button.setAttribute('aria-expanded', String(open));
-    button.textContent = open ? 'Close' : 'Menu';
+    button.textContent = (open ? button.dataset.openLabel : button.dataset.closedLabel) ?? '';
     menu.classList.toggle('hidden', !open);
     menu.classList.toggle('flex', open);
     document.documentElement.style.overflow = open ? 'hidden' : '';

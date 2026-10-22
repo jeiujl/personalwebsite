@@ -1,14 +1,17 @@
 ---
 // Trigger → steps → result for automation case studies, drawn as Decide-style
 // step bars on a dark panel. The bars grow in as it scrolls into view.
+import { getLang, pick } from '../i18n';
+
 interface Props {
   steps: { label: string; detail?: string }[];
 }
 const { steps } = Astro.props;
+const caption = pick(getLang(Astro.url), { en: 'How it works', zh: '运作方式' });
 ---
 
 <figure data-surface="dark" class="bg-bg p-6 sm:p-10" data-workflow>
-  <figcaption class="eyebrow">How it works</figcaption>
+  <figcaption class="eyebrow">{caption}</figcaption>
   <ol class="mt-8 grid gap-6 lg:grid-flow-col lg:auto-cols-fr lg:gap-0">
     {
       steps.map((step, i) => {

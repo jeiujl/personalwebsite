@@ -2,7 +2,8 @@
 // GSAP-style "tool feature" row: a soft 3D shape in the service color, the
 // colored service label, a heading, copy and an outlined Explore pill.
 import type { CollectionEntry } from 'astro:content';
-import { disciplines } from '../lib/disciplines';
+import { getLang, localizePath, pick } from '../i18n';
+import { disciplineLabel, disciplines } from '../lib/disciplines';
 
 interface Props {
   service: CollectionEntry<'services'>;
@@ -10,7 +11,10 @@ interface Props {
 }
 const { service, index } = Astro.props;
 const { title, summary, idealFor, discipline } = service.data;
-const { label, hue } = disciplines[discipline];
+const lang = getLang(Astro.url);
+const { hue } = disciplines[discipline];
+const label = disciplineLabel(discipline, lang);
+const t = pick(lang, { en: { ideal: 'Ideal for · ', explore: 'Explore' }, zh: { ideal: '适合 · ', explore: '了解更多' } });
 const flip = index % 2 === 1;
 ---
 
@@ -32,9 +36,9 @@ const flip = index % 2 === 1;
     </p>
     <h3 class="heading mt-5 text-4xl sm:text-5xl">{title}</h3>
     <p class="mt-5 max-w-xl text-lg text-muted">{summary}</p>
-    <p class="mt-4 max-w-xl text-[15px]"><span class="mono text-[11px] text-muted">Ideal for · </span>{idealFor}</p>
+    <p class="mt-4 max-w-xl text-[15px]"><span class="mono text-[11px] text-muted">{t.ideal}</span>{idealFor}</p>
     <div class="mt-8 flex flex-wrap items-center gap-5">
-      <a href={`/services#${service.id}`} class="btn-ghost">Explore <span class="text-accent" aria-hidden="true">↗</span></a>
+      <a href={localizePath(`/services#${service.id}`, lang)} class="btn-ghost">{t.explore} <span class="text-accent" aria-hidden="true">↗</span></a>
     </div>
   </div>
 </article>

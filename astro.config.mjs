@@ -16,7 +16,10 @@ export default defineConfig({
   site,
   output: 'static',
   adapter: vercel({ webAnalytics: { enabled: true } }),
-  integrations: [sitemap()],
+  integrations: [
+    // English at the root, Chinese under /zh: the sitemap links each page to its translation
+    sitemap({ i18n: { defaultLocale: 'en', locales: { en: 'en', zh: 'zh-CN' } } }),
+  ],
   vite: { plugins: [tailwindcss()] },
   // All fonts are self-hosted from installed @fontsource packages, so builds
   // don't depend on a font CDN.
