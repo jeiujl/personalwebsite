@@ -25,7 +25,7 @@ Almost everything you'll want to change lives in a few places. Search the projec
 
 **Stats band:** the big count-up numbers on the homepage come from `stats` in `src/config/site.ts`. Keep them true; swap in your own (e.g. businesses helped) as they grow.
 
-**Concept projects:** self-initiated designs for fictional brands have `concept: true`. They get a "Concept" badge, a note on their page, and their own section below client work. Their client name ends with "(fictional brand)".
+**Demo projects:** the Halden, Kinetik and Brightgate projects are demo content for this prototype, marked `concept: true` in their files (the flag isn't shown on the site). Replace them with real work before the site goes public.
 
 **Adding a project:** copy one of the files in `src/content/projects/`, rename it (the file name becomes the URL, e.g. `/work/my-project/`) and edit the frontmatter. `category` is one of `website`, `app`, `crm` or `ai`, which sets the project's color and work filter. To use a real screenshot, put the image next to the file and add `cover: ./my-image.png` and `coverAlt: "…"`. Automation projects can list `workflow` steps, which are drawn as a diagram.
 

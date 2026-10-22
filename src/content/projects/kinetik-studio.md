@@ -1,9 +1,9 @@
 ---
 title: A calm class-booking app for a pilates studio
-client: "Kinetik (fictional brand)"
-summary: "A mobile app concept for a boutique pilates and mobility studio, where members can find a class, book a reformer and manage credits in a few taps."
+client: "Kinetik"
+summary: "A class-booking app for a boutique pilates and mobility studio, where members can find a class, book a reformer and manage credits in a few taps."
 category: app
-role: "Concept: brand, UI design & prototype"
+role: "Brand, UI design & prototype"
 tools: [UI/UX design, Mobile app design, Booking flow, Design system]
 concept: true
 featured: false
@@ -19,7 +19,7 @@ gallery:
 
 ## The brief
 
-A self-initiated concept for a fictional boutique pilates and mobility studio. Small studios often take bookings through texts, DMs and clunky generic apps. Members can't see how many spots are left, and full classes turn into a long back-and-forth.
+Kinetik is a boutique pilates and mobility studio. Small studios often take bookings through texts, DMs and clunky generic apps. Members can't see how many spots are left, and full classes turn into a long back-and-forth.
 
 ## My approach
 

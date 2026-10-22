@@ -1,7 +1,6 @@
 ---
 import { Image } from 'astro:assets';
 import { render } from 'astro:content';
-import ConceptBadge from '../../components/ConceptBadge.astro';
 import CTA from '../../components/CTA.astro';
 import DisciplineTag from '../../components/DisciplineTag.astro';
 import Metrics from '../../components/Metrics.astro';
@@ -28,7 +27,7 @@ const data = project.data;
 const testimonial = (await getTestimonials()).find((t) => t.data.project?.id === project.id);
 
 const facts = [
-  { label: data.concept ? 'Brand' : 'Company', value: data.client },
+  { label: 'Company', value: data.client },
   { label: 'My role', value: data.role },
   ...(data.year ? [{ label: 'Year', value: String(data.year) }] : []),
   ...(data.duration ? [{ label: 'Timeline', value: data.duration }] : []),
@@ -56,18 +55,10 @@ const schema = {
           <div>
             <div class="mt-10 flex flex-wrap items-center gap-2" data-hero-item>
               <DisciplineTag discipline={data.category} />
-              {data.concept && <ConceptBadge />}
               {data.sample && <SampleBadge />}
             </div>
             <h1 class="heading mt-5 max-w-4xl text-5xl sm:text-6xl lg:text-7xl" data-hero-item>{data.title}</h1>
             <p class="mt-6 max-w-2xl text-lg text-pretty text-muted" data-hero-item>{data.summary}</p>
-            {
-              data.concept && (
-                <p class="mono mt-6 max-w-2xl text-[11px] leading-relaxed text-muted" data-hero-item>
-                  Concept project · a fictional brand I designed to show my process, not a client
-                </p>
-              )
-            }
           </div>
 
           <dl class="mt-10 grid grid-cols-1 border-t border-line sm:grid-cols-2 lg:mt-0 lg:grid-cols-1" data-hero-item>

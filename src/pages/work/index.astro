@@ -7,8 +7,6 @@ import { disciplines, getProjects } from '../../lib/content';
 import type { Discipline } from '../../lib/disciplines';
 
 const projects = await getProjects();
-const clientWork = projects.filter((p) => !p.data.concept);
-const concepts = projects.filter((p) => p.data.concept);
 const filters = [
   { value: 'all', label: 'All work', hue: '' },
   ...(Object.keys(disciplines) as Discipline[])
@@ -24,7 +22,7 @@ const filters = [
   <PageHero
     eyebrow="Selected projects"
     title="Work"
-    intro="Projects I've worked on and what I did on each, plus a few concepts that show how I think."
+    intro="Projects I've worked on, and what I did on each."
   />
 
   <section class="grid-lines pt-12 pb-8">
@@ -46,27 +44,10 @@ const filters = [
       </div>
 
       <div data-project-group class="mt-12">
-        <h2 class="sr-only">Client work</h2>
         <div class="grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
-          {clientWork.map((project) => <ProjectCard project={project} />)}
+          {projects.map((project) => <ProjectCard project={project} headingLevel="h2" />)}
         </div>
       </div>
-
-      {
-        concepts.length > 0 && (
-          <div data-project-group class="mt-24 border-t border-ink/80 pt-6">
-            <div class="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3">
-              <h2 class="heading text-3xl sm:text-4xl">Concepts</h2>
-              <p class="max-w-md text-[15px] text-muted">
-                Self-initiated designs for fictional businesses, to show how I'd approach projects like yours.
-              </p>
-            </div>
-            <div class="mt-10 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
-              {concepts.map((project) => <ProjectCard project={project} />)}
-            </div>
-          </div>
-        )
-      }
     </div>
   </section>
 

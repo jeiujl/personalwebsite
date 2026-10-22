@@ -16,8 +16,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { disciplines, getProjects, getServices, getTestimonials } from '../lib/content';
 
 const projects = await getProjects();
-const featured = projects.filter((p) => p.data.featured && !p.data.concept).slice(0, 3);
-const concepts = projects.filter((p) => p.data.concept).slice(0, 3);
+// Featured work first, then the rest, six cards in one grid
+const featured = [...projects.filter((p) => p.data.featured), ...projects.filter((p) => !p.data.featured && p.data.cover)].slice(0, 6);
 const services = await getServices();
 const testimonials = (await getTestimonials()).slice(0, 3);
 const recipes = (await getCollection('automations')).sort((a, b) => a.data.order - b.data.order);
@@ -52,24 +52,6 @@ const personSchema = {
       <div class="mt-14 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
         {featured.map((project) => <ProjectCard project={project} />)}
       </div>
-
-      {
-        concepts.length > 0 && (
-          <div class="mt-24 border-t border-ink/80 pt-6">
-            <div class="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3" data-reveal>
-              <h3 class="heading text-3xl sm:text-4xl">Concepts</h3>
-              <p class="max-w-md text-[15px] text-muted">
-                Self-initiated designs for fictional businesses, to show how I'd approach projects like yours.
-              </p>
-            </div>
-            <div class="mt-10 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
-              {concepts.map((project) => (
-                <ProjectCard project={project} headingLevel="h3" />
-              ))}
-            </div>
-          </div>
-        )
-      }
     </div>
   </section>
 

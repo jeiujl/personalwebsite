@@ -34,8 +34,8 @@ const projects = defineCollection({
       liveUrl: z.url().optional(),
       featured: z.boolean().default(false),
       order: z.number().default(100),
-      // Self-initiated design for a fictional brand. Shown with a "Concept"
-      // badge and listed apart from client work.
+      // Marks demo projects in this prototype (not shown on the site), so
+      // they're easy to find and replace with real work.
       concept: z.boolean().default(false),
       sample,
     }),
