@@ -1,0 +1,9 @@
+---
+import ContactPage from '../../views/ContactPage.astro';
+
+// Rendered on request so the form works without JavaScript and can read
+// ?service= and ?ref= from the URL.
+export const prerender = false;
+---
+
+<ContactPage />

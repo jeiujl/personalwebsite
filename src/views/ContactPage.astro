@@ -1,0 +1,94 @@
+---
+import ContactForm from '../components/ContactForm.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../config/site';
+import { getLang, pick } from '../i18n';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// The /contact and /zh/contact routes are rendered on request so the form
+// works without JavaScript and can read ?service= and ?ref= from the URL.
+
+const t = pick(getLang(Astro.url), {
+  en: {
+    title: 'Contact',
+    description: `Get in touch with ${site.name} about a website, app design or automations for your business.`,
+    heading: "Let's talk",
+    intro: "Tell me a little about what you need. There's no commitment, and no question is too basic.",
+    next: 'What happens next',
+    steps: [
+      { title: 'I read it and get back to you', text: 'By email, as soon as I can.' },
+      { title: 'We have a free 20-minute call', text: 'You tell me about your business and goals.' },
+      { title: 'You get a clear proposal', text: 'What I recommend, the timeline and the price.' },
+    ],
+    email: 'Prefer email?',
+    book: 'Book a call directly',
+  },
+  zh: {
+    title: '联系',
+    description: `联系 ${site.name}，聊聊你的网站、应用设计或业务自动化。`,
+    heading: '聊一聊',
+    intro: '简单告诉我你需要什么。没有任何承诺，再基础的问题也欢迎提。',
+    next: '接下来会怎样',
+    steps: [
+      { title: '我会阅读并回复你', text: '通过邮件，尽快回复。' },
+      { title: '我们进行 20 分钟免费通话', text: '你和我聊聊你的业务和目标。' },
+      { title: '你会收到一份清晰的方案', text: '我的建议、时间表和价格。' },
+    ],
+    email: '更喜欢发邮件？',
+    book: '直接预约通话',
+  },
+});
+---
+
+<BaseLayout title={t.title} description={t.description}>
+  <PageHero compact eyebrow={t.title} title={t.heading} intro={t.intro} />
+
+  <section class="grid-lines pt-16 pb-24">
+    <div class="container-page grid gap-12 lg:grid-cols-[1fr_1.5fr]">
+      <div>
+        <p class="eyebrow">{t.next}</p>
+        <ol class="mt-6 border-t border-line">
+          {
+            t.steps.map((step, i) => (
+              <li class="flex gap-5 border-b border-line py-5">
+                <span class:list={['block h-10 w-[3px] shrink-0', i === 0 ? 'bg-accent' : 'bg-line']} aria-hidden="true" />
+                <div>
+                  <p class="mono text-[11px] text-muted">{String(i + 1).padStart(2, '0')}</p>
+                  <p class="mt-1 font-medium">{step.title}</p>
+                  <p class="text-[15px] text-muted">{step.text}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+
+        {
+          (site.email || site.bookingUrl) && (
+            <div class="mt-10 space-y-3">
+              {site.email && (
+                <>
+                  <p class="eyebrow">{t.email}</p>
+                  <a href={`mailto:${site.email}`} class="arrow-link text-lg">
+                    {site.email} <span class="arrow" aria-hidden="true">↗</span>
+                  </a>
+                </>
+              )}
+              {site.bookingUrl && (
+                <p>
+                  <a href={site.bookingUrl} target="_blank" rel="noopener" class="arrow-link text-lg">
+                    {t.book} <span class="arrow" aria-hidden="true">↗</span>
+                  </a>
+                </p>
+              )}
+            </div>
+          )
+        }
+      </div>
+
+      {/* On phones the form comes first; the steps follow it */}
+      <div class="order-first lg:order-none">
+        <ContactForm />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

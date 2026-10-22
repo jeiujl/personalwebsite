@@ -1,9 +1,36 @@
 ---
-import { ctaHref, nav, site } from '../config/site';
+import { getCtaHref, getNav, getSite } from '../config/site';
+import { getLang, localizePath, pick } from '../i18n';
+
+const lang = getLang(Astro.url);
+const site = getSite(lang);
+const nav = getNav(lang);
+const ctaHref = getCtaHref(lang);
+const contactHref = localizePath('/contact', lang);
+const t = pick(lang, {
+  en: {
+    book: 'Book a free call',
+    message: 'Send a message',
+    messageMe: 'Send me a message ↗',
+    touch: 'Get in touch',
+    pages: 'Pages',
+    home: 'Home',
+    start: 'Start a project',
+  },
+  zh: {
+    book: '预约免费通话',
+    message: '发送消息',
+    messageMe: '给我发消息 ↗',
+    touch: '联系我',
+    pages: '页面',
+    home: '首页',
+    start: '开始合作',
+  },
+});
 
 const startLinks = [
-  { label: 'Book a free call', href: ctaHref, rel: ctaHref.startsWith('http') ? 'noopener' : '' },
-  { label: 'Send a message', href: '/contact', rel: '' },
+  { label: t.book, href: ctaHref, rel: ctaHref.startsWith('http') ? 'noopener' : '' },
+  { label: t.message, href: contactHref, rel: '' },
   ...site.socials.map((s) => ({ label: s.label, href: s.href, rel: 'me noopener' })),
 ];
 ---
@@ -11,19 +38,19 @@ const startLinks = [
 <footer data-surface="dark" data-band class="overflow-hidden border-t border-line bg-surface-2">
   <div class="container-page grid grid-cols-2 gap-x-6 gap-y-10 pt-16 pb-10 md:grid-cols-[2fr_1fr_1fr]">
     <div class="col-span-2 md:col-span-1">
-      <p class="eyebrow">Get in touch</p>
+      <p class="eyebrow">{t.touch}</p>
       <a
-        href={site.email ? `mailto:${site.email}` : '/contact'}
+        href={site.email ? `mailto:${site.email}` : contactHref}
         class="mt-4 inline-block text-2xl font-medium tracking-[-0.02em] text-ink hover:text-accent sm:text-3xl"
       >
-        {site.email || 'Send me a message ↗'}
+        {site.email || t.messageMe}
       </a>
       <p class="mt-3 max-w-sm text-[15px] text-muted">{site.tagline}</p>
     </div>
     <nav aria-label="Footer">
-      <p class="eyebrow">Pages</p>
+      <p class="eyebrow">{t.pages}</p>
       <ul class="mt-4 space-y-1">
-        <li><a href="/" class="mono inline-block py-1.5 text-muted hover:text-ink">Home</a></li>
+        <li><a href={localizePath('/', lang)} class="mono inline-block py-1.5 text-muted hover:text-ink">{t.home}</a></li>
         {
           nav.map((item) => (
             <li>
@@ -36,7 +63,7 @@ const startLinks = [
       </ul>
     </nav>
     <div>
-      <p class="eyebrow">Start a project</p>
+      <p class="eyebrow">{t.start}</p>
       <ul class="mt-4 space-y-1">
         {
           startLinks.map((link) => (

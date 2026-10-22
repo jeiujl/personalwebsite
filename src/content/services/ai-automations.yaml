@@ -13,3 +13,15 @@ exampleResult: 'Flowa AI, the company I started to set up automations for busine
 discipline: ai
 inquiryType: AI automation
 order: 4
+# Chinese text for the /zh pages
+zh:
+  title: 定制 AI 自动化
+  summary: 围绕你现有的工作方式打造的 AI 自动化，接手那些占满你一周时间的重复性工作。
+  deliverables:
+    - 收件箱分类并起草回复
+    - 潜在客户筛选与分配
+    - 从邮件、表单和文件中自动录入数据
+    - 自动生成报告和摘要
+    - 基于你的业务训练的网站聊天助手
+  idealFor: 每周花大量时间复制粘贴、处理邮件或手动录入数据的团队。
+  exampleResult: Flowa AI，我创办的为企业搭建自动化的公司。

@@ -1,10 +1,12 @@
 ---
-import { disciplines, type Discipline } from '../lib/disciplines';
+import { getLang } from '../i18n';
+import { disciplineLabel, disciplines, type Discipline } from '../lib/disciplines';
 
 interface Props {
   discipline: Discipline;
 }
-const { label, hue } = disciplines[Astro.props.discipline];
+const { hue } = disciplines[Astro.props.discipline];
+const label = disciplineLabel(Astro.props.discipline, getLang(Astro.url));
 ---
 
 <span class="tag"><span class="tag-dot" style={`background:${hue}`}></span>{label}</span>

@@ -13,3 +13,15 @@ exampleResult: 'The website for clothing brand Pursue Play, alongside social med
 discipline: website
 inquiryType: Website
 order: 1
+# Chinese text for the /zh pages
+zh:
+  title: 网站设计
+  summary: 现代、快速的网站，让你看起来更专业，并把访客变成来电、预约和销售。
+  deliverables:
+    - 适配电脑和手机的定制设计
+    - 协助撰写文案，让你的信息清晰明了
+    - 在线预约、联系表单或网店
+    - 对 Google 友好的设置（SEO 基础、速度、数据分析）
+    - 托管设置与上线
+  idealFor: 还没有网站、网站过时，或网站带不来客户的企业。
+  exampleResult: 为服装品牌 Pursue Play 制作网站，并创作社交媒体内容进行推广。

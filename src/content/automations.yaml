@@ -5,27 +5,52 @@
   action: They get a friendly text within seconds, and the conversation continues by text
   benefit: Stop losing leads to voicemail
   order: 1
+  zh:
+    name: 未接来电自动回短信
+    trigger: 客户来电，但没人能接听
+    action: 几秒内就会收到一条友好的短信，对话通过短信继续
+    benefit: 不再让潜在客户流失在语音信箱里
 - id: lead-follow-up
   name: Automatic lead follow-up
   trigger: Someone fills out a form or sends a message
   action: A sequence of texts and emails checks in until they reply or book
   benefit: Every lead gets followed up, every time
   order: 2
+  zh:
+    name: 自动跟进潜在客户
+    trigger: 有人填写表单或发来消息
+    action: 一系列短信和邮件会持续跟进，直到对方回复或预约
+    benefit: 每一位潜在客户都能得到跟进，每一次
 - id: appointment-reminders
   name: Appointment reminders
   trigger: A customer books an appointment
   action: Confirmation right away, reminders the day before and the hour before
   benefit: Fewer no-shows
   order: 3
+  zh:
+    name: 预约提醒
+    trigger: 客户预约了时间
+    action: 立即发送确认，并在前一天和前一小时发送提醒
+    benefit: 减少爽约
 - id: review-requests
   name: Review requests
   trigger: A job is marked complete
   action: The customer gets a text asking for a Google review, with a direct link
   benefit: More 5-star reviews on autopilot
   order: 4
+  zh:
+    name: 邀请评价
+    trigger: 一项服务标记为完成
+    action: 客户会收到一条短信，附上直达链接，邀请留下 Google 评价
+    benefit: 自动获得更多五星好评
 - id: ai-inbox-triage
   name: AI inbox assistant
   trigger: An email lands in your inbox
   action: AI sorts it, logs requests and drafts a reply for you to approve
   benefit: Hours of email work back every week
   order: 5
+  zh:
+    name: AI 邮箱助手
+    trigger: 一封邮件进入你的收件箱
+    action: AI 自动分类、记录请求，并起草回复供你确认
+    benefit: 每周省下数小时处理邮件的时间

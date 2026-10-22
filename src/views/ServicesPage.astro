@@ -1,0 +1,177 @@
+---
+import CTA from '../components/CTA.astro';
+import PageHero from '../components/PageHero.astro';
+import ProcessSteps from '../components/ProcessSteps.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import { getCtaHref, site } from '../config/site';
+import { getLang, pick } from '../i18n';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getServices } from '../lib/content';
+
+const lang = getLang(Astro.url);
+const ctaHref = getCtaHref(lang);
+const services = await getServices(lang);
+const design = services.filter((s) => s.data.pillar === 'design');
+const automation = services.filter((s) => s.data.pillar === 'automation');
+
+// TODO: adjust these answers to match how you work and price (in both languages)
+const faqsEn = [
+  {
+    q: 'Do I need to be technical?',
+    a: "Not at all. I handle the setup and explain everything in plain English. When we launch, I'll walk you and your team through it.",
+  },
+  {
+    q: 'How much does it cost?',
+    a: "Every business is different, so I quote each project after a free call. You'll always know the price before any work starts.",
+  },
+  {
+    q: 'How long does a project take?',
+    a: 'It depends on the size of the project. After our call, your proposal will include a timeline you can plan around.',
+  },
+  {
+    q: site.platformName ? `What is ${site.platformName}?` : 'What is the all-in-one platform?',
+    a: `${site.platformName || 'It'} is an all-in-one platform for your leads, texts, emails, calendar, reviews and automations. I set it up for your business, brand it for you, and manage it, so you get one tool instead of five.`,
+  },
+  {
+    q: 'Can you work with the tools I already use?',
+    a: "Usually, yes. Most automations can connect to your existing email, calendar, forms and spreadsheets. Tell me what you use and I'll let you know.",
+  },
+  {
+    q: 'What happens after launch?',
+    a: "I don't disappear. I offer ongoing support for updates, new automations and questions, and I'm a message away if something needs attention.",
+  },
+];
+const faqsZh = [
+  {
+    q: '我需要懂技术吗？',
+    a: '完全不需要。所有设置都由我来做，并用大白话解释清楚。上线时，我会带你和团队熟悉一遍。',
+  },
+  {
+    q: '费用是多少？',
+    a: '每家企业的情况都不一样，所以我会在免费通话后为每个项目单独报价。开工之前你一定会知道价格。',
+  },
+  {
+    q: '一个项目需要多长时间？',
+    a: '取决于项目的规模。通话之后，你的方案里会包含一份可以参考的时间表。',
+  },
+  {
+    q: site.platformName ? `${site.platformName} 是什么？` : '一站式平台是什么？',
+    a: `${site.platformName || '它'}是一个一站式平台，管理你的潜在客户、短信、邮件、日历、评价和自动化。我会为你的业务搭建、打上你的品牌并负责管理，让你用一个工具代替五个。`,
+  },
+  {
+    q: '可以和我现在用的工具配合吗？',
+    a: '通常可以。大多数自动化都能连接你现有的邮箱、日历、表单和表格。告诉我你在用什么，我会告诉你是否可行。',
+  },
+  {
+    q: '上线之后呢？',
+    a: '我不会消失。我提供持续支持，包括更新、新的自动化和各种问题；如果有什么需要处理，发条消息就能找到我。',
+  },
+];
+const faqs = pick(lang, { en: faqsEn, zh: faqsZh });
+const t = pick(lang, {
+  en: {
+    title: 'Services',
+    description:
+      'Website design, app design, an all-in-one CRM & marketing platform, and custom AI automations for small businesses.',
+    intro: 'Pick one, or combine them. A new website works even harder with automations behind it.',
+    design: 'Design',
+    designNote: 'Look established and win more customers online',
+    automation: 'Automation',
+    automationNote: 'Stop losing leads and win back hours every week',
+    howEyebrow: 'How it works',
+    howTitle: 'Simple from start to finish',
+    howIntro: "No confusing contracts or tech talk. Here's what working together looks like.",
+    faqTitle: 'Questions people ask',
+    unsure: 'Still unsure? Ask me on a free call.',
+    book: 'Book a free call',
+  },
+  zh: {
+    title: '服务',
+    description: '为小企业提供网站设计、应用设计、一站式 CRM 与营销平台，以及定制 AI 自动化。',
+    intro: '可以单选，也可以组合。新网站配上背后的自动化，效果会更好。',
+    design: '设计',
+    designNote: '在网上看起来更专业，赢得更多客户',
+    automation: '自动化',
+    automationNote: '不再流失潜在客户，每周省下数小时',
+    howEyebrow: '合作流程',
+    howTitle: '从头到尾都很简单',
+    howIntro: '没有复杂的合同，也没有技术术语。合作流程是这样的。',
+    faqTitle: '常见问题',
+    unsure: '还不确定？在免费通话里问我吧。',
+    book: '预约免费通话',
+  },
+});
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<BaseLayout title={t.title} description={t.description} jsonLd={faqSchema}>
+  <PageHero eyebrow={t.title} title={t.title} intro={t.intro} />
+
+  <div class="grid-lines">
+    <section class="container-page pt-16" aria-labelledby="design-heading">
+      <div class="flex flex-wrap items-baseline justify-between gap-3 border-b border-ink/80 pb-4" data-reveal>
+        <h2 id="design-heading" class="heading text-4xl sm:text-5xl">{t.design}</h2>
+        <p class="mono text-[12px] text-muted">{t.designNote}</p>
+      </div>
+      <div class="mt-8 grid gap-4 md:grid-cols-2" data-reveal-stagger>
+        {design.map((service) => <ServiceCard service={service} />)}
+      </div>
+    </section>
+
+    <section class="container-page pt-20" aria-labelledby="automation-heading">
+      <div class="flex flex-wrap items-baseline justify-between gap-3 border-b border-ink/80 pb-4" data-reveal>
+        <h2 id="automation-heading" class="heading text-4xl sm:text-5xl">{t.automation}</h2>
+        <p class="mono text-[12px] text-muted">{t.automationNote}</p>
+      </div>
+      <div class="mt-8 grid gap-4 md:grid-cols-2" data-reveal-stagger>
+        {automation.map((service) => <ServiceCard service={service} />)}
+      </div>
+    </section>
+
+    <section class="container-page pt-28">
+      <SectionHeading eyebrow={t.howEyebrow} title={t.howTitle} intro={t.howIntro} />
+      <div class="mt-12">
+        <ProcessSteps />
+      </div>
+    </section>
+
+    <section class="container-page grid gap-10 pt-28 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
+      <div class="self-start lg:sticky lg:top-28">
+        <SectionHeading eyebrow="FAQ" title={t.faqTitle} />
+        <p class="mt-6 text-muted">{t.unsure}</p>
+        <a href={ctaHref} class="btn-signal mt-6">{t.book} <span class="text-accent" aria-hidden="true">↗</span></a>
+      </div>
+      <div class="divide-y divide-line border-y border-line" data-reveal>
+        {
+          faqs.map((faq, i) => (
+            <details class="group py-6">
+              <summary class="flex cursor-pointer list-none items-center gap-5 text-lg font-medium [&::-webkit-details-marker]:hidden">
+                <span class="mono text-[11px] text-muted">{String(i + 1).padStart(2, '0')}</span>
+                <span class="flex-1">{faq.q}</span>
+                <span
+                  class="flex size-8 shrink-0 items-center justify-center rounded-full border border-line text-accent transition duration-300 group-open:rotate-45 group-hover:border-ink"
+                  aria-hidden="true"
+                >
+                  +
+                </span>
+              </summary>
+              <p class="mt-3 pr-12 pl-9 text-muted">{faq.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+
+  <CTA />
+</BaseLayout>

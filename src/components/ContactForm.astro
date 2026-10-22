@@ -1,7 +1,61 @@
 ---
 import { actions, isInputError } from 'astro:actions';
-import { budgetRanges, inquiryTypes, timelines } from '../lib/inquiry';
+import { getLang, pick } from '../i18n';
+import { budgetRanges, inquiryTypes, optionLabelsZh, timelines } from '../lib/inquiry';
 import Icon from './Icon.astro';
+
+const lang = getLang(Astro.url);
+const option = (value: string) => (lang === 'zh' ? (optionLabelsZh[value] ?? value) : value);
+const t = pick(lang, {
+  en: {
+    thanks: 'Thanks, your message is on its way.',
+    reply: "I'll get back to you as soon as I can.",
+    name: 'Your name',
+    email: 'Email',
+    company: 'Business name',
+    optional: '(optional)',
+    need: 'What do you need?',
+    choose: 'Choose one…',
+    budget: 'Budget',
+    noBudget: 'Prefer not to say',
+    timeline: 'Timeline',
+    noTimeline: 'Not sure',
+    message: "Tell me about your business and what you'd like to fix",
+    placeholder: 'e.g. We miss a lot of calls during the day and our website is outdated…',
+    send: 'Send message',
+    sending: 'Sending…',
+    failed: 'Something went wrong. Please try again.',
+    // Server messages are already in English
+    errors: {} as Record<string, string>,
+  },
+  zh: {
+    thanks: '谢谢，你的消息已发出。',
+    reply: '我会尽快回复你。',
+    name: '你的名字',
+    email: '邮箱',
+    company: '公司名称',
+    optional: '（选填）',
+    need: '你需要什么？',
+    choose: '请选择…',
+    budget: '预算',
+    noBudget: '暂不透露',
+    timeline: '时间',
+    noTimeline: '还不确定',
+    message: '介绍一下你的业务，以及你想解决的问题',
+    placeholder: '例如：我们白天经常漏接电话，网站也比较旧了…',
+    send: '发送消息',
+    sending: '发送中…',
+    failed: '出了点问题，请再试一次。',
+    errors: {
+      name: '请告诉我你的名字。',
+      email: '请输入有效的邮箱地址。',
+      service: '请选择你需要哪方面的帮助。',
+      message: '请简单介绍一下你的项目（10 到 5,000 字）。',
+    } as Record<string, string>,
+  },
+});
+// Field errors in the page's language (the action's own messages are English)
+const errorFor = (field: string, message?: string) => (message ? (t.errors[field] ?? message) : '');
 
 // Without JavaScript the form posts to the action and this (server-rendered)
 // page shows the result. With JavaScript the script below submits in place.
@@ -26,8 +80,8 @@ const errorClass = 'mt-1.5 text-sm text-danger';
   >
     <Icon name="check" size={24} />
   </span>
-  <h2 class="heading mt-4 text-2xl">Thanks, your message is on its way.</h2>
-  <p class="mt-2 text-muted">I'll get back to you as soon as I can.</p>
+  <h2 class="heading mt-4 text-2xl">{t.thanks}</h2>
+  <p class="mt-2 text-muted">{t.reply}</p>
 </div>
 
 <form
@@ -35,66 +89,70 @@ const errorClass = 'mt-1.5 text-sm text-danger';
   method="POST"
   action={actions.contact}
   class:list={['card space-y-5 p-6 sm:p-8', sent && 'hidden']}
+  data-errors={JSON.stringify(t.errors)}
+  data-sending={t.sending}
+  data-send={t.send}
+  data-failed={t.failed}
 >
   <div class="grid gap-5 sm:grid-cols-2">
     <div>
-      <label for="name" class={labelClass}>Your name</label>
+      <label for="name" class={labelClass}>{t.name}</label>
       <input id="name" name="name" type="text" autocomplete="name" required minlength="2" class={fieldClass} />
-      <p class={errorClass} data-error-for="name">{fieldErrors.name?.[0]}</p>
+      <p class={errorClass} data-error-for="name">{errorFor('name', fieldErrors.name?.[0])}</p>
     </div>
     <div>
-      <label for="email" class={labelClass}>Email</label>
+      <label for="email" class={labelClass}>{t.email}</label>
       <input id="email" name="email" type="email" autocomplete="email" required class={fieldClass} />
-      <p class={errorClass} data-error-for="email">{fieldErrors.email?.[0]}</p>
+      <p class={errorClass} data-error-for="email">{errorFor('email', fieldErrors.email?.[0])}</p>
     </div>
   </div>
 
   <div class="grid gap-5 sm:grid-cols-2">
     <div>
       <label for="company" class={labelClass}>
-        Business name <span class="text-muted">(optional)</span>
+        {t.company} <span class="text-muted">{t.optional}</span>
       </label>
       <input id="company" name="company" type="text" autocomplete="organization" class={fieldClass} />
     </div>
     <div>
-      <label for="service" class={labelClass}>What do you need?</label>
+      <label for="service" class={labelClass}>{t.need}</label>
       <select id="service" name="service" required class={fieldClass}>
-        <option value="" disabled selected={!preselected}>Choose one…</option>
+        <option value="" disabled selected={!preselected}>{t.choose}</option>
         {
           inquiryTypes.map((type) => (
             <option value={type} selected={type === preselected}>
-              {type}
+              {option(type)}
             </option>
           ))
         }
       </select>
-      <p class={errorClass} data-error-for="service">{fieldErrors.service?.[0]}</p>
+      <p class={errorClass} data-error-for="service">{errorFor('service', fieldErrors.service?.[0])}</p>
     </div>
   </div>
 
   <div class="grid gap-5 sm:grid-cols-2">
     <div>
       <label for="budget" class={labelClass}>
-        Budget <span class="text-muted">(optional)</span>
+        {t.budget} <span class="text-muted">{t.optional}</span>
       </label>
       <select id="budget" name="budget" class={fieldClass}>
-        <option value="">Prefer not to say</option>
-        {budgetRanges.map((b) => <option value={b}>{b}</option>)}
+        <option value="">{t.noBudget}</option>
+        {budgetRanges.map((b) => <option value={b}>{option(b)}</option>)}
       </select>
     </div>
     <div>
       <label for="timeline" class={labelClass}>
-        Timeline <span class="text-muted">(optional)</span>
+        {t.timeline} <span class="text-muted">{t.optional}</span>
       </label>
       <select id="timeline" name="timeline" class={fieldClass}>
-        <option value="">Not sure</option>
-        {timelines.map((t) => <option value={t}>{t}</option>)}
+        <option value="">{t.noTimeline}</option>
+        {timelines.map((value) => <option value={value}>{option(value)}</option>)}
       </select>
     </div>
   </div>
 
   <div>
-    <label for="message" class={labelClass}>Tell me about your business and what you'd like to fix</label>
+    <label for="message" class={labelClass}>{t.message}</label>
     <textarea
       id="message"
       name="message"
@@ -102,12 +160,13 @@ const errorClass = 'mt-1.5 text-sm text-danger';
       required
       minlength="10"
       class={fieldClass}
-      placeholder="e.g. We miss a lot of calls during the day and our website is outdated…"></textarea>
-    <p class={errorClass} data-error-for="message">{fieldErrors.message?.[0]}</p>
+      placeholder={t.placeholder}></textarea>
+    <p class={errorClass} data-error-for="message">{errorFor('message', fieldErrors.message?.[0])}</p>
   </div>
 
   <!-- Referral source (from links like /?ref=dad) and spam traps -->
   <input type="hidden" name="ref" value={ref} />
+  <input type="hidden" name="lang" value={lang} />
   <input type="hidden" name="startedAt" value={Date.now()} />
   <div class="absolute -left-[9999px]" aria-hidden="true">
     <label for="website">Leave this empty</label>
@@ -117,7 +176,7 @@ const errorClass = 'mt-1.5 text-sm text-danger';
   <p id="form-error" class={errorClass} role="alert">{formError}</p>
 
   <button type="submit" class="btn-signal w-full py-3.5 text-base sm:w-auto">
-    <span class="submit-label">Send message</span>
+    <span class="submit-label">{t.send}</span>
     <span class="text-accent" aria-hidden="true">↗</span>
   </button>
 </form>
@@ -131,13 +190,15 @@ const errorClass = 'mt-1.5 text-sm text-danger';
 
   if (form) {
     const refInput = form.elements.namedItem('ref') as HTMLInputElement;
+    const translated: Record<string, string> = JSON.parse(form.dataset.errors ?? '{}');
     try {
       refInput.value ||= localStorage.getItem('ref') ?? '';
     } catch {}
 
     const showErrors = (fields: Record<string, string[] | undefined>) => {
       form.querySelectorAll<HTMLElement>('[data-error-for]').forEach((el) => {
-        const message = fields[el.dataset.errorFor!]?.[0] ?? '';
+        const field = el.dataset.errorFor!;
+        const message = fields[field]?.[0] ? (translated[field] ?? fields[field]![0]) : '';
         el.textContent = message;
         const input = form.elements.namedItem(el.dataset.errorFor!) as HTMLElement | null;
         input?.setAttribute('aria-invalid', message ? 'true' : 'false');
@@ -149,13 +210,13 @@ const errorClass = 'mt-1.5 text-sm text-danger';
       const button = form.querySelector('button[type="submit"]') as HTMLButtonElement;
       const label = button.querySelector('.submit-label')!;
       button.disabled = true;
-      label.textContent = 'Sending…';
+      label.textContent = form.dataset.sending!;
       formError!.textContent = '';
 
       const { data, error } = await actions.contact(new FormData(form));
 
       button.disabled = false;
-      label.textContent = 'Send message';
+      label.textContent = form.dataset.send!;
 
       if (error) {
         if (isInputError(error)) {
@@ -163,7 +224,7 @@ const errorClass = 'mt-1.5 text-sm text-danger';
           form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
         } else {
           showErrors({});
-          formError!.textContent = error.message || 'Something went wrong. Please try again.';
+          formError!.textContent = error.message || form.dataset.failed!;
         }
         return;
       }

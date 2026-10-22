@@ -101,6 +101,31 @@
   }
 }
 
+/* Chinese pages: the Latin fonts have no Chinese characters, so each stack
+   falls through to a system Chinese font for them. The display font only has
+   one weight, so Chinese headlines use a heavy weight without faking bold on
+   the Latin letters, and get room for taller characters. */
+:root {
+  --font-zh: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', 'Noto Sans CJK SC',
+    'Source Han Sans SC', sans-serif;
+}
+html:lang(zh) body {
+  font-family: var(--font-geist), var(--font-zh);
+}
+html:lang(zh) .mono,
+html:lang(zh) .eyebrow {
+  font-family: var(--font-geist-mono), var(--font-zh);
+  letter-spacing: 0.04em;
+}
+html:lang(zh) .monument,
+html:lang(zh) .ghost-title {
+  font-family: var(--font-anton), var(--font-zh);
+  font-weight: 800;
+  font-synthesis: none;
+  line-height: 1.08;
+  letter-spacing: 0.02em;
+}
+
 /* Reusable type utilities (also usable inside @apply) */
 @utility mono {
   /* Small uppercase mono layer: nav, tags, labels, metadata */

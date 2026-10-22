@@ -12,3 +12,14 @@ exampleResult: 'The HayesX pilot companion app: designed, built and managed, wit
 discipline: app
 inquiryType: App design
 order: 2
+# Chinese text for the /zh pages
+zh:
+  title: 应用设计
+  summary: 清晰易用的应用设计，从初步想法到可点击的原型，方便你测试并交给开发人员。
+  deliverables:
+    - 梳理每一步的用户流程
+    - 适配 iPhone、Android 或网页的精致界面
+    - 可点击原型，用于测试和路演
+    - 可直接交付开发的设计文件
+  idealFor: 有应用想法的创业者和企业，或现有应用难以使用的团队。
+  exampleResult: HayesX 飞行员配套应用：从设计、开发到项目管理，包含飞行前检查清单、飞行日志和手册。

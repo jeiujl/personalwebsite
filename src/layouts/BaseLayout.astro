@@ -2,7 +2,8 @@
 import { Font } from 'astro:assets';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { site } from '../config/site';
+import { getSite } from '../config/site';
+import { getLang, languages, switchLangPath } from '../i18n';
 import '../styles/global.css';
 
 interface Props {
@@ -14,6 +15,9 @@ interface Props {
   /** Keep the page out of search results (e.g. the 404 page). */
   noindex?: boolean;
 }
+
+const lang = getLang(Astro.url);
+const site = getSite(lang);
 
 const {
   title,
@@ -28,21 +32,37 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name}: ${site.tag
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const imageUrl = new URL(image, Astro.site);
 const structuredData = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+// Every page exists in both languages, so search engines get both addresses.
+const alternates = (Object.keys(languages) as (keyof typeof languages)[]).map((l) => ({
+  hreflang: languages[l].hreflang,
+  href: new URL(switchLangPath(Astro.url.pathname, l), Astro.site).href,
+}));
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={languages[lang].htmlLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    {
+      !noindex && (
+        <>
+          {alternates.map((a) => (
+            <link rel="alternate" hreflang={a.hreflang} href={a.href} />
+          ))}
+          <link rel="alternate" hreflang="x-default" href={alternates[0].href} />
+        </>
+      )
+    }
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="theme-color" content="#0b0c0b" />
 
     <meta property="og:type" content={type} />
+    <meta property="og:locale" content={languages[lang].ogLocale} />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
@@ -78,7 +98,7 @@ const structuredData = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []
     <a
       href="#main"
       class="mono sr-only z-50 rounded-full bg-[#73ffb9] px-4 py-2 text-[#0b0c0b] focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
-      >Skip to content</a
+      >{lang === 'zh' ? '跳到正文' : 'Skip to content'}</a
     >
     <Header />
     <main id="main" class="flex-1">

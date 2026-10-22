@@ -1,11 +1,21 @@
 ---
-const steps = [
+import { getLang } from '../i18n';
+
+const stepsEn = [
   { title: 'Free call', text: "A relaxed 20-minute chat about your business, what's working and what isn't." },
   { title: 'Clear proposal', text: "A plan in plain English: what I'll build, how long it takes, and the price." },
   { title: 'Design & build', text: 'I do the work and share progress along the way so you can give feedback early.' },
   { title: 'Launch & training', text: 'We go live together, and I show you and your team how everything works.' },
   { title: 'Ongoing support', text: "I'm here for changes, new automations and questions after launch." },
 ];
+const stepsZh = [
+  { title: '免费通话', text: '轻松聊 20 分钟，了解你的业务，哪些做得好、哪些不太顺。' },
+  { title: '清晰的方案', text: '用大白话写清楚：我会做什么、需要多久、价格多少。' },
+  { title: '设计与搭建', text: '我来完成工作，并随时同步进度，方便你尽早给反馈。' },
+  { title: '上线与培训', text: '我们一起上线，我会教你和团队如何使用每一项功能。' },
+  { title: '持续支持', text: '上线后的修改、新的自动化和任何问题，我都在。' },
+];
+const steps = getLang(Astro.url) === 'zh' ? stepsZh : stepsEn;
 ---
 
 <ol class="grid border-t border-line sm:grid-cols-2 lg:grid-cols-5" data-reveal-stagger>

@@ -1,21 +1,37 @@
 ---
-import { ctaHref, site } from '../config/site';
+import { getCtaHref, site } from '../config/site';
+import { getLang, pick } from '../i18n';
 import Starfield from './Starfield.astro';
 
 interface Props {
   title?: string;
   text?: string;
 }
-const {
-  title = "Let's talk",
-  text = "Tell me what's slowing you down. In a free 20-minute call I'll suggest where a better website or a few automations would make the biggest difference. No pressure, no jargon.",
-} = Astro.props;
+const lang = getLang(Astro.url);
+const ctaHref = getCtaHref(lang);
+const t = pick(lang, {
+  en: {
+    title: "Let's talk",
+    text: "Tell me what's slowing you down. In a free 20-minute call I'll suggest where a better website or a few automations would make the biggest difference. No pressure, no jargon.",
+    next: 'Next step',
+    book: 'Book a free call',
+    email: 'Email me',
+  },
+  zh: {
+    title: '聊一聊',
+    text: '告诉我是什么在拖慢你的业务。在 20 分钟的免费通话里，我会告诉你更好的网站或几个自动化能在哪里带来最大的改变。没有压力，也没有术语。',
+    next: '下一步',
+    book: '预约免费通话',
+    email: '给我发邮件',
+  },
+});
+const { title = t.title, text = t.text } = Astro.props;
 ---
 
 <section data-surface="dark" data-band class="relative mt-24 overflow-hidden bg-bg py-20 sm:py-28">
   <Starfield count={60} seed={41} />
   <div class="container-page relative" data-reveal>
-    <p class="eyebrow">Next step</p>
+    <p class="eyebrow">{t.next}</p>
     <a href={ctaHref} class="group mt-6 block">
       <h2 class="monument text-[clamp(60px,12vw,184px)] text-balance">
         <span class="monument-fade">{title}</span><span
@@ -28,12 +44,12 @@ const {
       <p class="max-w-xl text-pretty text-muted">{text}</p>
       <div class="flex flex-wrap gap-3">
         <a href={ctaHref} class="btn-signal px-7 py-3.5 text-[17px]" data-magnetic>
-          Book a free call <span class="text-accent" aria-hidden="true">↗</span>
+          {t.book} <span class="text-accent" aria-hidden="true">↗</span>
         </a>
         {
           site.email && (
             <a href={`mailto:${site.email}`} class="btn-ghost" data-magnetic>
-              Email me
+              {t.email}
             </a>
           )
         }

@@ -1,12 +1,16 @@
 ---
 // A row of big numbers that count up as they scroll in (motion.ts, data-count).
 // Values live in site.stats.
-import { site } from '../config/site';
+import { getSite } from '../config/site';
+import { getLang, pick } from '../i18n';
+
+const lang = getLang(Astro.url);
+const site = getSite(lang);
 ---
 
 {
   site.stats.length > 0 && (
-    <section class="grid-lines border-b border-line" aria-label="At a glance">
+    <section class="grid-lines border-b border-line" aria-label={pick(lang, { en: 'At a glance', zh: '概览' })}>
       <dl class="container-page grid grid-cols-2 lg:grid-cols-4" data-reveal-stagger>
         {site.stats.map((stat, i) => (
           <div
