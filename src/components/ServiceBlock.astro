@@ -14,9 +14,13 @@ const { label, hue } = disciplines[discipline];
 const flip = index % 2 === 1;
 ---
 
-<article class="grid items-center gap-10 border-t border-line py-14 md:grid-cols-12 md:gap-12 md:py-20" data-reveal>
+<article class="grid items-center gap-8 border-t border-line py-10 md:grid-cols-12 md:gap-12 md:py-14" data-reveal>
   <div class:list={['md:col-span-5', flip && 'md:order-2 md:col-start-8']}>
-    <div class="shape-stage relative mx-auto aspect-square w-full max-w-[22rem]" style={`--hue:${hue}`} aria-hidden="true">
+    <div
+      class="shape-stage relative aspect-square w-36 sm:mx-auto sm:w-full sm:max-w-[18rem]"
+      style={`--hue:${hue}`}
+      aria-hidden="true"
+    >
       <div class:list={['shape', `shape-${discipline}`]}></div>
     </div>
   </div>

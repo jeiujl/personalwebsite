@@ -73,9 +73,10 @@ const steps: { icon: IconName; label: string; bar: string; title: string; text: 
         <HeroVisual nodes={steps} />
       </div>
 
-      <div data-hero-copy class="mt-auto">
+      <div data-hero-copy class="mt-auto pt-10">
         <p class="eyebrow" data-hero-item>Design × Automation</p>
-        <h1 class="monument mt-5 text-[clamp(60px,11vw,172px)]" data-monument>
+        {/* Sized by width and height, so the CTA stays above the fold on short laptops */}
+        <h1 class="monument mt-5 text-[length:clamp(56px,min(11vw,16.5svh),172px)]" data-monument>
           {
             site.heroDisplay.map((line) => (
               <span class="block overflow-hidden pb-[0.04em]">
@@ -117,13 +118,14 @@ const steps: { icon: IconName; label: string; bar: string; title: string; text: 
 </section>
 
 <style is:global>
-  /* Story mode (set by the script on capable devices) */
+  /* Story mode (set by the script on capable devices). The stage fills the
+     viewport below the sticky header and pins there. */
   [data-story].is-story [data-story-stage] {
-    height: 100svh;
+    height: calc(100svh - 4rem);
   }
   [data-story].is-story .story-hero {
-    min-height: 100svh;
-    padding-top: 5.5rem;
+    min-height: calc(100svh - 4rem);
+    padding-top: 2.5rem;
   }
   [data-story].is-story [data-story-ghost] {
     display: block;
@@ -250,7 +252,8 @@ const steps: { icon: IconName; label: string; bar: string; title: string; text: 
       scrollTrigger: {
         trigger: stage,
         pin: true,
-        start: 'top top',
+        // Pin just below the sticky header, not behind it
+        start: () => `top ${document.getElementById('site-header')?.offsetHeight ?? 64}px`,
         end: '+=260%',
         scrub: 0.6,
         anticipatePin: 1,

@@ -40,13 +40,13 @@ const isActive = (href: string) => current === href || current.startsWith(`${hre
     </nav>
 
     <div class="flex items-center gap-2">
-      <a href={ctaHref} class="btn-signal hidden px-4 py-2 text-[14px] sm:inline-flex">
-        Book a call <span class="text-accent" aria-hidden="true">↗</span>
+      <a href={ctaHref} class="btn-signal min-h-10 px-3.5 py-2 text-[13px] sm:px-4 sm:text-[14px]">
+        Book a call <span class="hidden text-accent sm:inline" aria-hidden="true">↗</span>
       </a>
       <button
         type="button"
         id="menu-button"
-        class="mono rounded-full border border-line px-3.5 py-[7px] text-[12px] leading-none text-ink md:hidden"
+        class="mono min-h-10 rounded-full border border-line px-4 py-2 text-[12px] leading-none text-ink md:hidden"
         aria-controls="mobile-menu"
         aria-expanded="false"
       >
@@ -114,7 +114,7 @@ const isActive = (href: string) => current === href || current.startsWith(`${hre
         entries.forEach((e) => (e.isIntersecting ? under.add(e.target) : under.delete(e.target)));
         header.dataset.surface = under.size ? 'dark' : 'light';
       },
-      { rootMargin: `-${edge}px 0px -${window.innerHeight - edge - 1}px 0px` },
+      { rootMargin: `-${edge}px 0px -${Math.max(0, window.innerHeight - edge - 1)}px 0px` },
     );
     darkSections.forEach((section) => observer!.observe(section));
   };

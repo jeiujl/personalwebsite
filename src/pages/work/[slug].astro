@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { render } from 'astro:content';
+import ConceptBadge from '../../components/ConceptBadge.astro';
 import CTA from '../../components/CTA.astro';
 import DisciplineTag from '../../components/DisciplineTag.astro';
 import Metrics from '../../components/Metrics.astro';
@@ -27,7 +28,7 @@ const data = project.data;
 const testimonial = (await getTestimonials()).find((t) => t.data.project?.id === project.id);
 
 const facts = [
-  { label: 'Company', value: data.client },
+  { label: data.concept ? 'Brand' : 'Company', value: data.client },
   { label: 'My role', value: data.role },
   ...(data.year ? [{ label: 'Year', value: String(data.year) }] : []),
   ...(data.duration ? [{ label: 'Timeline', value: data.duration }] : []),
@@ -46,30 +47,40 @@ const schema = {
 
 <BaseLayout title={data.title} description={data.summary} type="article" jsonLd={schema}>
   <article>
-    <header data-surface="dark" data-band class="relative overflow-hidden bg-bg pt-12 pb-14 sm:pt-16">
+    <header data-surface="dark" data-band class="relative overflow-hidden bg-bg pt-12 pb-12 sm:pt-16">
       <Starfield count={60} seed={data.title.length} />
       <div class="container-page relative">
         <a href="/work" class="mono text-muted hover:text-ink"><span aria-hidden="true">←</span> All work</a>
-        <div class="mt-10 flex flex-wrap items-center gap-2" data-hero-item>
-          <DisciplineTag discipline={data.category} />
-          {data.sample && <SampleBadge />}
-        </div>
-        <h1 class="heading mt-5 max-w-4xl text-5xl sm:text-6xl lg:text-7xl" data-hero-item>{data.title}</h1>
-        <p class="mt-6 max-w-2xl text-lg text-pretty text-muted" data-hero-item>{data.summary}</p>
+        {/* Title on the left, facts in a column on the right, so the cover shows sooner */}
+        <div class="lg:grid lg:grid-cols-[1fr_320px] lg:items-end lg:gap-16">
+          <div>
+            <div class="mt-10 flex flex-wrap items-center gap-2" data-hero-item>
+              <DisciplineTag discipline={data.category} />
+              {data.concept && <ConceptBadge />}
+              {data.sample && <SampleBadge />}
+            </div>
+            <h1 class="heading mt-5 max-w-4xl text-5xl sm:text-6xl lg:text-7xl" data-hero-item>{data.title}</h1>
+            <p class="mt-6 max-w-2xl text-lg text-pretty text-muted" data-hero-item>{data.summary}</p>
+            {
+              data.concept && (
+                <p class="mono mt-6 max-w-2xl text-[11px] leading-relaxed text-muted" data-hero-item>
+                  Concept project · a fictional brand I designed to show my process, not a client
+                </p>
+              )
+            }
+          </div>
 
-        <dl
-          class:list={['mt-12 grid grid-cols-2 border-t border-line', facts.length > 2 ? 'sm:grid-cols-4' : 'sm:max-w-2xl']}
-          data-hero-item
-        >
-          {
-            facts.map((f) => (
-              <div class="border-b border-line py-5 sm:border-b-0 sm:border-l sm:px-5 sm:first:border-l-0 sm:first:pl-0">
-                <dt class="mono text-[11px] text-muted">{f.label}</dt>
-                <dd class="mt-1.5 font-medium">{f.value}</dd>
-              </div>
-            ))
-          }
-        </dl>
+          <dl class="mt-10 grid grid-cols-1 border-t border-line sm:grid-cols-2 lg:mt-0 lg:grid-cols-1" data-hero-item>
+            {
+              facts.map((f) => (
+                <div class="border-b border-line py-4">
+                  <dt class="mono text-[11px] text-muted">{f.label}</dt>
+                  <dd class="mt-1.5 font-medium">{f.value}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
       </div>
     </header>
 
@@ -88,7 +99,7 @@ const schema = {
             />
           ) : data.workflow.length === 0 ? (
             <div data-reveal>
-              <ProjectCover category={data.category} class="border border-line" />
+              <ProjectCover category={data.category} large class="aspect-[16/10] border border-line sm:aspect-[21/9]" />
             </div>
           ) : null
         }

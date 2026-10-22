@@ -6,15 +6,24 @@ interface Props {
   eyebrow: string;
   title: string;
   intro?: string;
+  /** Shorter band for pages where the content should start sooner (e.g. Contact). */
+  compact?: boolean;
 }
-const { eyebrow, title, intro } = Astro.props;
+const { eyebrow, title, intro, compact = false } = Astro.props;
 ---
 
-<section data-surface="dark" data-band class="relative overflow-hidden bg-bg pt-16 pb-14 sm:pt-24 sm:pb-20">
+<section
+  data-surface="dark"
+  data-band
+  class:list={['relative overflow-hidden bg-bg', compact ? 'pt-10 pb-10 sm:pt-14 sm:pb-12' : 'pt-16 pb-14 sm:pt-24 sm:pb-20']}
+>
   <Starfield count={70} seed={title.length * 13} />
   <div class="container-page relative">
     <p class="eyebrow" data-hero-item>{eyebrow}</p>
-    <h1 class="monument mt-6 text-[clamp(72px,17vw,232px)]" data-monument>
+    <h1
+      class:list={['monument mt-6', compact ? 'text-[clamp(60px,10vw,144px)]' : 'text-[clamp(72px,17vw,232px)]']}
+      data-monument
+    >
       {title.split('\n').map((line) => (
         <span class="block overflow-hidden pb-[0.04em]">
           <span class="monument-fade block" data-monument-line>{line}</span>
@@ -23,7 +32,10 @@ const { eyebrow, title, intro } = Astro.props;
     </h1>
     {
       intro && (
-        <div class="mt-10 grid gap-6 border-t border-line pt-6 md:grid-cols-[1fr_auto] md:items-end" data-hero-item>
+        <div
+          class:list={['grid gap-6 border-t border-line md:grid-cols-[1fr_auto] md:items-end', compact ? 'mt-6 pt-5' : 'mt-10 pt-6']}
+          data-hero-item
+        >
           <p class="max-w-xl text-lg text-pretty text-muted">{intro}</p>
           <slot />
         </div>

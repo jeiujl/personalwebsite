@@ -10,18 +10,22 @@ Almost everything you'll want to change lives in a few places. Search the projec
 
 | What | Where |
 |---|---|
-| Name, giant homepage headline (`heroDisplay`), sentence under it, email, booking link, photo, resume, socials, platform name | `src/config/site.ts` |
+| Name, giant homepage headline (`heroDisplay`), sentence under it, email, booking link, photo, resume, socials, platform name, homepage stats | `src/config/site.ts` |
 | Case studies (one Markdown file each) | `src/content/projects/*.md` |
 | Testimonials | `src/content/testimonials/*.yaml` |
 | Services (and optional starting prices) | `src/content/services/*.yaml` |
 | Automation examples on the homepage | `src/content/automations.yaml` |
-| Experience timeline (About page) | `src/content/experience.yaml` |
+| Experience and education (About page) | `src/content/experience.yaml` |
 | Bio and skills | `src/pages/about.astro` |
 | FAQ | `src/pages/services.astro` |
 | Colors, fonts and the four service colors | `src/styles/global.css` (tokens at the top) and `src/lib/disciplines.ts` |
 | The five automation steps in the homepage story | `src/components/HeroScene.astro` (the `steps` list) |
 
 **Testimonials:** the reviews sections stay hidden until `src/content/testimonials/` has at least one quote. Only add quotes a client has approved word for word (see the README in that folder).
+
+**Stats band:** the big count-up numbers on the homepage come from `stats` in `src/config/site.ts`. Keep them true; swap in your own (e.g. businesses helped) as they grow.
+
+**Concept projects:** self-initiated designs for fictional brands have `concept: true`. They get a "Concept" badge, a note on their page, and their own section below client work. Their client name ends with "(fictional brand)".
 
 **Adding a project:** copy one of the files in `src/content/projects/`, rename it (the file name becomes the URL, e.g. `/work/my-project/`) and edit the frontmatter. `category` is one of `website`, `app`, `crm` or `ai`, which sets the project's color and work filter. To use a real screenshot, put the image next to the file and add `cover: ./my-image.png` and `coverAlt: "…"`. Automation projects can list `workflow` steps, which are drawn as a diagram.
 

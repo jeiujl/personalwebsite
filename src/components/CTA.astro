@@ -16,17 +16,18 @@ const {
   <Starfield count={60} seed={41} />
   <div class="container-page relative" data-reveal>
     <p class="eyebrow">Next step</p>
-    <a href={ctaHref} class="group mt-6 flex items-start gap-3 sm:gap-6">
-      <h2 class="monument monument-fade text-[clamp(72px,16vw,224px)]">{title}</h2>
-      <span
-        class="monument text-[clamp(48px,10vw,140px)] text-accent transition-transform duration-500 ease-[var(--ease-settle)] group-hover:translate-x-2 group-hover:-translate-y-2"
-        aria-hidden="true">↗</span
-      >
+    <a href={ctaHref} class="group mt-6 block">
+      <h2 class="monument text-[clamp(60px,12vw,184px)] text-balance">
+        <span class="monument-fade">{title}</span><span
+          class="ml-[0.12em] inline-block align-[0.12em] text-[0.6em] text-accent transition-transform duration-500 ease-[var(--ease-settle)] group-hover:translate-x-2 group-hover:-translate-y-2"
+          aria-hidden="true">↗</span
+        >
+      </h2>
     </a>
     <div class="mt-10 grid gap-6 border-t border-line pt-6 md:grid-cols-[1fr_auto] md:items-center">
       <p class="max-w-xl text-pretty text-muted">{text}</p>
       <div class="flex flex-wrap gap-3">
-        <a href={ctaHref} class="btn-signal" data-magnetic>
+        <a href={ctaHref} class="btn-signal px-7 py-3.5 text-[17px]" data-magnetic>
           Book a free call <span class="text-accent" aria-hidden="true">↗</span>
         </a>
         {

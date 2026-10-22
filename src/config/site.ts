@@ -43,6 +43,16 @@ export const site = {
   // TODO: add LinkedIn and any other profiles, e.g. { label: 'LinkedIn', href: 'https://www.linkedin.com/in/…' }
   socials: [{ label: 'GitHub', href: 'https://github.com/jeiujl' }],
 
+  // The homepage stats band. Numbers count up as they scroll into view.
+  // Keep them true: clients check. TODO: as your numbers grow, swap in your
+  // own, e.g. { value: '25+', label: 'Businesses helped', note: 'Across Ontario' }.
+  stats: [
+    { value: '4', label: 'Industries', note: 'Aviation, dental, fashion & AI' },
+    { value: '4', label: 'Services', note: 'Websites, apps, CRM & automations' },
+    { value: '24/7', label: 'Automations on duty', note: 'They keep working after hours' },
+    { value: '20', label: 'Minute first call, free', note: 'Talk it through, no pressure' },
+  ],
+
   // A message referrers can copy and send to people they want to introduce you to.
   // Give each referrer their own link, e.g. https://yoursite.com/?ref=dad, and
   // every inquiry email will say who sent it.

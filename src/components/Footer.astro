@@ -1,10 +1,16 @@
 ---
-import { nav, site } from '../config/site';
+import { ctaHref, nav, site } from '../config/site';
+
+const startLinks = [
+  { label: 'Book a free call', href: ctaHref, rel: ctaHref.startsWith('http') ? 'noopener' : '' },
+  { label: 'Send a message', href: '/contact', rel: '' },
+  ...site.socials.map((s) => ({ label: s.label, href: s.href, rel: 'me noopener' })),
+];
 ---
 
 <footer data-surface="dark" data-band class="overflow-hidden border-t border-line bg-surface-2">
-  <div class="container-page grid gap-10 pt-16 pb-10 md:grid-cols-[2fr_1fr_1fr]">
-    <div>
+  <div class="container-page grid grid-cols-2 gap-x-6 gap-y-10 pt-16 pb-10 md:grid-cols-[2fr_1fr_1fr]">
+    <div class="col-span-2 md:col-span-1">
       <p class="eyebrow">Get in touch</p>
       <a
         href={site.email ? `mailto:${site.email}` : '/contact'}
@@ -16,12 +22,12 @@ import { nav, site } from '../config/site';
     </div>
     <nav aria-label="Footer">
       <p class="eyebrow">Pages</p>
-      <ul class="mt-4 space-y-2">
-        <li><a href="/" class="mono text-muted hover:text-ink">Home</a></li>
+      <ul class="mt-4 space-y-1">
+        <li><a href="/" class="mono inline-block py-1.5 text-muted hover:text-ink">Home</a></li>
         {
           nav.map((item) => (
             <li>
-              <a href={item.href} class="mono text-muted hover:text-ink">
+              <a href={item.href} class="mono inline-block py-1.5 text-muted hover:text-ink">
                 {item.label}
               </a>
             </li>
@@ -30,13 +36,17 @@ import { nav, site } from '../config/site';
       </ul>
     </nav>
     <div>
-      <p class="eyebrow">Elsewhere</p>
-      <ul class="mt-4 space-y-2">
+      <p class="eyebrow">Start a project</p>
+      <ul class="mt-4 space-y-1">
         {
-          site.socials.map((s) => (
+          startLinks.map((link) => (
             <li>
-              <a href={s.href} class="mono text-muted hover:text-ink" rel="me noopener" target="_blank">
-                {s.label} <span aria-hidden="true">↗</span>
+              <a
+                href={link.href}
+                class="mono inline-block py-1.5 text-muted hover:text-ink"
+                {...(link.rel ? { rel: link.rel, target: '_blank' } : {})}
+              >
+                {link.label} <span aria-hidden="true">↗</span>
               </a>
             </li>
           ))

@@ -34,6 +34,9 @@ const projects = defineCollection({
       liveUrl: z.url().optional(),
       featured: z.boolean().default(false),
       order: z.number().default(100),
+      // Self-initiated design for a fictional brand. Shown with a "Concept"
+      // badge and listed apart from client work.
+      concept: z.boolean().default(false),
       sample,
     }),
 });
@@ -85,6 +88,8 @@ const experience = defineCollection({
   schema: z.object({
     role: z.string(),
     org: z.string(),
+    // Which list the entry appears in on the About page
+    kind: z.enum(['work', 'education']).default('work'),
     period: z.string().optional(),
     summary: z.string().optional(),
     order: z.number(),

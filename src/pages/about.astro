@@ -7,7 +7,11 @@ import SampleBadge from '../components/SampleBadge.astro';
 import { site } from '../config/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const experience = (await getCollection('experience')).sort((a, b) => a.data.order - b.data.order);
+const entries = (await getCollection('experience')).sort((a, b) => a.data.order - b.data.order);
+const lists = [
+  { title: 'Experience', items: entries.filter((e) => e.data.kind === 'work') },
+  { title: 'Education', items: entries.filter((e) => e.data.kind === 'education') },
+].filter((list) => list.items.length > 0);
 
 // Skills and tools, based on the work above. Edit freely.
 const skills = [
@@ -27,21 +31,19 @@ const skills = [
   <div class="grid-lines">
     <section class="container-page grid gap-12 pt-16 lg:grid-cols-[1fr_320px]">
       <div data-reveal>
-        <h2 class="heading text-4xl sm:text-5xl">Design and automation for businesses that would rather be doing the work.</h2>
+        <h2 class="heading text-3xl sm:text-5xl">Design and automation for businesses that would rather be doing the work.</h2>
         <div class="prose-body mt-8">
           <p>
-            I'm Jerry. I graduated from University of Toronto Schools in 2026 and now study Financial Analysis &amp;
-            Risk Management (FARM) at the University of Waterloo.
+            I'm Jerry, founder of Flowa AI. I design and build websites and apps, and set up automations that save
+            small businesses time, like missed-call text-back for a dental services company.
           </p>
           <p>
-            I founded Flowa AI to set up automations for small businesses, like missed-call text-back for a dental
-            services company. I designed, built and managed the HayesX pilot companion app, promoted the clothing
-            brand Pursue Play with social media content and a website, and have worked as a project manager at IPMD,
-            Inc.
+            I designed, built and managed the HayesX pilot companion app, promoted the clothing brand Pursue Play with
+            social media content and a website, and have worked as a project manager at IPMD, Inc.
           </p>
           <p>
             Whether it's a website, an app or a few automations, I keep things simple and explain everything in plain
-            English.
+            English. I also study Financial Analysis &amp; Risk Management at the University of Waterloo.
           </p>
         </div>
         <div class="mt-10 flex flex-wrap items-center gap-5">
@@ -105,27 +107,33 @@ const skills = [
     </section>
 
     {
-      experience.length > 0 && (
-        <section class="container-page pt-28">
-          <div class="flex items-baseline justify-between gap-3 border-b border-ink/80 pb-4" data-reveal>
-            <h2 class="heading text-4xl sm:text-5xl">Experience</h2>
-          </div>
-          <ol data-reveal-stagger>
-            {experience.map((item) => (
-              <li class="grid gap-2 border-b border-line py-6 sm:grid-cols-[180px_1fr] sm:gap-8">
-                <div class="flex flex-wrap items-center gap-2">
-                  {item.data.period && <p class="mono text-[12px] text-muted">{item.data.period}</p>}
-                  {item.data.sample && <SampleBadge />}
-                </div>
-                <div>
-                  <h3 class="text-xl font-medium tracking-[-0.02em]">
-                    {item.data.role} <span class="text-muted">· {item.data.org}</span>
-                  </h3>
-                  {item.data.summary && <p class="mt-2 text-muted">{item.data.summary}</p>}
-                </div>
-              </li>
-            ))}
-          </ol>
+      lists.length > 0 && (
+        <section class="container-page grid gap-16 pt-28 lg:grid-cols-[1.6fr_1fr] lg:gap-12">
+          {lists.map((list) => (
+            <div>
+              <div class="border-b border-ink/80 pb-4" data-reveal>
+                <h2 class="heading text-4xl sm:text-5xl">{list.title}</h2>
+              </div>
+              <ol data-reveal-stagger>
+                {list.items.map((item, i) => (
+                  <li class="grid grid-cols-[2rem_1fr] gap-x-3 border-b border-line py-6">
+                    <span class="mono pt-1 text-[11px] text-muted" aria-hidden="true">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <div>
+                      <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                        <h3 class="text-xl font-medium tracking-[-0.02em]">{item.data.org}</h3>
+                        {item.data.period && <p class="mono text-[11px] text-muted">{item.data.period}</p>}
+                        {item.data.sample && <SampleBadge />}
+                      </div>
+                      <p class="mt-1 text-[15px] text-ink/80">{item.data.role}</p>
+                      {item.data.summary && <p class="mt-3 text-[15px] text-muted">{item.data.summary}</p>}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ))}
         </section>
       )
     }

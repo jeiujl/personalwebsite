@@ -5,13 +5,15 @@ summary: Designed, built and managed a companion app for pilots of the HayesX-25
 category: app
 role: Design, development & project management
 tools: [UI/UX design, Next.js, Progressive web app]
+cover: ./images/hayesx-cover.webp
+coverAlt: The HayesX pilot companion app open on its checklist screen, next to the HayesX-250 aircraft
 featured: true
 order: 1
 ---
 
 ## About HayesX
 
-HayesX makes the HayesX-250, a single-seat electric personal aircraft. The pilot companion app is an app designed for HayesX-250 pilots.
+HayesX makes the HayesX-250, a single-seat electric personal aircraft. The pilot companion app is an app designed for HayesX-250 pilots: preflight, logbook and manuals in one place.
 
 ## What I did
 
@@ -21,7 +23,7 @@ HayesX makes the HayesX-250, a single-seat electric personal aircraft. The pilot
 
 ## What's inside
 
-- A **preflight checklist**
-- A **digital logbook**
+- A **preflight checklist** with the aircraft's airworthiness and maintenance status up front
+- A **digital logbook** that tracks flights and total hours
 - **Manuals** in one place
-- **Messages** and an **account** section
+- **Messages**, an **account** section and a one-tap **Emergency** button

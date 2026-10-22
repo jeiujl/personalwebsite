@@ -9,12 +9,15 @@ import Marquee from '../components/Marquee.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import ServiceBlock from '../components/ServiceBlock.astro';
+import StatsBand from '../components/StatsBand.astro';
 import TestimonialCard from '../components/TestimonialCard.astro';
 import { site } from '../config/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { disciplines, getProjects, getServices, getTestimonials } from '../lib/content';
 
-const featured = (await getProjects()).filter((p) => p.data.featured).slice(0, 3);
+const projects = await getProjects();
+const featured = projects.filter((p) => p.data.featured && !p.data.concept).slice(0, 3);
+const concepts = projects.filter((p) => p.data.concept).slice(0, 3);
 const services = await getServices();
 const testimonials = (await getTestimonials()).slice(0, 3);
 const recipes = (await getCollection('automations')).sort((a, b) => a.data.order - b.data.order);
@@ -36,23 +39,10 @@ const personSchema = {
 
   <Marquee items={Object.values(disciplines).map((d) => d.label)} />
 
-  <!-- Services: one feature row per service -->
-  <section class="grid-lines bg-surface-2 pt-16 pb-6">
-    <GhostTitle text="Services" class="container-page" />
-    <div class="container-page">
-      <SectionHeading
-        eyebrow="What I do"
-        title="Two ways I help your business grow"
-        intro="Look professional online, and stop letting leads slip through the cracks. Pick one, or combine them."
-      />
-      <div class="mt-14">
-        {services.map((service, i) => <ServiceBlock service={service} index={i} />)}
-      </div>
-    </div>
-  </section>
+  <StatsBand />
 
   <!-- Selected work -->
-  <section class="grid-lines pt-16 pb-24">
+  <section class="grid-lines py-20 sm:py-24">
     <GhostTitle text="Work" class="container-page" />
     <div class="container-page">
       <div class="flex flex-wrap items-end justify-between gap-6">
@@ -62,11 +52,44 @@ const personSchema = {
       <div class="mt-14 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
         {featured.map((project) => <ProjectCard project={project} />)}
       </div>
+
+      {
+        concepts.length > 0 && (
+          <div class="mt-24 border-t border-ink/80 pt-6">
+            <div class="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3" data-reveal>
+              <h3 class="heading text-3xl sm:text-4xl">Concepts</h3>
+              <p class="max-w-md text-[15px] text-muted">
+                Self-initiated designs for fictional businesses, to show how I'd approach projects like yours.
+              </p>
+            </div>
+            <div class="mt-10 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
+              {concepts.map((project) => (
+                <ProjectCard project={project} headingLevel="h3" />
+              ))}
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- Services: one feature row per service -->
+  <section class="grid-lines border-t border-line bg-surface-2 py-20 sm:py-24">
+    <GhostTitle text="Services" class="container-page" />
+    <div class="container-page">
+      <SectionHeading
+        eyebrow="What I do"
+        title="Four ways I help your business grow"
+        intro="Look professional online, and stop letting leads slip through the cracks. Pick one, or combine them."
+      />
+      <div class="mt-14">
+        {services.map((service, i) => <ServiceBlock service={service} index={i} />)}
+      </div>
     </div>
   </section>
 
   <!-- Automation recipes -->
-  <section class="grid-lines border-t border-line bg-surface-2 py-24">
+  <section class="grid-lines border-t border-line py-20 sm:py-24">
     <div class="container-page">
       <SectionHeading
         eyebrow="Automations I offer"
@@ -93,7 +116,7 @@ const personSchema = {
   <!-- Testimonials -->
   {
     testimonials.length > 0 && (
-      <section class="grid-lines py-24">
+      <section class="grid-lines border-t border-line py-20 sm:py-24">
         <div class="container-page">
           <SectionHeading eyebrow="Kind words" title="What clients say" />
           <div class="mt-14 grid gap-10 md:grid-cols-3" data-reveal-stagger>
@@ -108,7 +131,7 @@ const personSchema = {
 
   <!-- About snippet -->
   <section class="border-t border-line">
-    <div class="container-page grid items-center gap-10 pt-20 md:grid-cols-[auto_1fr]" data-reveal>
+    <div class="container-page grid items-center gap-10 pt-20 sm:pt-24 md:grid-cols-[auto_1fr]" data-reveal>
       {
         site.photo ? (
           <Image
@@ -132,9 +155,9 @@ const personSchema = {
         <p class="eyebrow">About me</p>
         <h2 class="heading mt-4 text-4xl sm:text-5xl">Hi, I'm {site.name}.</h2>
         <p class="mt-4 max-w-2xl text-lg text-muted">
-          I'm a Financial Analysis &amp; Risk Management student at the University of Waterloo and the founder of Flowa
-          AI. I design and build websites and apps, and set up automations, like missed-call text-back, so callers who
-          can't get through still hear back.
+          I'm the founder of Flowa AI. I design and build websites and apps, and set up automations, like missed-call
+          text-back, so callers who can't get through still hear back. I also study Financial Analysis &amp; Risk
+          Management at the University of Waterloo.
         </p>
         <a href="/about" class="arrow-link mt-6">More about me <span class="arrow" aria-hidden="true">↗</span></a>
       </div>

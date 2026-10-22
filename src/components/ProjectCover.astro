@@ -1,84 +1,110 @@
 ---
 // A drawn preview used when a project has no cover image: a dark panel with
-// hairlines, tinted with the project's service color.
+// hairlines, tinted with the project's service color. `large` scales the
+// drawing up for the wide cover on a project page. CRM is a pipeline board
+// (leads moving to Booked); AI is an inbox with a drafted reply to approve.
 import { disciplines, type Discipline } from '../lib/disciplines';
 
 interface Props {
   category: Discipline;
+  large?: boolean;
   class?: string;
 }
-const { category, class: className = '' } = Astro.props;
+const { category, large = false, class: className = '' } = Astro.props;
 const hue = disciplines[category].hue;
-const kind = category === 'crm' || category === 'ai' ? 'automation' : category;
+const pipeline = [
+  { title: 'New', cards: 3 },
+  { title: 'Replied', cards: 2 },
+  { title: 'Booked', cards: 1 },
+];
 ---
 
 <div
   data-surface="dark"
-  class:list={['cover relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-bg', className]}
+  class:list={['cover relative flex items-center justify-center overflow-hidden bg-bg', large ? '' : 'aspect-[16/10]', className]}
   style={`--hue:${hue}`}
   aria-hidden="true"
 >
   <div class="cover-grid absolute inset-0"></div>
   <div class="absolute -right-10 -bottom-16 size-56 rounded-full opacity-30 blur-3xl" style="background:var(--hue)"></div>
-  {
-    kind === 'website' && (
-      <div class="relative w-[74%] border border-line bg-surface">
-        <div class="flex items-center gap-1.5 border-b border-line px-3 py-2">
-          <span class="size-1.5 rounded-full bg-line" />
-          <span class="size-1.5 rounded-full bg-line" />
-          <span class="size-1.5 rounded-full bg-line" />
-        </div>
-        <div class="grid grid-cols-[1.5fr_1fr] gap-4 p-5">
-          <div class="space-y-2">
-            <div class="h-5 w-11/12 bg-ink/85" />
-            <div class="h-5 w-2/3 bg-ink/85" />
-            <div class="mt-3 h-1.5 w-full bg-line" />
-            <div class="h-1.5 w-4/5 bg-line" />
-            <div class="mt-4 h-5 w-20 rounded-full border" style="border-color:var(--hue)" />
+  <div class:list={['relative flex w-full justify-center', large && 'origin-center sm:scale-[1.6]']}>
+    {
+      category === 'website' && (
+        <div class="w-[74%] max-w-md border border-line bg-surface">
+          <div class="flex items-center gap-1.5 border-b border-line px-3 py-2">
+            <span class="size-1.5 rounded-full bg-line" />
+            <span class="size-1.5 rounded-full bg-line" />
+            <span class="size-1.5 rounded-full bg-line" />
           </div>
-          <div class="border border-line" style="background:color-mix(in srgb, var(--hue) 22%, transparent)" />
-        </div>
-      </div>
-    )
-  }
-  {
-    kind === 'app' && (
-      <div class="relative flex items-end gap-4">
-        <div class="h-40 w-[5.5rem] translate-y-3 rounded-[1.1rem] border border-line bg-surface p-2">
-          <div class="h-12 rounded-md" style="background:color-mix(in srgb, var(--hue) 30%, transparent)" />
-          <div class="mt-2 h-1.5 w-3/4 bg-line" />
-          <div class="mt-1.5 h-1.5 w-1/2 bg-line" />
-        </div>
-        <div class="flex h-48 w-[6.5rem] flex-col gap-1.5 rounded-[1.25rem] border border-line bg-surface p-2.5">
-          <div class="h-1.5 w-1/2 bg-ink/70" />
-          <div class="h-7 border border-line" />
-          <div class="h-7 border" style="border-color:var(--hue)" />
-          <div class="h-7 border border-line" />
-          <div class="mt-auto h-5 rounded-full border border-accent" />
-        </div>
-      </div>
-    )
-  }
-  {
-    kind === 'automation' && (
-      <div class="relative flex w-[80%] items-center">
-        {[0, 1, 2, 3].map((i) => (
-          <>
-            {i > 0 && <div class:list={['h-px flex-1', i < 3 ? 'bg-accent' : 'bg-line']} />}
-            {/* Round nodes like the homepage network; the bg-coloured ring stops the line at the rim */}
-            <div
-              class:list={[
-                'flex size-11 shrink-0 items-center justify-center rounded-full border bg-surface ring-4 ring-bg sm:size-13',
-                i < 3 ? 'border-accent' : 'border-line',
-              ]}
-            >
-              <div class="size-2.5 rounded-full" style={i === 3 ? 'background:var(--line)' : 'background:var(--hue)'} />
+          <div class="grid grid-cols-[1.5fr_1fr] gap-4 p-5">
+            <div class="space-y-2">
+              <div class="h-5 w-11/12 bg-ink/85" />
+              <div class="h-5 w-2/3 bg-ink/85" />
+              <div class="mt-3 h-1.5 w-full bg-line" />
+              <div class="h-1.5 w-4/5 bg-line" />
+              <div class="mt-4 h-5 w-20 rounded-full border" style="border-color:var(--hue)" />
             </div>
-          </>
-        ))}
-      </div>
-    )
-  }
+            <div class="border border-line" style="background:color-mix(in srgb, var(--hue) 22%, transparent)" />
+          </div>
+        </div>
+      )
+    }
+    {
+      category === 'app' && (
+        <div class="flex items-end gap-4">
+          <div class="h-40 w-[5.5rem] translate-y-3 rounded-[1.1rem] border border-line bg-surface p-2">
+            <div class="h-12 rounded-md" style="background:color-mix(in srgb, var(--hue) 30%, transparent)" />
+            <div class="mt-2 h-1.5 w-3/4 bg-line" />
+            <div class="mt-1.5 h-1.5 w-1/2 bg-line" />
+          </div>
+          <div class="flex h-48 w-[6.5rem] flex-col gap-1.5 rounded-[1.25rem] border border-line bg-surface p-2.5">
+            <div class="h-1.5 w-1/2 bg-ink/70" />
+            <div class="h-7 border border-line" />
+            <div class="h-7 border" style="border-color:var(--hue)" />
+            <div class="h-7 border border-line" />
+            <div class="mt-auto h-5 rounded-full border border-accent" />
+          </div>
+        </div>
+      )
+    }
+    {
+      category === 'crm' && (
+        <div class="grid w-[78%] max-w-md grid-cols-3 gap-2.5">
+          {pipeline.map((column, c) => (
+            <div class="flex flex-col gap-1.5 border border-line bg-surface p-2">
+              <p class="mono mb-1 text-[9px] leading-none text-muted">{column.title}</p>
+              {Array.from({ length: column.cards }, () => (
+                <div class="h-6 border border-line" />
+              ))}
+              {c === 2 && (
+                <div
+                  class="h-6 border"
+                  style="border-color:var(--hue);background:color-mix(in srgb, var(--hue) 18%, transparent)"
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      )
+    }
+    {
+      category === 'ai' && (
+        <div class="flex w-[62%] max-w-sm flex-col gap-2">
+          <div class="h-7 w-3/4 rounded-xl rounded-bl-sm border border-line bg-surface" />
+          <div class="h-7 w-1/2 rounded-xl rounded-bl-sm border border-line bg-surface" />
+          <div
+            class="mt-2 ml-auto flex w-4/5 items-center justify-between gap-3 rounded-xl rounded-br-sm border px-3 py-2.5"
+            style="border-color:var(--hue);background:color-mix(in srgb, var(--hue) 10%, transparent)"
+          >
+            <div class="h-1.5 flex-1 bg-line" />
+            <span class="mono shrink-0 rounded-full border border-accent px-2 py-1 text-[8px] leading-none text-accent">
+              Approve
+            </span>
+          </div>
+        </div>
+      )
+    }
+  </div>
 </div>
 
 <style>

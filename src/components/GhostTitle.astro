@@ -6,6 +6,7 @@ interface Props {
 const { text, class: className = '' } = Astro.props;
 ---
 
-<p class:list={['ghost-title -mb-[0.12em] overflow-hidden whitespace-nowrap', className]} aria-hidden="true">
+{/* The section heading overlaps the lower half of the giant word */}
+<p class:list={['ghost-title -mb-[0.45em] overflow-hidden whitespace-nowrap', className]} aria-hidden="true">
   {text}
 </p>

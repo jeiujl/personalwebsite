@@ -9,7 +9,7 @@ interface Props {
 const { steps, active = 1, class: className = '' } = Astro.props;
 ---
 
-<ol class:list={['flex gap-4 sm:gap-6', className]} data-step-bars>
+<ol class:list={['flex gap-3 sm:gap-6', className]} data-step-bars>
   {
     steps.map((step, i) => (
       <li class="flex items-end gap-2">
@@ -17,7 +17,7 @@ const { steps, active = 1, class: className = '' } = Astro.props;
           data-step-bar
           class:list={['block h-9 w-[3px] transition-colors duration-300 sm:h-11', i < active ? 'bg-accent' : 'bg-line']}
         />
-        <span class="mono hidden text-[11px] leading-none text-muted sm:inline">
+        <span class="mono text-[10px] leading-none text-muted sm:text-[11px]">
           {String(i + 1).padStart(2, '0')}.{step}
         </span>
       </li>

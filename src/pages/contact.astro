@@ -20,6 +20,7 @@ const nextSteps = [
   description={`Get in touch with ${site.name} about a website, app design or automations for your business.`}
 >
   <PageHero
+    compact
     eyebrow="Contact"
     title="Let's talk"
     intro="Tell me a little about what you need. There's no commitment, and no question is too basic."
@@ -67,7 +68,8 @@ const nextSteps = [
         }
       </div>
 
-      <div>
+      {/* On phones the form comes first; the steps follow it */}
+      <div class="order-first lg:order-none">
         <ContactForm />
       </div>
     </div>

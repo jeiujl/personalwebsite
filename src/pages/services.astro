@@ -4,7 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import ProcessSteps from '../components/ProcessSteps.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import ServiceCard from '../components/ServiceCard.astro';
-import { site } from '../config/site';
+import { ctaHref, site } from '../config/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getServices } from '../lib/content';
 
@@ -94,20 +94,27 @@ const faqSchema = {
       </div>
     </section>
 
-    <section class="container-page pt-28">
-      <SectionHeading eyebrow="FAQ" title="Questions people ask" />
-      <div class="mt-10 max-w-3xl divide-y divide-line border-y border-line" data-reveal>
+    <section class="container-page grid gap-10 pt-28 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
+      <div class="self-start lg:sticky lg:top-28">
+        <SectionHeading eyebrow="FAQ" title="Questions people ask" />
+        <p class="mt-6 text-muted">Still unsure? Ask me on a free call.</p>
+        <a href={ctaHref} class="btn-signal mt-6">Book a free call <span class="text-accent" aria-hidden="true">↗</span></a>
+      </div>
+      <div class="divide-y divide-line border-y border-line" data-reveal>
         {
           faqs.map((faq, i) => (
             <details class="group py-6">
-              <summary class="flex cursor-pointer list-none items-baseline gap-5 text-lg font-medium [&::-webkit-details-marker]:hidden">
+              <summary class="flex cursor-pointer list-none items-center gap-5 text-lg font-medium [&::-webkit-details-marker]:hidden">
                 <span class="mono text-[11px] text-muted">{String(i + 1).padStart(2, '0')}</span>
                 <span class="flex-1">{faq.q}</span>
-                <span class="mono text-accent transition-transform duration-300 group-open:rotate-45" aria-hidden="true">
+                <span
+                  class="flex size-8 shrink-0 items-center justify-center rounded-full border border-line text-accent transition duration-300 group-open:rotate-45 group-hover:border-ink"
+                  aria-hidden="true"
+                >
                   +
                 </span>
               </summary>
-              <p class="mt-3 pl-9 text-muted">{faq.a}</p>
+              <p class="mt-3 pr-12 pl-9 text-muted">{faq.a}</p>
             </details>
           ))
         }
