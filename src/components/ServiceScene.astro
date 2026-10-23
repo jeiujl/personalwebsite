@@ -1,0 +1,617 @@
+---
+// A small looping animation for each service row on the homepage:
+// website: a URL is typed into a browser and the site loads;
+// app: the open app is swiped away and swirls into its icon on the home screen;
+// crm: a missed call becomes a lead that moves through the pipeline to Booked;
+// ai: an inbox gets sorted and labelled, and a drafted reply is approved.
+// What's drawn here is the finished still frame, shown with reduced motion or
+// without JavaScript. The script below sets the start states and plays each
+// scene only while it's on screen.
+import { getLang, pick } from '../i18n';
+import type { Discipline } from '../lib/disciplines';
+import { iconPaths, type IconName } from '../lib/icons';
+
+interface Props {
+  discipline: Discipline;
+}
+const { discipline } = Astro.props;
+
+const t = pick(getLang(Astro.url), {
+  en: {
+    book: 'Book now',
+    missed: 'Missed call · 2:14 PM',
+    pipeline: 'Pipeline',
+    columns: ['New', 'Replied', 'Booked'],
+    inbox: 'Inbox',
+    labels: ['Lead', 'Invoice', 'Support'],
+    draft: 'Draft reply',
+    approve: 'Approve',
+    sent: 'Sent ✓',
+    app: 'Classes',
+  },
+  zh: {
+    book: '立即预约',
+    missed: '未接来电 · 下午 2:14',
+    pipeline: '销售管道',
+    columns: ['新客户', '已回复', '已预约'],
+    inbox: '收件箱',
+    labels: ['潜在客户', '发票', '客服'],
+    draft: '回复草稿',
+    approve: '确认',
+    sent: '已发送 ✓',
+    app: '课程',
+  },
+});
+
+/** A 24×24 icon from the shared set, placed at (x, y) and drawn `size` units wide. */
+const icon = (name: IconName, x: number, y: number, size: number) => ({
+  d: iconPaths[name],
+  transform: `translate(${x} ${y}) scale(${size / 24})`,
+  'stroke-width': (1.6 * 24) / size,
+});
+
+// Home-screen icon grid for the app scene: 4 columns × 3 rows. The app's own
+// icon (purple) sits in row 2, column 2.
+const homeIcons = [0, 1, 2].flatMap((row) =>
+  [0, 1, 2, 3].map((col) => ({ x: 121 + col * 21, y: 74 + row * 24, own: row === 1 && col === 1, tone: (row * 4 + col) % 5 })),
+);
+const appIcon = homeIcons.find((i) => i.own)!;
+const toneFill = ['#2a2b27', 'var(--hue-website)', '#34352f', 'var(--hue-crm)', 'var(--hue-ai)'];
+---
+
+<div class="scene relative h-full w-full" data-scene={discipline} aria-hidden="true">
+  <div class="scene-glow"></div>
+  <svg class="relative h-full w-full overflow-visible" viewBox="0 0 320 256" fill="none">
+    {
+      discipline === 'website' && (
+        <g>
+          {/* Browser window */}
+          <rect x="20" y="28" width="280" height="200" rx="12" class="frame" />
+          <path d="M20 60h280" class="hair" />
+          {[38, 50, 62].map((cx) => (
+            <circle cx={cx} cy="44" r="3.5" class="dot" />
+          ))}
+          {/* Address bar with a globe, the typed URL, a caret and a go button */}
+          <rect x="76" y="35" width="200" height="18" rx="9" class="field" />
+          <g class="hue-stroke" stroke-width="1.1">
+            <circle cx="89" cy="44" r="5" />
+            <ellipse cx="89" cy="44" rx="2.2" ry="5" />
+            <path d="M84 44h10" />
+          </g>
+          <text x="99" y="47.3" class="sc-mono ink-fill" font-size="8.5" data-url-text>
+            yourbusiness.com
+          </text>
+          <rect x="178" y="39" width="1.2" height="10" class="hue-fill" opacity="0" data-caret />
+          <circle cx="266" cy="44" r="6.5" class="hue-fill" data-go />
+          <path d="M263 44h6M266.5 41.5 269 44l-2.5 2.5" class="bg-stroke" stroke-width="1.3" stroke-linecap="round" />
+          <circle cx="266" cy="44" r="7" class="hue-stroke" stroke-width="1.5" opacity="0" data-ripple />
+          <rect x="20" y="59" width="280" height="2.5" class="hue-fill" opacity="0" data-progress />
+
+          {/* The page that loads */}
+          <g data-page>
+            <g data-build>
+              <rect x="36" y="74" width="10" height="10" rx="2.5" class="hue-fill" />
+              <rect x="52" y="77.5" width="34" height="3" rx="1.5" class="ink-fill" opacity="0.8" />
+              {[204, 228, 252].map((x) => (
+                <rect x={x} y="77.5" width="18" height="3" rx="1.5" class="muted-fill" />
+              ))}
+            </g>
+            <rect x="36" y="102" width="132" height="11" rx="2" class="ink-fill" data-build />
+            <rect x="36" y="118" width="98" height="11" rx="2" class="ink-fill" data-build />
+            <g data-build>
+              <rect x="36" y="139" width="124" height="4" rx="2" class="line-fill" />
+              <rect x="36" y="148" width="100" height="4" rx="2" class="line-fill" />
+            </g>
+            <g data-build>
+              <rect x="36" y="162" width="66" height="19" rx="9.5" class="hue-stroke" stroke-width="1.3" />
+              <text x="69" y="174.3" text-anchor="middle" class="sc-sans ink-fill" font-size="8">
+                {t.book}
+              </text>
+            </g>
+            <g data-build>
+              <rect x="184" y="98" width="100" height="84" rx="6" class="hue-soft hue-stroke" stroke-width="1" />
+              <circle cx="208" cy="120" r="7" class="hue-fill" />
+              <path d="M190 176l28-30 18 18 14-12 28 24" class="hue-stroke" stroke-width="1.4" stroke-linejoin="round" />
+            </g>
+            <g data-build>
+              {[36, 122, 208].map((x) => (
+                <rect x={x} y="196" width="76" height="20" rx="4" class="card" />
+              ))}
+            </g>
+          </g>
+
+          {/* Pointer */}
+          <g data-cursor opacity="0">
+            <path d="M0 0v15l4-3.6 2.6 6 2.4-1-2.6-6H12Z" class="pointer" stroke-width="1" stroke-linejoin="round" />
+          </g>
+        </g>
+      )
+    }
+
+    {
+      discipline === 'app' && (
+        <g>
+          <defs>
+            <clipPath id="app-window-clip">
+              <rect x="113" y="17" width="94" height="222" rx="14" data-app-clip />
+            </clipPath>
+          </defs>
+          {/* Phone */}
+          <rect x="108" y="12" width="104" height="232" rx="19" class="frame" />
+          <rect x="113" y="17" width="94" height="222" rx="14" class="screen" />
+
+          {/* Home screen */}
+          <g data-home>
+            <text x="160" y="50" text-anchor="middle" class="sc-sans ink-fill" font-size="17" font-weight="500" data-home-item>
+              9:41
+            </text>
+            <rect x="141" y="56" width="38" height="3" rx="1.5" class="muted-fill" data-home-item />
+            {homeIcons.map((i) => (
+              <rect
+                x={i.x}
+                y={i.y}
+                width="15"
+                height="15"
+                rx="4"
+                class:list={[i.own && 'hue-fill']}
+                style={i.own ? undefined : `fill:${toneFill[i.tone]};opacity:${i.tone % 2 ? 0.55 : 1}`}
+                data-home-item
+              />
+            ))}
+            <path
+              d={`M${appIcon.x + 4} ${appIcon.y + 5.5}h7M${appIcon.x + 4} ${appIcon.y + 9.5}h4.5`}
+              class="bg-stroke"
+              stroke-width="1.4"
+              stroke-linecap="round"
+              data-home-item
+            />
+            <rect x="119" y="204" width="82" height="25" rx="8" class="field" data-home-item />
+            {[125, 144, 163, 182].map((x, i) => (
+              <rect x={x} y="209" width="14" height="14" rx="4" style={`fill:${toneFill[(i + 1) % 5]};opacity:0.7`} data-home-item />
+            ))}
+          </g>
+
+          {/* The open app */}
+          <g data-app>
+            <g clip-path="url(#app-window-clip)">
+              <rect x="113" y="17" width="94" height="222" class="app-bg" />
+              <rect x="113" y="17" width="94" height="62" class="hue-fill" />
+              <rect x="146" y="22" width="28" height="7" rx="3.5" fill="#000" opacity="0.5" />
+              <text x="122" y="58" class="sc-sans" font-size="12" font-weight="600" fill="#ffffff">
+                {t.app}
+              </text>
+              <rect x="122" y="65" width="40" height="3" rx="1.5" fill="#ffffff" opacity="0.6" />
+              {[88, 126, 164].map((y, i) => (
+                <g>
+                  <rect x="121" y={y} width="78" height="31" rx="7" fill="#ffffff" />
+                  <rect x="127" y={y + 6} width="19" height="19" rx="5" class="hue-fill" opacity={0.25 + i * 0.25} />
+                  <rect x="151" y={y + 9} width="38" height="3.5" rx="1.75" fill="#3c3a3e" />
+                  <rect x="151" y={y + 17} width="26" height="3" rx="1.5" fill="#c9c7cc" />
+                </g>
+              ))}
+              <rect x="121" y="203" width="78" height="20" rx="10" class="hue-fill" />
+              <rect x="146" y="211.5" width="28" height="3" rx="1.5" fill="#ffffff" />
+            </g>
+          </g>
+          <rect x="140" y="232" width="40" height="3" rx="1.5" class="ink-fill" opacity="0.7" />
+          {/* Fingertip */}
+          <circle cx="160" cy="232" r="9" class="finger" opacity="0" data-finger />
+        </g>
+      )
+    }
+
+    {
+      discipline === 'crm' && (
+        <g>
+          {/* Missed-call notification */}
+          <g data-toast opacity="0">
+            <rect x="74" y="6" width="172" height="25" rx="12.5" class="field hue-stroke" stroke-width="1.1" />
+            <path {...icon('phone-call', 84, 11.5, 14)} class="hue-stroke" stroke-linejoin="round" />
+            <text x="104" y="22" class="sc-sans ink-fill" font-size="8.5">
+              {t.missed}
+            </text>
+          </g>
+
+          {/* Pipeline board */}
+          <rect x="16" y="40" width="288" height="196" rx="10" class="frame" />
+          <circle cx="31" cy="57" r="3" class="hue-fill" />
+          <text x="39" y="60" class="sc-mono muted-fill" font-size="8">
+            {t.pipeline.toUpperCase()}
+          </text>
+          {t.columns.map((title, c) => (
+            <g>
+              <rect x={28 + c * 94} y="70" width="82" height="156" rx="6" class="field" />
+              <text x={36 + c * 94} y="85" class="sc-mono muted-fill" font-size="7.5">
+                {title.toUpperCase()}
+              </text>
+              <text
+                x={102 + c * 94}
+                y="85"
+                text-anchor="end"
+                class:list={['sc-mono', c === 2 ? 'hue-text' : 'muted-fill']}
+                font-size="7.5"
+                data-booked-count={c === 2 ? '' : undefined}
+              >
+                {['2', '1', '4'][c]}
+              </text>
+            </g>
+          ))}
+          {/* Cards already in the pipeline */}
+          {[
+            [34, 94],
+            [128, 94],
+            [222, 94],
+            [222, 126],
+            [222, 158],
+          ].map(([x, y]) => (
+            <g>
+              <rect x={x} y={y} width="70" height="26" rx="5" class="card" />
+              <circle cx={x + 10} cy={y + 13} r="4.5" class="line-fill" />
+              <rect x={x + 19} y={y + 8.5} width="32" height="3.5" rx="1.75" class="muted-fill" />
+              <rect x={x + 19} y={y + 15.5} width="22" height="3" rx="1.5" class="line-fill" />
+            </g>
+          ))}
+
+          {/* The new lead, shown where it ends up: Booked */}
+          <g data-lead transform="translate(188 96)">
+            <rect x="34" y="94" width="70" height="26" rx="5" class="card" />
+            <rect x="34" y="94" width="70" height="26" rx="5" class="hue-soft hue-stroke" stroke-width="1.1" data-lead-booked />
+            <circle cx="44" cy="107" r="4.5" class="hue-fill" />
+            <rect x="53" y="102.5" width="30" height="3.5" rx="1.75" class="ink-fill" />
+            <rect x="53" y="109.5" width="20" height="3" rx="1.5" class="muted-fill" />
+            <path {...icon('phone-call', 88, 101, 11)} class="hue-stroke" stroke-linejoin="round" opacity="0" data-lead-icon="call" />
+            <path {...icon('message', 88, 101, 11)} class="hue-stroke" stroke-linejoin="round" opacity="0" data-lead-icon="text" />
+            <path {...icon('check', 88, 101, 11)} class="hue-stroke" stroke-linecap="round" data-lead-icon="booked" />
+          </g>
+        </g>
+      )
+    }
+
+    {
+      discipline === 'ai' && (
+        <g>
+          <rect x="16" y="16" width="288" height="226" rx="10" class="frame" />
+          <text x="30" y="36" class="sc-mono muted-fill" font-size="8">
+            {t.inbox.toUpperCase()}
+          </text>
+          <g>
+            <rect x="256" y="25" width="36" height="16" rx="8" class="hue-soft hue-stroke" stroke-width="1" />
+            <path {...icon('sparkle', 262, 28, 10)} class="hue-stroke" stroke-linejoin="round" />
+            <text x="275" y="36.3" class="sc-mono ink-fill" font-size="7.5">
+              AI
+            </text>
+          </g>
+
+          {/* Emails, each labelled by the AI */}
+          {t.labels.map((label, i) => {
+            const y = 48 + i * 34;
+            const hue = ['var(--hue)', 'var(--hue-crm)', 'var(--hue-app)'][i];
+            return (
+              <g data-row>
+                <rect x="28" y={y} width="264" height="28" rx="6" class="field" />
+                <circle cx="39" cy={y + 14} r="3" class="ink-fill" opacity="0.7" />
+                <rect x="49" y={y + 8} width="56" height="3.5" rx="1.75" class="ink-fill" opacity="0.8" />
+                <rect x="49" y={y + 16} width={[120, 96, 108][i]} height="3" rx="1.5" class="line-fill" />
+                <g data-chip>
+                  <rect
+                    x="214"
+                    y={y + 7}
+                    width="68"
+                    height="14"
+                    rx="7"
+                    style={`fill:color-mix(in srgb, ${hue} 22%, transparent);stroke:${hue}`}
+                    stroke-width="1"
+                  />
+                  <text x="248" y={y + 16.8} text-anchor="middle" class="sc-sans ink-fill" font-size="7.5">
+                    {label}
+                  </text>
+                </g>
+              </g>
+            );
+          })}
+          {/* Scanner line that sweeps the inbox */}
+          <g data-scan opacity="0">
+            <rect x="28" y="0" width="264" height="10" class="scan-glow" />
+            <path d="M28 10h264" class="hue-stroke" stroke-width="1.2" />
+          </g>
+
+          {/* Drafted reply */}
+          <g data-draft>
+            <rect x="28" y="154" width="264" height="76" rx="8" class="field hue-stroke" stroke-width="1" />
+            <path {...icon('sparkle', 38, 162, 10)} class="hue-stroke" stroke-linejoin="round" />
+            <text x="52" y="170" class="sc-mono muted-fill" font-size="7.5">
+              {t.draft.toUpperCase()}
+            </text>
+            {[200, 168, 116].map((w, i) => (
+              <rect x="40" y={182 + i * 10} width={w} height="4" rx="2" class="muted-fill" data-draft-line />
+            ))}
+            <g data-approve>
+              <rect x="216" y="204" width="66" height="18" rx="9" class="hue-fill" data-approve-bg />
+              <text x="249" y="216" text-anchor="middle" class="sc-sans" font-size="8" fill="#0b0c0b" data-approve-text>
+                {t.approve}
+              </text>
+            </g>
+          </g>
+
+          <g data-cursor opacity="0" data-sent={t.sent} data-label={t.approve}>
+            <path d="M0 0v15l4-3.6 2.6 6 2.4-1-2.6-6H12Z" class="pointer" stroke-width="1" stroke-linejoin="round" />
+          </g>
+        </g>
+      )
+    }
+  </svg>
+</div>
+
+<style>
+  .scene-glow {
+    position: absolute;
+    inset: 18% 14%;
+    border-radius: 50%;
+    background: var(--hue);
+    filter: blur(52px);
+    opacity: 0.32;
+  }
+  .sc-mono {
+    font-family: var(--font-geist-mono), var(--font-zh);
+    letter-spacing: 0.04em;
+  }
+  .sc-sans {
+    font-family: var(--font-geist), var(--font-zh);
+  }
+  .frame {
+    fill: #121311;
+    stroke: #42433d;
+  }
+  .screen {
+    fill: #0b0c0b;
+  }
+  .field {
+    fill: #191919;
+    stroke: #2c2d29;
+  }
+  .card {
+    fill: #232420;
+    stroke: #33342f;
+  }
+  .hair {
+    stroke: #2c2d29;
+  }
+  .dot {
+    fill: #42433d;
+  }
+  .ink-fill {
+    fill: #fffce1;
+  }
+  .muted-fill {
+    fill: #8f8f82;
+  }
+  .line-fill {
+    fill: #42433d;
+  }
+  .hue-fill {
+    fill: var(--hue);
+  }
+  .hue-text {
+    fill: var(--hue);
+  }
+  .hue-stroke {
+    stroke: var(--hue);
+  }
+  .hue-soft {
+    fill: color-mix(in srgb, var(--hue) 18%, transparent);
+  }
+  .bg-stroke {
+    stroke: #0b0c0b;
+  }
+  .app-bg {
+    fill: #f4f2ea;
+  }
+  .pointer {
+    fill: #fffce1;
+    stroke: #0b0c0b;
+  }
+  .finger {
+    fill: rgb(255 252 225 / 0.45);
+    stroke: #fffce1;
+  }
+  .scan-glow {
+    fill: color-mix(in srgb, var(--hue) 22%, transparent);
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { CustomEase } from 'gsap/CustomEase';
+
+  type Builder = (root: HTMLElement) => gsap.core.Timeline;
+
+  const q = <T extends Element = SVGElement>(root: Element, selector: string) => root.querySelector<T>(selector)!;
+  const qa = <T extends Element = SVGElement>(root: Element, selector: string) => [...root.querySelectorAll<T>(selector)];
+
+  // Moves the pointer to (x, y) in the scene's own coordinates.
+  const at = (x: number, y: number) => ({ x, y });
+
+  const scenes: Record<string, Builder> = {
+    // Type a URL, click go, the page loads
+    website(root) {
+      const textEl = q<SVGTextElement>(root, '[data-url-text]');
+      const url = textEl.textContent!.trim();
+      const caret = q(root, '[data-caret]');
+      const cursor = q(root, '[data-cursor]');
+      const build = qa(root, '[data-build]');
+      const progress = q(root, '[data-progress]');
+      const ripple = q(root, '[data-ripple]');
+      const typed = { n: 0 };
+      const show = () => {
+        textEl.textContent = url.slice(0, Math.round(typed.n));
+        caret.setAttribute('x', String(100 + textEl.getComputedTextLength()));
+      };
+
+      const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.4 });
+      tl.set(build, { opacity: 0, y: 8 })
+        .set(cursor, { opacity: 0, ...at(232, 168), scale: 1 })
+        .set(progress, { opacity: 1, scaleX: 0, transformOrigin: '0% 50%' })
+        .set(ripple, { opacity: 0, scale: 0.4, transformOrigin: '50% 50%' })
+        .set(caret, { opacity: 1 })
+        .fromTo(typed, { n: 0 }, { n: url.length, duration: 1.3, ease: 'none', onUpdate: show }, 0.3)
+        .to(cursor, { opacity: 1, duration: 0.25 }, 1.1)
+        .to(cursor, { ...at(262, 42), duration: 0.6, ease: 'settle' }, 1.15)
+        .to(cursor, { scale: 0.82, duration: 0.1, yoyo: true, repeat: 1, transformOrigin: '0% 0%' }, 1.8)
+        .to(ripple, { opacity: 1, scale: 1.8, duration: 0.45, ease: 'power2.out' }, 1.82)
+        .to(ripple, { opacity: 0, duration: 0.25 }, 2.1)
+        .set(caret, { opacity: 0 }, 1.85)
+        .to(progress, { scaleX: 1, duration: 0.6, ease: 'power2.inOut' }, 1.9)
+        .to(progress, { opacity: 0, duration: 0.2 }, 2.5)
+        .to(cursor, { opacity: 0, ...at(250, 120), duration: 0.5 }, 2.3)
+        .to(build, { opacity: 1, y: 0, duration: 0.5, stagger: 0.09, ease: 'settle' }, 2.35)
+        .to(build, { opacity: 0, duration: 0.35 }, '+=1.8')
+        .to(typed, { n: 0, duration: 0.3, ease: 'none', onUpdate: show }, '<');
+      return tl;
+    },
+
+    // Swipe the app away; it swirls into its icon; tap the icon to open it again
+    app(root) {
+      const app = q(root, '[data-app]');
+      const clip = q(root, '[data-app-clip]');
+      const items = qa(root, '[data-home-item]');
+      const finger = q(root, '[data-finger]');
+      // Centre of the app's home-screen icon (row 2, column 2)
+      const icon = { x: 142 + 7.5, y: 98 + 7.5 };
+      const shrink = { x: icon.x - 160, y: icon.y - 128, scale: 0.16, rotation: -270 };
+      const origin = '160 128';
+
+      const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.2 });
+      tl.set(app, { svgOrigin: origin, x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 })
+        .set(clip, { attr: { rx: 14 } })
+        .set(items, { opacity: 0, scale: 0.7, transformOrigin: '50% 50%' })
+        .set(finger, { opacity: 0, attr: { cx: 160, cy: 236 } })
+        // Swipe up from the home indicator
+        .to(finger, { opacity: 1, duration: 0.2 }, 0.7)
+        .to(finger, { attr: { cy: 168 }, duration: 0.45, ease: 'power2.in' }, 0.85)
+        .to(finger, { opacity: 0, duration: 0.2 }, 1.2)
+        .to(app, { y: -14, scale: 0.8, duration: 0.4, ease: 'power2.in' }, 0.9)
+        // Swirl down into the icon
+        .to(app, { ...shrink, duration: 0.75, ease: 'power3.inOut' }, 1.25)
+        .to(clip, { attr: { rx: 26 }, duration: 0.6 }, 1.25)
+        .to(items, { opacity: 1, scale: 1, duration: 0.4, stagger: 0.025, ease: 'back.out(2)' }, 1.3)
+        .to(app, { opacity: 0, duration: 0.1 }, 1.95)
+        // Tap the icon: the app swirls back open
+        .set(finger, { attr: { cx: icon.x, cy: icon.y + 30 } }, 3.0)
+        .to(finger, { opacity: 1, attr: { cy: icon.y }, duration: 0.35, ease: 'settle' }, 3.0)
+        .to(finger, { scale: 0.75, transformOrigin: '50% 50%', duration: 0.1, yoyo: true, repeat: 1 }, 3.38)
+        .to(finger, { opacity: 0, duration: 0.2 }, 3.6)
+        .set(app, { opacity: 1 }, 3.5)
+        .to(app, { x: 0, y: 0, scale: 1, rotation: 0, duration: 0.7, ease: 'power3.inOut' }, 3.5)
+        .to(clip, { attr: { rx: 14 }, duration: 0.6 }, 3.5)
+        .to(items, { opacity: 0, duration: 0.3 }, 4.1)
+        .to({}, { duration: 0.8 });
+      return tl;
+    },
+
+    // Missed call → lead in New → Replied → Booked
+    crm(root) {
+      const toast = q(root, '[data-toast]');
+      const lead = q(root, '[data-lead]');
+      const booked = q(root, '[data-lead-booked]');
+      const icons = Object.fromEntries(qa(root, '[data-lead-icon]').map((el) => [el.getAttribute('data-lead-icon'), el]));
+      const count = q(root, '[data-booked-count]');
+      const setCount = (n: string) => () => (count.textContent = n);
+
+      const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.3 });
+      tl.set(toast, { opacity: 0, y: -24, scale: 1, transformOrigin: '50% 50%' })
+        .set(lead, { x: 0, y: 32, opacity: 0, scale: 0.85, transformOrigin: '50% 50%' })
+        .set(booked, { opacity: 0 })
+        .set(icons.call, { opacity: 1, scale: 1, transformOrigin: '50% 50%' })
+        .set([icons.text, icons.booked], { opacity: 0, scale: 0.4, transformOrigin: '50% 50%' })
+        // Callbacks at the very start don't fire on the first play, so reset just after it
+        .call(setCount('3'), undefined, 0.01)
+        // The notification drops in, then becomes a lead card in New
+        .to(toast, { opacity: 1, y: 0, duration: 0.45, ease: 'settle' }, 0.3)
+        .to(toast, { opacity: 0, y: 70, x: -56, scale: 0.5, duration: 0.5, ease: 'power2.in' }, 1.3)
+        .to(lead, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.8)' }, 1.65)
+        // Text sent: it moves to Replied
+        .to(lead, { x: 94, duration: 0.6, ease: 'decisive' }, 2.5)
+        .to(icons.call, { opacity: 0, scale: 0.4, duration: 0.2 }, 2.6)
+        .to(icons.text, { opacity: 1, scale: 1, duration: 0.35, ease: 'back.out(2.5)' }, 2.8)
+        // They book: it moves to Booked and lights up
+        .to(lead, { x: 188, y: 96, duration: 0.7, ease: 'decisive' }, 3.6)
+        .to(icons.text, { opacity: 0, scale: 0.4, duration: 0.2 }, 3.7)
+        .to(booked, { opacity: 1, duration: 0.35 }, 4.1)
+        .to(icons.booked, { opacity: 1, scale: 1, duration: 0.35, ease: 'back.out(2.5)' }, 4.15)
+        .call(setCount('4'), undefined, 4.2)
+        .fromTo(
+          count,
+          { scale: 1.6, transformOrigin: '50% 50%' },
+          { scale: 1, duration: 0.4, ease: 'back.out(3)', immediateRender: false },
+          4.2,
+        )
+        .to(lead, { opacity: 0, duration: 0.35 }, '+=1.6');
+      return tl;
+    },
+
+    // Emails arrive, AI labels them, drafts a reply, which gets approved
+    ai(root) {
+      const rows = qa(root, '[data-row]');
+      const chips = qa(root, '[data-chip]');
+      const scan = q(root, '[data-scan]');
+      const draft = q(root, '[data-draft]');
+      const lines = qa(root, '[data-draft-line]');
+      const approveBg = q(root, '[data-approve-bg]');
+      const approveText = q(root, '[data-approve-text]');
+      const cursor = q(root, '[data-cursor]');
+      const setLabel = (text: string) => () => (approveText.textContent = text);
+
+      const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.3 });
+      tl.set(rows, { opacity: 0, x: -12 })
+        .set(chips, { opacity: 0, scale: 0.5, transformOrigin: '50% 50%' })
+        .set(scan, { opacity: 0, y: 40 })
+        .set(draft, { opacity: 0, y: 10 })
+        .set(lines, { scaleX: 0, transformOrigin: '0% 50%' })
+        .set(approveBg, { opacity: 0.35 })
+        .set(cursor, { opacity: 0, ...at(150, 250), scale: 1 })
+        .call(setLabel(cursor.getAttribute('data-label')!), undefined, 0.01)
+        .to(rows, { opacity: 1, x: 0, duration: 0.4, stagger: 0.15, ease: 'settle' }, 0.2)
+        // Scan down the inbox; each email gets its label as the line passes
+        .to(scan, { opacity: 1, duration: 0.2 }, 0.9)
+        .to(scan, { y: 136, duration: 1.1, ease: 'none' }, 0.9)
+        .to(chips, { opacity: 1, scale: 1, duration: 0.3, stagger: 0.39, ease: 'back.out(2.5)' }, 1.04)
+        .to(scan, { opacity: 0, duration: 0.2 }, 2.0)
+        // A reply is drafted, then approved
+        .to(draft, { opacity: 1, y: 0, duration: 0.4, ease: 'settle' }, 2.2)
+        .to(lines, { scaleX: 1, duration: 0.45, stagger: 0.22, ease: 'power2.out' }, 2.45)
+        .to(cursor, { opacity: 1, duration: 0.2 }, 3.2)
+        .to(cursor, { ...at(246, 212), duration: 0.6, ease: 'settle' }, 3.2)
+        .to(cursor, { scale: 0.82, duration: 0.1, yoyo: true, repeat: 1, transformOrigin: '0% 0%' }, 3.85)
+        .to(approveBg, { opacity: 1, duration: 0.2 }, 3.9)
+        .call(setLabel(cursor.getAttribute('data-sent')!), undefined, 3.95)
+        .to(cursor, { opacity: 0, ...at(270, 240), duration: 0.4 }, 4.3)
+        .to([rows, draft], { opacity: 0, duration: 0.4 }, '+=1.5');
+      return tl;
+    },
+  };
+
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    // The site's two eases (also registered in motion.ts)
+    gsap.registerPlugin(CustomEase);
+    CustomEase.create('settle', '0.32,0.72,0,1');
+    CustomEase.create('decisive', '0.19,1,0.22,1');
+
+    const timelines = new Map<Element, gsap.core.Timeline>();
+    document.querySelectorAll<HTMLElement>('[data-scene]').forEach((root) => {
+      const build = scenes[root.dataset.scene!];
+      if (build) timelines.set(root, build(root).pause());
+    });
+
+    // Only animate the scenes that are on screen
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((entry) => {
+          const tl = timelines.get(entry.target);
+          if (entry.isIntersecting) tl?.play();
+          else tl?.pause();
+        }),
+      { threshold: 0.25 },
+    );
+    timelines.forEach((_, root) => io.observe(root));
+  }
+</script>
