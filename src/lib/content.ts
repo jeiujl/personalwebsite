@@ -45,6 +45,12 @@ export async function getServices(lang: Lang = 'en') {
     .map((service) => ({ ...service, data: localized(service.data, lang) }));
 }
 
+export async function getDemos(lang: Lang = 'en') {
+  return (await getCollection('demos'))
+    .sort(byOrder)
+    .map((demo) => ({ ...demo, data: localized(demo.data, lang) }));
+}
+
 export async function getAutomations(lang: Lang = 'en') {
   return (await getCollection('automations'))
     .sort(byOrder)
