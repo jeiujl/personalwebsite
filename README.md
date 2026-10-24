@@ -12,6 +12,7 @@ Almost everything you'll want to change lives in a few places. Search the projec
 |---|---|
 | Name, giant homepage headline (`heroDisplay`), sentence under it, email, booking link, photo, resume, socials, platform name, homepage stats | `src/config/site.ts` |
 | Case studies (one Markdown file each) | `src/content/projects/*.md` |
+| Live demo sites (Demos page and homepage) | `src/content/demos/*.md` |
 | Testimonials | `src/content/testimonials/*.yaml` |
 | Services (and optional starting prices) | `src/content/services/*.yaml` |
 | Automation examples on the homepage | `src/content/automations.yaml` |
@@ -37,6 +38,8 @@ Referral links work in both languages, e.g. `/zh/?ref=dad` for Chinese-speaking 
 **Stats band:** the big count-up numbers on the homepage come from `stats` in `src/config/site.ts`. Keep them true; swap in your own (e.g. businesses helped) as they grow.
 
 **Demo projects:** the Kinetik and Brightgate projects are demo content for this prototype, marked `concept: true` in their files (the flag isn't shown on the site). Replace them with real work before the site goes public.
+
+**Adding a demo:** copy `src/content/demos/jerry-jets.md`, change the title, link (`url`), text and images. `cover` is the card image; `preview` is the same site without a browser frame, shown in the "Try it here" frame until the live site loads. The site must allow being shown in a frame and be public (no Vercel login).
 
 **Adding a project:** copy one of the files in `src/content/projects/`, rename it (the file name becomes the URL, e.g. `/work/my-project/`) and edit the frontmatter. `category` is one of `website`, `app`, `crm` or `ai`, which sets the project's color and work filter. To use a real screenshot, put the image next to the file and add `cover: ./my-image.png` and `coverAlt: "…"`. Automation projects can list `workflow` steps, which are drawn as a diagram.
 

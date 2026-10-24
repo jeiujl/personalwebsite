@@ -104,6 +104,31 @@ const services = defineCollection({
   }),
 });
 
+// Live demo websites, shown in the Demos section. One file per demo; the
+// Chinese text sits in the `zh` block.
+const demos = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/demos' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      // What kind of site it is, e.g. "Private aviation website"
+      kind: z.string(),
+      summary: z.string(),
+      url: z.url(),
+      cover: image(),
+      coverAlt: z.string(),
+      // Just the site, no browser frame: shown in the live preview until it loads
+      preview: image(),
+      highlights: z.array(z.string()).default([]),
+      tools: z.array(z.string()).default([]),
+      order: z.number().default(100),
+      zh: z
+        .object({ kind: z.string(), summary: z.string(), coverAlt: z.string(), highlights: z.array(z.string()) })
+        .partial()
+        .optional(),
+    }),
+});
+
 const automations = defineCollection({
   loader: file('./src/content/automations.yaml'),
   schema: z.object({
@@ -137,4 +162,4 @@ const experience = defineCollection({
   }),
 });
 
-export const collections = { projects, projectsZh, testimonials, services, automations, experience };
+export const collections = { projects, projectsZh, demos, testimonials, services, automations, experience };

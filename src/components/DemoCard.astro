@@ -1,0 +1,50 @@
+---
+// A live demo site: its cover, what it is, and a link that opens the real site.
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { getLang, pick } from '../i18n';
+import StatusDot from './StatusDot.astro';
+
+interface Props {
+  demo: CollectionEntry<'demos'>;
+  headingLevel?: 'h2' | 'h3';
+}
+const { demo, headingLevel: Heading = 'h3' } = Astro.props;
+const { title, kind, summary, url, cover, coverAlt, tools } = demo.data;
+const t = pick(getLang(Astro.url), {
+  en: { live: 'Live demo', open: 'Open live demo' },
+  zh: { live: '在线演示', open: '打开在线演示' },
+});
+---
+
+<article class="group relative grid grid-cols-1 items-center gap-8 md:grid-cols-[1.35fr_1fr] md:gap-12">
+  <div class="min-w-0 overflow-hidden border border-line">
+    <div class="transition-transform duration-700 ease-[var(--ease-settle)] group-hover:scale-[1.03]">
+      <Image
+        src={cover}
+        alt={coverAlt}
+        widths={[600, 1000, 1400]}
+        sizes="(min-width: 768px) 58vw, 100vw"
+        class="aspect-[16/10] w-full object-cover"
+      />
+    </div>
+  </div>
+  <div class="min-w-0">
+    <StatusDot label={t.live} />
+    <Heading class="heading mt-4 text-4xl sm:text-5xl">
+      <a href={url} target="_blank" rel="noopener" class="after:absolute after:inset-0">{title}</a>
+    </Heading>
+    <p class="mono mt-3 text-[12px] text-muted">{kind}</p>
+    <p class="mt-5 max-w-md text-lg text-pretty text-muted">{summary}</p>
+    {
+      tools.length > 0 && (
+        <ul class="mt-6 flex flex-wrap gap-2">
+          {tools.map((tool) => (
+            <li class="mono rounded-full border border-line px-3 py-1.5 text-[11px] leading-none">{tool}</li>
+          ))}
+        </ul>
+      )
+    }
+    <span class="btn-ghost mt-8" aria-hidden="true">{t.open} <span class="text-accent">↗</span></span>
+  </div>
+</article>

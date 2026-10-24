@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import AutomationRecipe from '../components/AutomationRecipe.astro';
 import CTA from '../components/CTA.astro';
+import DemoCard from '../components/DemoCard.astro';
 import GhostTitle from '../components/GhostTitle.astro';
 import HeroScene from '../components/HeroScene.astro';
 import Marquee from '../components/Marquee.astro';
@@ -13,7 +14,7 @@ import TestimonialCard from '../components/TestimonialCard.astro';
 import { getSite } from '../config/site';
 import { getLang, localizePath, pick } from '../i18n';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getAutomations, getProjects, getServices, getTestimonials } from '../lib/content';
+import { getAutomations, getDemos, getProjects, getServices, getTestimonials } from '../lib/content';
 import { disciplineKeys, disciplineLabel } from '../lib/disciplines';
 
 const lang = getLang(Astro.url);
@@ -23,6 +24,7 @@ const featured = projects.filter((p) => p.data.featured).slice(0, 6);
 const services = await getServices(lang);
 const testimonials = (await getTestimonials()).slice(0, 3);
 const recipes = await getAutomations(lang);
+const demos = (await getDemos(lang)).slice(0, 2);
 
 const t = pick(lang, {
   en: {
@@ -32,6 +34,10 @@ const t = pick(lang, {
     workTitle: 'Selected projects',
     workIntro: "A few things I've designed, built and set up.",
     allWork: 'See all work',
+    demosEyebrow: 'Live demos',
+    demosTitle: 'Try one yourself',
+    demosIntro: "Working websites I've built that you can click around in right now.",
+    allDemos: 'See all demos',
     servicesGhost: 'Services',
     servicesEyebrow: 'What I do',
     servicesTitle: 'Four ways I help your business grow',
@@ -58,6 +64,10 @@ const t = pick(lang, {
     workTitle: '精选项目',
     workIntro: '一些我设计、开发和搭建的项目。',
     allWork: '查看全部作品',
+    demosEyebrow: '在线演示',
+    demosTitle: '亲自试试',
+    demosIntro: '我搭建的可用网站，现在就可以点开体验。',
+    allDemos: '查看全部演示',
     servicesGhost: '服务',
     servicesEyebrow: '我能做什么',
     servicesTitle: '帮助你的业务成长的四种方式',
@@ -110,6 +120,27 @@ const personSchema = {
       </div>
     </div>
   </section>
+
+  <!-- Live demos -->
+  {
+    demos.length > 0 && (
+      <section class="grid-lines border-t border-line py-20 sm:py-24">
+        <div class="container-page">
+          <div class="flex flex-wrap items-end justify-between gap-6">
+            <SectionHeading eyebrow={t.demosEyebrow} title={t.demosTitle} intro={t.demosIntro} />
+            <a href={localizePath('/demos', lang)} class="arrow-link">
+              {t.allDemos} <span class="arrow" aria-hidden="true">↗</span>
+            </a>
+          </div>
+          <div class="mt-14 space-y-16" data-reveal-stagger>
+            {demos.map((demo) => (
+              <DemoCard demo={demo} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   <!-- Services: one feature row per service -->
   <section class="grid-lines border-t border-line bg-surface-2 py-20 sm:py-24">

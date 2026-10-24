@@ -86,6 +86,7 @@ export function getSite(lang: Lang) {
 
 const navItems = [
   { en: 'Work', zh: '作品', href: '/work' },
+  { en: 'Demos', zh: '演示', href: '/demos' },
   { en: 'Services', zh: '服务', href: '/services' },
   { en: 'About', zh: '关于', href: '/about' },
   { en: 'Contact', zh: '联系', href: '/contact' },
