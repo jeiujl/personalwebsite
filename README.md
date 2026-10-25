@@ -39,7 +39,7 @@ Referral links work in both languages, e.g. `/zh/?ref=dad` for Chinese-speaking 
 
 **Demo projects:** the Kinetik and Brightgate projects are demo content for this prototype, marked `concept: true` in their files (the flag isn't shown on the site). Replace them with real work before the site goes public.
 
-**Adding a demo:** copy `src/content/demos/jerry-jets.md`, change the title, link (`url`), text and images. `cover` is the card image; `preview` is the same site without a browser frame, shown in the "Try it here" frame until the live site loads. The site must allow being shown in a frame and be public (no Vercel login).
+**Adding a demo:** copy `src/content/demos/jerry-jets.md`, change the title, link (`url`), text and images. `cover` is the card image on the homepage (a screenshot works best). On the Demos page the site itself runs full screen, so changes to the demo show up there automatically. The site must be public (no Vercel login) and allow being shown in a frame.
 
 **Adding a project:** copy one of the files in `src/content/projects/`, rename it (the file name becomes the URL, e.g. `/work/my-project/`) and edit the frontmatter. `category` is one of `website`, `app`, `crm` or `ai`, which sets the project's color and work filter. To use a real screenshot, put the image next to the file and add `cover: ./my-image.png` and `coverAlt: "…"`. Automation projects can list `workflow` steps, which are drawn as a diagram.
 

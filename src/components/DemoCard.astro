@@ -1,8 +1,9 @@
 ---
-// A live demo site: its cover, what it is, and a link that opens the real site.
+// A live demo site: its cover and what it is, linking to the Demos page where
+// it runs full screen.
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import { getLang, pick } from '../i18n';
+import { getLang, localizePath, pick } from '../i18n';
 import StatusDot from './StatusDot.astro';
 
 interface Props {
@@ -10,10 +11,12 @@ interface Props {
   headingLevel?: 'h2' | 'h3';
 }
 const { demo, headingLevel: Heading = 'h3' } = Astro.props;
-const { title, kind, summary, url, cover, coverAlt, tools } = demo.data;
-const t = pick(getLang(Astro.url), {
-  en: { live: 'Live demo', open: 'Open live demo' },
-  zh: { live: '在线演示', open: '打开在线演示' },
+const { title, kind, summary, cover, coverAlt, tools } = demo.data;
+const lang = getLang(Astro.url);
+const href = localizePath(`/demos/#${demo.id}`, lang);
+const t = pick(lang, {
+  en: { live: 'Live demo', open: 'Try it full screen' },
+  zh: { live: '在线演示', open: '全屏体验' },
 });
 ---
 
@@ -32,7 +35,7 @@ const t = pick(getLang(Astro.url), {
   <div class="min-w-0">
     <StatusDot label={t.live} />
     <Heading class="heading mt-4 text-4xl sm:text-5xl">
-      <a href={url} target="_blank" rel="noopener" class="after:absolute after:inset-0">{title}</a>
+      <a href={href} class="after:absolute after:inset-0">{title}</a>
     </Heading>
     <p class="mono mt-3 text-[12px] text-muted">{kind}</p>
     <p class="mt-5 max-w-md text-lg text-pretty text-muted">{summary}</p>

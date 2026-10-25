@@ -117,8 +117,6 @@ const demos = defineCollection({
       url: z.url(),
       cover: image(),
       coverAlt: z.string(),
-      // Just the site, no browser frame: shown in the live preview until it loads
-      preview: image(),
       highlights: z.array(z.string()).default([]),
       tools: z.array(z.string()).default([]),
       order: z.number().default(100),

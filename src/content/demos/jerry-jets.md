@@ -4,8 +4,7 @@ kind: Private aviation website
 summary: A cinematic website for a private jet charter brand. You fly through the clouds as you scroll, explore the fleet, and pick a destination on a 3D globe.
 url: https://rapid-emerald-ibqcy8x-flowaai.vercel.app/
 cover: ./images/jerry-jets-cover.webp
-preview: ./images/jerry-jets-site.webp
-coverAlt: "The Jerry Jets homepage: a sunset over the clouds seen through an aircraft window, with the headlines We are movement and We are distinction in cream and champagne type on a dark background."
+coverAlt: "The Jerry Jets homepage: sunset clouds seen through a softly lit aircraft window, between the headlines We are movement and We are distinction, with a Book your flight button below."
 highlights:
   - A scroll-driven opening that flies you through the clouds
   - A fleet showcase with the aircraft, cabin layout and specs
@@ -16,7 +15,7 @@ order: 1
 zh:
   kind: 私人飞机网站
   summary: 为私人飞机包机品牌打造的电影感网站。滚动页面时仿佛穿越云层飞行，可以浏览机队，并在 3D 地球上选择目的地。
-  coverAlt: "Jerry Jets 首页：透过机窗看到的云海日落，深色背景上是奶油色和香槟色的标题 We are movement 和 We are distinction。"
+  coverAlt: "Jerry Jets 首页：透过柔光机窗看到的日落云海，两侧是标题 We are movement 和 We are distinction，下方是 Book your flight 按钮。"
   highlights:
     - 随滚动展开的开场，带你穿越云层
     - 机队展示，包括飞机、客舱布局和参数

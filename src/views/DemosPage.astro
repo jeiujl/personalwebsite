@@ -1,8 +1,6 @@
 ---
 import CTA from '../components/CTA.astro';
-import LivePreview from '../components/LivePreview.astro';
-import PageHero from '../components/PageHero.astro';
-import StatusDot from '../components/StatusDot.astro';
+import LiveDemo from '../components/LiveDemo.astro';
 import { getLang, pick } from '../i18n';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getDemos } from '../lib/content';
@@ -12,47 +10,44 @@ const demos = await getDemos(lang);
 const t = pick(lang, {
   en: {
     title: 'Demos',
-    description: 'Live demo websites designed and built by Jerry Liu. Open one and click around: they are real, working sites.',
-    eyebrow: 'Live demos',
-    intro: "Websites I've designed and built to show what's possible. They're real, working sites, so open one and click around.",
-    live: 'Live demo',
+    description: 'Live demo websites designed and built by Jerry Liu. Scroll through them right here: they are real, working sites.',
+    about: 'About this demo',
     built: "What's inside",
-    open: 'Open live demo',
+    open: 'Open full site',
     cta: 'Want one like this?',
   },
   zh: {
     title: '演示',
-    description: 'Jerry Liu 设计并搭建的在线演示网站。点开随便看看：它们都是真实可用的网站。',
-    eyebrow: '在线演示',
-    intro: '我设计并搭建的网站，展示可以做到什么。它们都是真实可用的网站，点开随便看看。',
-    live: '在线演示',
+    description: 'Jerry Liu 设计并搭建的在线演示网站。直接在这里滚动浏览：它们都是真实可用的网站。',
+    about: '关于这个演示',
     built: '网站里有什么',
-    open: '打开在线演示',
+    open: '打开完整网站',
     cta: '想要一个这样的网站？',
   },
 });
 ---
 
 <BaseLayout title={t.title} description={t.description}>
-  <PageHero eyebrow={t.eyebrow} title={t.title} intro={t.intro} />
+  <h1 class="sr-only">{t.title}</h1>
 
-  <div class="grid-lines">
-    {
-      demos.map((demo, i) => {
-        const d = demo.data;
-        return (
-          <section class:list={['container-page pt-16', i > 0 && 'mt-12 border-t border-line pt-20']} aria-labelledby={`demo-${demo.id}`}>
-            <div class="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_1.7fr] lg:gap-14">
-              <div class="min-w-0" data-reveal>
-                <StatusDot label={t.live} />
-                <h2 id={`demo-${demo.id}`} class="heading mt-4 text-5xl sm:text-6xl">
-                  {d.title}
-                </h2>
-                <p class="mono mt-3 text-[12px] text-muted">{d.kind}</p>
-                <p class="mt-6 text-lg text-pretty text-muted">{d.summary}</p>
+  {
+    demos.map((demo, i) => {
+      const d = demo.data;
+      return (
+        <>
+          {/* The live site first, full screen */}
+          <LiveDemo demo={demo} eager={i === 0} />
+
+          <section id={`details-${demo.id}`} class="grid-lines scroll-mt-16 border-b border-line py-16 sm:py-20">
+            <div class="container-page grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
+              <div data-reveal>
+                <p class="eyebrow">{t.about}</p>
+                <p class="heading mt-5 max-w-2xl text-3xl text-pretty sm:text-4xl">{d.summary}</p>
+              </div>
+              <div data-reveal>
                 {d.highlights.length > 0 && (
                   <>
-                    <p class="eyebrow mt-10">{t.built}</p>
+                    <p class="eyebrow">{t.built}</p>
                     <ul class="mt-4 space-y-2.5 text-[15px]">
                       {d.highlights.map((item) => (
                         <li class="flex gap-3">
@@ -74,15 +69,12 @@ const t = pick(lang, {
                   {t.open} <span class="text-accent" aria-hidden="true">↗</span>
                 </a>
               </div>
-              <div class="min-w-0" data-reveal>
-                <LivePreview url={d.url} title={d.title} poster={d.preview} />
-              </div>
             </div>
           </section>
-        );
-      })
-    }
-  </div>
+        </>
+      );
+    })
+  }
 
   <CTA title={t.cta} />
 </BaseLayout>
