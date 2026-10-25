@@ -1,0 +1,42 @@
+---
+// A demo site running live, full screen, right inside the page: a slim bar
+// with its name and links, then the real site filling the rest of the screen.
+// Because it's the live site, changes to the demo show up here by themselves.
+import type { CollectionEntry } from 'astro:content';
+import { getLang, pick } from '../i18n';
+import StatusDot from './StatusDot.astro';
+
+interface Props {
+  demo: CollectionEntry<'demos'>;
+  /** Load straight away (the first demo) rather than when scrolled near. */
+  eager?: boolean;
+}
+const { demo, eager = false } = Astro.props;
+const { title, kind, url } = demo.data;
+const t = pick(getLang(Astro.url), {
+  en: { live: 'Live demo', details: 'Details', open: 'Open full site', frame: `${title}, live demo` },
+  zh: { live: '在线演示', details: '详情', open: '打开完整网站', frame: `${title} 在线演示` },
+});
+---
+
+<section id={demo.id} data-surface="dark" data-band class="scroll-mt-16 bg-bg" aria-labelledby={`demo-${demo.id}`}>
+  <div class="container-page flex h-14 items-center gap-4 border-b border-line">
+    <span class="hidden sm:block"><StatusDot label={t.live} /></span>
+    <h2 id={`demo-${demo.id}`} class="truncate font-medium text-ink">
+      {title}<span class="mono ml-3 hidden text-[11px] text-muted md:inline">{kind}</span>
+    </h2>
+    <a href={`#details-${demo.id}`} class="mono ml-auto shrink-0 text-[12px] text-muted hover:text-ink">
+      {t.details} <span aria-hidden="true">↓</span>
+    </a>
+    <a href={url} target="_blank" rel="noopener" class="mono shrink-0 text-[12px] text-ink hover:text-accent">
+      {t.open} <span class="text-accent" aria-hidden="true">↗</span>
+    </a>
+  </div>
+  {/* Fills the screen under the site header and the bar above */}
+  <iframe
+    src={url}
+    title={t.frame}
+    loading={eager ? 'eager' : 'lazy'}
+    allow="fullscreen"
+    class="block h-[calc(100svh-7.5rem)] min-h-[480px] w-full border-0 bg-[#131210]"></iframe>
+</section>
