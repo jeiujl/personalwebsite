@@ -8,6 +8,8 @@ tools: [Open permit data, AI lead scoring, Contractor matching, Drafted outreach
 concept: true
 featured: true
 order: 5
+cover: ./images/concept-corvane-electric-cover.webp
+coverAlt: "Corvane Electric's Permit Leads app in a browser. A table lists today's 14 building-permit leads from Toronto, Mississauga and Vaughan, with address, project type, estimated value, general contractor, issue date, lead score and a red Not yet tag where no electrician has filed. The selected permit has a small map, a 9-day timeline and a drafted intro email to the general contractor, ready to approve and send."
 workflow:
   - label: New permits are pulled every morning
     detail: From Toronto, Mississauga and Vaughan open data
