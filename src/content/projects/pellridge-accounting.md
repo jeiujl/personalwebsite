@@ -8,6 +8,8 @@ tools: [Business Brain knowledge base, Cited answers, Onboarding agent, Document
 concept: true
 featured: true
 order: 8
+cover: ./images/concept-pellridge-accounting-cover.webp
+coverAlt: "Pellridge Accounting's Business Brain in a desktop app. Left: a knowledge tree of services and fees, processes, document checklists, client FAQ and tone of voice, each with a last-updated date. Centre: a staff member asks what a new incorporated client must provide before year-end, and the answer lists six documents with source citations. Right: an onboarding agent tracking Mira Patel's documents (4 of 6 received), a scheduled reminder and a drafted email awaiting approval."
 workflow:
   - label: The team's knowledge is collected
     detail: Interviews, existing documents, checklists and past emails
