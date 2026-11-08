@@ -8,6 +8,8 @@ tools: [Keyword map, Service and area pages, Schema markup, Online booking, Inst
 concept: true
 featured: true
 order: 9
+cover: ./images/concept-ferncliff-heating-cover.webp
+coverAlt: "Ferncliff Heating & Air's local SEO page, Furnace repair in Etobicoke, in a browser: same-day service, a 4.9 rating from 212 reviews, a booking card with Saturday time slots, four service cards and an Areas we serve strip. Floating cards show a keyword map of search terms and their pages, and an AI answer that cites Ferncliff. A phone shows the instant text reply that leads to Booked: Sat 9:00 am."
 workflow:
   - label: Real search demand is mapped
     detail: Which services and neighbourhoods people actually search for
