@@ -13,13 +13,13 @@ const site = getSite(lang);
 const t = pick(lang, {
   en: {
     title: 'About',
-    description: `About ${site.name}: founder of Flowa AI, with 4+ years in finance and computer science, who designs websites and apps and sets up automations.`,
+    description: `About ${site.name}: founder of Flowa AI, with 4+ years in finance and computer science, who builds AI systems for sales and operations, plus the websites and apps around them.`,
     hi: `Hi, I'm ${site.name}`,
-    heading: 'Design and automation for businesses that would rather be doing the work.',
+    heading: 'AI systems for businesses that would rather be doing the work.',
     bio: [
-      "I'm Jerry, founder of Flowa AI. I design and build websites and apps, and set up automations that save small businesses time, like missed-call text-back for a dental services company.",
+      "I'm Jerry, founder of Flowa AI. I build AI systems that answer and follow up with every lead and take routine work off busy teams, like missed-call text-back for a dental services company, plus the websites and apps around them.",
       'I designed, built and managed the HayesX pilot companion app, promoted the clothing brand Pursue Play with social media content and a website, and have worked as a project manager at IPMD, Inc.',
-      "Whether it's a website, an app or a few automations, I keep things simple and explain everything in plain English. I studied at University of Toronto Schools and have 4+ years of experience in finance and computer science.",
+      "Whether it's a follow-up system, an AI agent or a website, I keep things simple, explain everything in plain English, and make sure nothing important goes out without your OK. I studied at University of Toronto Schools and have 4+ years of experience in finance and computer science.",
     ],
     work: 'Work with me',
     resume: 'Download resume',
@@ -29,13 +29,13 @@ const t = pick(lang, {
   },
   zh: {
     title: '关于',
-    description: `关于 ${site.name}：Flowa AI 创始人，在金融和计算机科学领域拥有 4 年以上经验，设计网站和应用并搭建自动化。`,
+    description: `关于 ${site.name}：Flowa AI 创始人，在金融和计算机科学领域拥有 4 年以上经验，为销售与运营打造 AI 系统，也做配套的网站和应用。`,
     hi: `你好，我是 ${site.name}`,
-    heading: '为更想专注本职工作的企业提供设计与自动化。',
+    heading: '为更想专注本职工作的企业打造 AI 系统。',
     bio: [
-      '我是 Jerry，Flowa AI 的创始人。我设计和开发网站与应用，并为小企业搭建省时的自动化，比如为一家牙科服务公司设置未接来电自动回短信。',
+      '我是 Jerry，Flowa AI 的创始人。我打造 AI 系统，回复并跟进每一位潜在客户，把日常事务从忙碌的团队手中接过来，比如为一家牙科服务公司设置未接来电自动回短信，也会做配套的网站和应用。',
       '我设计、开发并管理了 HayesX 飞行员配套应用，用社交媒体内容和网站推广了服装品牌 Pursue Play，也曾在 IPMD, Inc. 担任项目经理。',
-      '无论是网站、应用还是几个自动化，我都会让事情保持简单，并用大白话解释清楚。我曾就读于多伦多大学附属中学（University of Toronto Schools），在金融和计算机科学领域拥有 4 年以上经验。',
+      '无论是跟进系统、AI 智能体还是网站，我都会让事情保持简单，用大白话解释清楚，并确保重要的内容都先经过你确认。我曾就读于多伦多大学附属中学（University of Toronto Schools），在金融和计算机科学领域拥有 4 年以上经验。',
     ],
     work: '和我合作',
     resume: '下载简历',
@@ -53,15 +53,15 @@ const lists = [
 
 // Skills and tools, based on the work above. Edit freely (in both languages).
 const skillsEn = [
-  { group: 'Design', items: ['Website design', 'App & UI/UX design', 'Clickable prototypes'] },
+  { group: 'AI systems', items: ['AI agents (Claude)', 'Lead follow-up & missed-call text-back', 'CRM setup & pipelines'] },
   { group: 'Build', items: ['Websites & landing pages', 'Web apps (PWA)', 'Next.js'] },
-  { group: 'Automation', items: ['Missed-call text-back', 'CRM setup', 'AI automations (Claude)'] },
+  { group: 'Design', items: ['Website design', 'App & UI/UX design', 'Clickable prototypes'] },
   { group: 'Management & marketing', items: ['Project management', 'Social media content'] },
 ];
 const skillsZh = [
-  { group: '设计', items: ['网站设计', '应用与 UI/UX 设计', '可点击原型'] },
+  { group: 'AI 系统', items: ['AI 智能体（Claude）', '潜在客户跟进与未接来电自动回短信', 'CRM 搭建与销售管道'] },
   { group: '开发', items: ['网站与落地页', '网页应用（PWA）', 'Next.js'] },
-  { group: '自动化', items: ['未接来电自动回短信', 'CRM 搭建', 'AI 自动化（Claude）'] },
+  { group: '设计', items: ['网站设计', '应用与 UI/UX 设计', '可点击原型'] },
   { group: '管理与营销', items: ['项目管理', '社交媒体内容'] },
 ];
 const skills = pick(lang, { en: skillsEn, zh: skillsZh });

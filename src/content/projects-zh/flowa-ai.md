@@ -1,7 +1,7 @@
 ---
 title: 创办 Flowa AI
 client: Flowa AI（我的公司）
-summary: 创办了 Flowa AI，一家为企业搭建自动化的公司。
+summary: 创办了 Flowa AI，一家为企业打造销售与运营 AI 系统的公司，比如潜在客户跟进和未接来电自动回短信。
 role: 创始人
 tools: [自动化, 未接来电自动回短信, AI]
 coverAlt: "桌面浏览器中的 Flowa AI 首页，标题为 Automations that answer for you，有一个 Book a call 按钮，以及一组标有电话、日历、收件箱和 CRM 图标的 3D 方块。"

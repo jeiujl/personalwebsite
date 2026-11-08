@@ -11,14 +11,14 @@ export const site = {
   // Short version used where there is no photo
   initials: 'JL',
   // One line that says what you do and for whom
-  tagline: 'Websites, apps & automations for small businesses',
+  tagline: 'AI systems for sales & operations',
   // The giant homepage headline, one entry per line. Short words work best.
-  heroDisplay: ['Websites,', 'apps &', 'automations'],
+  heroDisplay: ['AI systems', 'for sales &', 'operations'],
   // The sentence under it. Keep it about outcomes, not tools.
-  headline: 'I design websites & apps, and automate the busywork that slows your business down.',
+  headline: 'I build AI systems that answer every lead, follow up until they book, and take the busywork off your team.',
   // Shown under the headline and used as the default meta description
   description:
-    'I help small businesses look professional online and stop losing leads: modern website and app design, plus done-for-you CRM and AI automations.',
+    'AI systems for small and mid-sized businesses: lead follow-up that books more customers, AI agents that handle quotes, onboarding and paperwork, and the websites and campaigns that bring leads in. Built, run and improved for you.',
   location: 'Toronto & Waterloo, Canada · open to clients anywhere',
 
   // TODO: the email address shown on the site. While empty, email links are
@@ -49,7 +49,7 @@ export const site = {
   // own, e.g. { value: '25+', label: 'Businesses helped', note: 'Across Ontario' }.
   stats: [
     { value: '4', label: 'Industries', note: 'Aviation, dental, fashion & AI' },
-    { value: '4', label: 'Services', note: 'Websites, apps, CRM & automations' },
+    { value: '4', label: 'Systems', note: 'Sales, AI agents, growth & apps' },
     { value: '24/7', label: 'Automations on duty', note: 'They keep working after hours' },
     { value: '20', label: 'Minute first call, free', note: 'Talk it through, no pressure' },
   ],
@@ -58,26 +58,26 @@ export const site = {
   // Give each referrer their own link, e.g. https://yoursite.com/?ref=dad, and
   // every inquiry email will say who sent it.
   referralBlurb:
-    "I'd like to introduce you to Jerry Liu, who designs websites and apps and sets up automations, like missed-call text-back, so businesses stop losing callers. Have a look:",
+    "I'd like to introduce you to Jerry Liu. He builds AI systems that answer and follow up with every lead and take admin work off your team, plus the websites that bring customers in. Have a look:",
 } as const;
 
 // Chinese versions of the text above, shown on the /zh pages. Anything not
 // listed here (name, links, photo…) is shared with the English site.
 const siteZh = {
-  tagline: '为小企业打造网站、应用和自动化',
-  heroDisplay: ['网站、', '应用与', '自动化'],
-  headline: '我为企业设计网站和应用，并把拖慢业务的繁琐工作自动化。',
-  description: '帮助小企业在网上展现专业形象，不再流失潜在客户：现代化的网站与应用设计，以及全程代办的 CRM 和 AI 自动化。',
+  tagline: '为销售与运营打造的 AI 系统',
+  heroDisplay: ['为销售与', '运营打造', 'AI 系统'],
+  headline: '我打造 AI 系统：回复每一位潜在客户，持续跟进直到对方预约，并把繁琐工作从你的团队手中接过来。',
+  description: '为中小企业打造 AI 系统：让更多潜在客户成交的跟进系统，处理报价、客户入驻和文书工作的 AI 智能体，以及带来客户的网站和推广。由我搭建、运行并持续优化。',
   location: '加拿大多伦多与滑铁卢 · 欢迎各地客户',
   photoAlt: 'Jerry Liu 夜晚站在布鲁克林大桥上',
   stats: [
     { value: '4', label: '涉及行业', note: '航空、牙科、服装与 AI' },
-    { value: '4', label: '服务项目', note: '网站、应用、CRM 与自动化' },
+    { value: '4', label: '系统类型', note: '销售、AI 智能体、增长与应用' },
     { value: '24/7', label: '自动化全天候运行', note: '下班后也在为你工作' },
     { value: '20', label: '分钟免费初次通话', note: '聊聊你的需求，没有压力' },
   ],
   referralBlurb:
-    '想向你介绍 Jerry Liu。他设计网站和应用，也会搭建自动化（比如未接来电自动回短信），让企业不再错过来电客户。可以看看：',
+    '想向你介绍 Jerry Liu。他打造 AI 系统，回复并跟进每一位潜在客户，把行政工作从团队手中接过来，也会做带来客户的网站。可以看看：',
 };
 
 export function getSite(lang: Lang) {

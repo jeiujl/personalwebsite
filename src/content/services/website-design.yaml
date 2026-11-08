@@ -1,27 +1,30 @@
 pillar: design
-title: Website design
-summary: A modern, fast website that makes you look established and turns visitors into calls, bookings and sales.
+title: Websites & lead generation
+summary: Websites and landing pages built to turn visitors into inquiries, plus the SEO, ads and content that bring the right people to them, tracked from first click to booked customer.
 deliverables:
-  - Custom design for desktop and mobile
-  - Copywriting help so your message is clear
-  - Online booking, contact forms or a shop
-  - Google-friendly setup (SEO basics, speed, analytics)
-  - Hosting setup and launch
-idealFor: Businesses with no website, an outdated one, or one that doesn't bring in customers.
+  - A website or landing page built to convert, on desktop and mobile
+  - SEO and AI-search basics, so buyers find you on Google and in AI answers
+  - Meta and Google ads set up and managed, with ad spend paid directly by you
+  - Content and ad creative made from your own photos and footage
+  - Tracking from ad to inquiry to booked customer
+  - A monthly report on cost per qualified lead
+idealFor: Businesses ready for more leads, or with a website that doesn't bring any in.
 exampleResult: 'The website for clothing brand Pursue Play, alongside social media content to promote it.'
-# TODO: optional, e.g. 'From $1,500'. Leave out to show "Custom quote".
+startingAt: From $1,500 · ads from $1,000/mo
 discipline: website
-inquiryType: Website
-order: 1
+inquiryType: Website & lead generation
+order: 3
 # Chinese text for the /zh pages
 zh:
-  title: 网站设计
-  summary: 现代、快速的网站，让你看起来更专业，并把访客变成来电、预约和销售。
+  title: 网站与获客
+  summary: 以把访客变成询盘为目标打造的网站和落地页，再加上把合适的人带过来的 SEO、广告和内容，从第一次点击一直追踪到成交预约。
   deliverables:
-    - 适配电脑和手机的定制设计
-    - 协助撰写文案，让你的信息清晰明了
-    - 在线预约、联系表单或网店
-    - 对 Google 友好的设置（SEO 基础、速度、数据分析）
-    - 托管设置与上线
-  idealFor: 还没有网站、网站过时，或网站带不来客户的企业。
-  exampleResult: 为服装品牌 Pursue Play 制作网站，并创作社交媒体内容进行推广。
+    - 以转化为目标的网站或落地页，电脑和手机都好用
+    - SEO 与 AI 搜索基础优化，让客户在 Google 和 AI 回答里找到你
+    - 搭建并管理 Meta 和 Google 广告，广告费由你直接支付
+    - 用你自己的照片和视频制作内容和广告素材
+    - 从广告到询盘再到成交预约的全程追踪
+    - 每月报告：每个合格潜在客户的成本
+  idealFor: 准备获取更多潜在客户，或者网站带不来客户的企业。
+  exampleResult: 为服装品牌 Pursue Play 制作网站，并配合社交媒体内容进行推广。
+  startingAt: 起价 $1,500 · 广告管理 $1,000/月起
