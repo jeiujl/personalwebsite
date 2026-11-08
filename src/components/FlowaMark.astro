@@ -1,0 +1,20 @@
+---
+// The Flowa AI "Spark Lens F" mark. It takes the current text colour, so it
+// works on both the dark and the light parts of the site.
+interface Props {
+  class?: string;
+  title?: string;
+}
+const { class: className = '', title } = Astro.props;
+---
+
+<svg
+  viewBox="88 88 336 336"
+  class={className}
+  role={title ? 'img' : undefined}
+  aria-label={title}
+  aria-hidden={title ? undefined : 'true'}
+  focusable="false"
+>
+  <path fill="currentColor" d="M424 256.05C424 271.28 421.97 286.03 418.18 300.05H275C261.19 300.05 250 311.25 250 325.05V423.95C160 420.79 88 346.83 88 256.05C88 163.27 163.22 88.05 256 88.05C329.15 88.05 391.38 134.8 414.44 200.05H275C261.19 200.05 250 211.25 250 225.05C250 238.86 261.19 250.05 275 250.05H423.89C423.96 252.04 424 254.04 424 256.05ZM348.4 327.65C350.32 342.53 362.32 354.53 377.2 356.45C362.32 358.37 350.32 370.37 348.4 385.25C346.48 370.37 334.48 358.37 319.6 356.45C334.48 354.53 346.48 342.53 348.4 327.65Z" />
+</svg>

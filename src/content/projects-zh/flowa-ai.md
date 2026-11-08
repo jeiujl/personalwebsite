@@ -8,6 +8,7 @@ coverAlt: "桌面浏览器中的 Flowa AI 首页，标题为 Automations that an
 galleryAlts:
   - "黑色背景上运行中的 Flowa 自动化仪表盘：从新潜在客户到即时短信、跟进再到完成预约的四步流程，旁边是活动记录和短信预览。"
   - "标题为 What Flowa sets up 的服务网格，包含未接来电自动回短信、潜在客户跟进、在线预约、邀请评价和 AI 邮箱助手的卡片。"
+  - "Flowa AI 标志套件：黑白两版的 Spark Lens F 图形标志（一个圆中切出字母 F，并带一颗小火花）、Flowa AI 文字组合标志，以及应用图标、网站图标和头像。"
 ---
 
 ## Flowa 做什么

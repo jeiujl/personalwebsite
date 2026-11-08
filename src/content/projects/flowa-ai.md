@@ -14,6 +14,8 @@ gallery:
     alt: "A live Flowa automation dashboard on black, running a four-step flow from new lead to instant text to follow-up to booked, with an activity log and a text message preview."
   - src: ./images/flowa-2.webp
     alt: "A services grid headed 'What Flowa sets up', with cards for missed-call text-back, lead follow-up, online booking, review requests and an AI inbox assistant."
+  - src: ./images/flowa-logo.webp
+    alt: "The Flowa AI logo kit: the Spark Lens F mark (a circle with an F cut out and a small spark) in black and in white, the Flowa AI wordmark lockup, and app icons, a favicon and profile pictures."
 ---
 
 ## What Flowa does
