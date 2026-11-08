@@ -12,7 +12,7 @@ gallery:
   - src: ./images/pursue-play-1.webp
     alt: "The Pursue Play About page, with the brand story laid out over a black-and-white architecture photo."
 featured: true
-order: 4
+order: 5
 ---
 
 ## The brand

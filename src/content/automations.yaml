@@ -1,4 +1,4 @@
-# Automation "recipes" shown on the homepage: simple, common wins clients recognise.
+# Systems "in action" shown on the homepage: jobs clients recognise, one card each.
 - id: missed-call-text-back
   name: Missed-call text-back
   trigger: A customer calls and nobody can answer
@@ -10,47 +10,47 @@
     trigger: 客户来电，但没人能接听
     action: 几秒内就会收到一条友好的短信，对话通过短信继续
     benefit: 不再让潜在客户流失在语音信箱里
-- id: lead-follow-up
-  name: Automatic lead follow-up
-  trigger: Someone fills out a form or sends a message
-  action: A sequence of texts and emails checks in until they reply or book
-  benefit: Every lead gets followed up, every time
+- id: speed-to-lead
+  name: Instant lead follow-up
+  trigger: Someone fills out a form, sends a DM or emails you
+  action: They get a reply in minutes, then follow-ups until they book, reply or say no
+  benefit: Reach buyers while they're still deciding
   order: 2
   zh:
-    name: 自动跟进潜在客户
-    trigger: 有人填写表单或发来消息
-    action: 一系列短信和邮件会持续跟进，直到对方回复或预约
-    benefit: 每一位潜在客户都能得到跟进，每一次
-- id: appointment-reminders
-  name: Appointment reminders
-  trigger: A customer books an appointment
-  action: Confirmation right away, reminders the day before and the hour before
-  benefit: Fewer no-shows
+    name: 即时跟进潜在客户
+    trigger: 有人填写表单、发来私信或给你发邮件
+    action: 几分钟内收到回复，之后持续跟进，直到对方预约、回复或明确拒绝
+    benefit: 在客户还在比较的时候就联系上他们
+- id: quote-follow-up
+  name: Quote follow-up
+  trigger: A quote has gone quiet for a few days
+  action: A check-in goes out with answers to the usual questions, and replies come straight to you
+  benefit: Win jobs you already quoted
   order: 3
   zh:
-    name: 预约提醒
-    trigger: 客户预约了时间
-    action: 立即发送确认，并在前一天和前一小时发送提醒
-    benefit: 减少爽约
-- id: review-requests
-  name: Review requests
-  trigger: A job is marked complete
-  action: The customer gets a text asking for a Google review, with a direct link
-  benefit: More 5-star reviews on autopilot
+    name: 报价跟进
+    trigger: 一份报价几天都没有回音
+    action: 自动发出一条问候，附上常见问题的解答，回复直接转给你
+    benefit: 拿下你已经报过价的生意
+- id: email-to-quote
+  name: Email-to-quote agent
+  trigger: A request arrives by email, PDF or form
+  action: AI reads it, matches your prices and drafts the quote for you to approve
+  benefit: Quotes out in minutes, not days
   order: 4
   zh:
-    name: 邀请评价
-    trigger: 一项服务标记为完成
-    action: 客户会收到一条短信，附上直达链接，邀请留下 Google 评价
-    benefit: 自动获得更多五星好评
-- id: ai-inbox-triage
-  name: AI inbox assistant
-  trigger: An email lands in your inbox
-  action: AI sorts it, logs requests and drafts a reply for you to approve
-  benefit: Hours of email work back every week
+    name: 邮件转报价智能体
+    trigger: 需求通过邮件、PDF 或表单发来
+    action: AI 读取内容、匹配你的价格，并起草报价供你确认
+    benefit: 几分钟发出报价，而不是几天
+- id: paperwork-chaser
+  name: Paperwork & payment chaser
+  trigger: A new client signs, or an invoice passes its due date
+  action: Forms, document requests and polite reminders go out until everything's in
+  benefit: Stop chasing people yourself
   order: 5
   zh:
-    name: AI 邮箱助手
-    trigger: 一封邮件进入你的收件箱
-    action: AI 自动分类、记录请求，并起草回复供你确认
-    benefit: 每周省下数小时处理邮件的时间
+    name: 文件与付款催办
+    trigger: 新客户签约，或发票过了到期日
+    action: 自动发送表单、索取文件并礼貌提醒，直到全部收齐
+    benefit: 不用再亲自追着别人要

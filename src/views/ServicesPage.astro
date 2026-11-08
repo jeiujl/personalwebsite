@@ -15,7 +15,7 @@ const services = await getServices(lang);
 const design = services.filter((s) => s.data.pillar === 'design');
 const automation = services.filter((s) => s.data.pillar === 'automation');
 
-// TODO: adjust these answers to match how you work and price (in both languages)
+// FAQ answers, in both languages. Keep them true to how you work and price.
 const faqsEn = [
   {
     q: 'Do I need to be technical?',
@@ -23,23 +23,31 @@ const faqsEn = [
   },
   {
     q: 'How much does it cost?',
-    a: "Every business is different, so I quote each project after a free call. You'll always know the price before any work starts.",
+    a: "Each service shows a starting price, in US dollars. After a free call I send a fixed quote that says exactly what's included, so you know the full price before any work starts. Ad spend and software subscriptions are billed to you directly, at cost.",
+  },
+  {
+    q: 'Will the AI send things without me?',
+    a: "Only what you've approved. Routine messages, like a text back after a missed call, run on their own once you've signed off the wording. Quotes, prices, contracts and anything unusual wait for your OK, and a person takes over whenever a customer needs one.",
+  },
+  {
+    q: "What if my customers don't want to talk to a bot?",
+    a: 'They usually never have to. Most of what I build is fast texts and emails written in your words, and anyone who asks gets a real person. If you want to test it first, start with after-hours and missed calls only.',
   },
   {
     q: 'How long does a project take?',
     a: 'It depends on the size of the project. After our call, your proposal will include a timeline you can plan around.',
   },
   {
-    q: site.platformName ? `What is ${site.platformName}?` : 'What is the all-in-one platform?',
-    a: `${site.platformName || 'It'} is an all-in-one platform for your leads, texts, emails, calendar, reviews and automations. I set it up for your business, brand it for you, and manage it, so you get one tool instead of five.`,
+    q: 'Can you work with the tools I already use?',
+    a: "Usually, yes. I connect to your existing email, calendar, CRM, forms and spreadsheets wherever I can, instead of making you switch. Tell me what you use and I'll let you know.",
   },
   {
-    q: 'Can you work with the tools I already use?',
-    a: "Usually, yes. Most automations can connect to your existing email, calendar, forms and spreadsheets. Tell me what you use and I'll let you know.",
+    q: 'Who owns the accounts and data?',
+    a: "You do. Your CRM, ad accounts and customer data stay in your business's name, so you're never locked in.",
   },
   {
     q: 'What happens after launch?',
-    a: "I don't disappear. I offer ongoing support for updates, new automations and questions, and I'm a message away if something needs attention.",
+    a: "The monthly plan keeps it working: I watch the system, fix anything that breaks, improve the messages and send you a report on what it produced. When you're ready, we add the next system.",
   },
 ];
 const faqsZh = [
@@ -49,23 +57,31 @@ const faqsZh = [
   },
   {
     q: '费用是多少？',
-    a: '每家企业的情况都不一样，所以我会在免费通话后为每个项目单独报价。开工之前你一定会知道价格。',
+    a: '每项服务都标有起步价（美元）。免费通话后，我会发给你一份固定报价，写明包含的所有内容，开工之前你就知道全部价格。广告费和软件订阅按实际费用由你直接支付。',
+  },
+  {
+    q: 'AI 会不经过我就发消息吗？',
+    a: '只会发送你确认过的内容。日常消息（比如未接来电后的自动短信）在你确认措辞后自动运行；报价、价格、合同和任何特殊情况都会先等你确认，客户需要时会由真人接手。',
+  },
+  {
+    q: '如果我的客户不想和机器人对话怎么办？',
+    a: '大多数时候他们根本不需要。我搭建的大部分内容是用你的口吻写的快速短信和邮件，任何人要求的话都可以转给真人。想先试试，可以只从下班后和未接来电开始。',
   },
   {
     q: '一个项目需要多长时间？',
     a: '取决于项目的规模。通话之后，你的方案里会包含一份可以参考的时间表。',
   },
   {
-    q: site.platformName ? `${site.platformName} 是什么？` : '一站式平台是什么？',
-    a: `${site.platformName || '它'}是一个一站式平台，管理你的潜在客户、短信、邮件、日历、评价和自动化。我会为你的业务搭建、打上你的品牌并负责管理，让你用一个工具代替五个。`,
+    q: '可以和我现在用的工具配合吗？',
+    a: '通常可以。我会尽量连接你现有的邮箱、日历、CRM、表单和表格，而不是让你换工具。告诉我你在用什么，我会告诉你是否可行。',
   },
   {
-    q: '可以和我现在用的工具配合吗？',
-    a: '通常可以。大多数自动化都能连接你现有的邮箱、日历、表单和表格。告诉我你在用什么，我会告诉你是否可行。',
+    q: '账户和数据归谁所有？',
+    a: '归你所有。你的 CRM、广告账户和客户数据都登记在你的企业名下，不会被绑定。',
   },
   {
     q: '上线之后呢？',
-    a: '我不会消失。我提供持续支持，包括更新、新的自动化和各种问题；如果有什么需要处理，发条消息就能找到我。',
+    a: '月度方案会让系统持续运转：我会监控系统、修复问题、优化消息内容，并发给你一份成果报告。准备好之后，我们再添加下一个系统。',
   },
 ];
 const faqs = pick(lang, { en: faqsEn, zh: faqsZh });
@@ -73,12 +89,12 @@ const t = pick(lang, {
   en: {
     title: 'Services',
     description:
-      'Website design, app design, an all-in-one CRM & marketing platform, and custom AI automations for small businesses.',
-    intro: 'Pick one, or combine them. A new website works even harder with automations behind it.',
-    design: 'Design',
-    designNote: 'Look established and win more customers online',
-    automation: 'Automation',
-    automationNote: 'Stop losing leads and win back hours every week',
+      'AI systems for small and mid-sized businesses: lead follow-up, AI agents for quotes, onboarding and paperwork, lead generation and websites, and custom apps. Clear starting prices.',
+    intro: "Systems I build, run and improve for you. Start with the one that fixes your biggest leak, then add the next. Every price is a starting point; you get a fixed quote before any work starts.",
+    design: 'Growth & build',
+    designNote: 'Bring in more of the right customers',
+    automation: 'AI systems',
+    automationNote: 'Answer every lead and take the busywork off your team',
     howEyebrow: 'How it works',
     howTitle: 'Simple from start to finish',
     howIntro: "No confusing contracts or tech talk. Here's what working together looks like.",
@@ -88,12 +104,12 @@ const t = pick(lang, {
   },
   zh: {
     title: '服务',
-    description: '为小企业提供网站设计、应用设计、一站式 CRM 与营销平台，以及定制 AI 自动化。',
-    intro: '可以单选，也可以组合。新网站配上背后的自动化，效果会更好。',
-    design: '设计',
-    designNote: '在网上看起来更专业，赢得更多客户',
-    automation: '自动化',
-    automationNote: '不再流失潜在客户，每周省下数小时',
+    description: '为中小企业打造 AI 系统：潜在客户跟进、处理报价/入驻/文书的 AI 智能体、获客与网站，以及定制应用。起步价格清晰透明。',
+    intro: '由我搭建、运行并持续优化的系统。先从解决你最大漏洞的那一个开始，再逐步添加。所有价格都是起步价；开工前你会拿到固定报价。',
+    design: '增长与开发',
+    designNote: '带来更多合适的客户',
+    automation: 'AI 系统',
+    automationNote: '回复每一位潜在客户，把繁琐工作从团队手中接过来',
     howEyebrow: '合作流程',
     howTitle: '从头到尾都很简单',
     howIntro: '没有复杂的合同，也没有技术术语。合作流程是这样的。',
@@ -118,23 +134,23 @@ const faqSchema = {
   <PageHero eyebrow={t.title} title={t.title} intro={t.intro} />
 
   <div class="grid-lines">
-    <section class="container-page pt-16" aria-labelledby="design-heading">
-      <div class="flex flex-wrap items-baseline justify-between gap-3 border-b border-ink/80 pb-4" data-reveal>
-        <h2 id="design-heading" class="heading text-4xl sm:text-5xl">{t.design}</h2>
-        <p class="mono text-[12px] text-muted">{t.designNote}</p>
-      </div>
-      <div class="mt-8 grid gap-4 md:grid-cols-2" data-reveal-stagger>
-        {design.map((service) => <ServiceCard service={service} />)}
-      </div>
-    </section>
-
-    <section class="container-page pt-20" aria-labelledby="automation-heading">
+    <section class="container-page pt-16" aria-labelledby="automation-heading">
       <div class="flex flex-wrap items-baseline justify-between gap-3 border-b border-ink/80 pb-4" data-reveal>
         <h2 id="automation-heading" class="heading text-4xl sm:text-5xl">{t.automation}</h2>
         <p class="mono text-[12px] text-muted">{t.automationNote}</p>
       </div>
       <div class="mt-8 grid gap-4 md:grid-cols-2" data-reveal-stagger>
         {automation.map((service) => <ServiceCard service={service} />)}
+      </div>
+    </section>
+
+    <section class="container-page pt-20" aria-labelledby="design-heading">
+      <div class="flex flex-wrap items-baseline justify-between gap-3 border-b border-ink/80 pb-4" data-reveal>
+        <h2 id="design-heading" class="heading text-4xl sm:text-5xl">{t.design}</h2>
+        <p class="mono text-[12px] text-muted">{t.designNote}</p>
+      </div>
+      <div class="mt-8 grid gap-4 md:grid-cols-2" data-reveal-stagger>
+        {design.map((service) => <ServiceCard service={service} />)}
       </div>
     </section>
 

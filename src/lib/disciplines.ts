@@ -1,10 +1,10 @@
 // The four services, each with its own color (used on tags, labels and
 // shapes). Projects and services both point at one of these keys.
 export const disciplines = {
-  website: { label: 'Websites', zh: '网站设计', hue: 'var(--hue-website)' },
-  app: { label: 'App design', zh: '应用设计', hue: 'var(--hue-app)' },
-  crm: { label: 'CRM platform', zh: 'CRM 平台', hue: 'var(--hue-crm)' },
-  ai: { label: 'AI automation', zh: 'AI 自动化', hue: 'var(--hue-ai)' },
+  crm: { label: 'Sales systems', zh: '销售系统', hue: 'var(--hue-crm)' },
+  ai: { label: 'AI agents', zh: 'AI 智能体', hue: 'var(--hue-ai)' },
+  website: { label: 'Websites & growth', zh: '网站与增长', hue: 'var(--hue-website)' },
+  app: { label: 'Apps', zh: '应用开发', hue: 'var(--hue-app)' },
 } as const;
 
 export type Discipline = keyof typeof disciplines;

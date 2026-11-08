@@ -1,29 +1,30 @@
 pillar: automation
-title: Your all-in-one CRM & marketing platform
-summary: One place for your leads, texts, emails, calendar and reviews, set up and managed for you, with the automations already running.
+title: Lead follow-up system
+summary: Every call, form and message gets a reply in minutes and a follow-up until it books. Quotes that went quiet get worked again, and you approve what goes out.
 deliverables:
-  - CRM and sales pipeline set up for your business
-  - Missed-call text-back and two-way texting
-  - Automatic lead follow-up by text and email
-  - Online booking with appointment reminders
-  - Review requests after every job
-  - Mobile app for you and your team
-idealFor: Service businesses that lose leads to slow replies or keep customer info in notebooks and spreadsheets.
+  - Instant replies to calls, forms, emails and DMs, with missed-call text-back or an after-hours AI receptionist
+  - Follow-ups by text and email until they book, reply or say no
+  - Old quotes and quiet leads followed up again
+  - Online booking with reminders, so fewer no-shows
+  - One pipeline showing every lead, where it came from and what's next
+  - A monthly report on replies, bookings and what to fix next
+idealFor: Businesses that already get leads but lose them to slow replies, voicemail or forgotten follow-ups.
 exampleResult: "Missed-call text-back for a dental services company, so callers who can't get through still get a text."
-# TODO: optional, e.g. 'From $297/mo'. Leave out to show "Custom quote".
+startingAt: From $2,500 + $500/mo
 discipline: crm
-inquiryType: CRM platform
-order: 3
+inquiryType: Lead follow-up system
+order: 1
 # Chinese text for the /zh pages
 zh:
-  title: 你的一站式 CRM 与营销平台
-  summary: 把潜在客户、短信、邮件、日历和评价集中在一个地方，由我为你搭建和管理，自动化开箱即用。
+  title: 潜在客户跟进系统
+  summary: 每一通来电、每一份表单、每一条消息都会在几分钟内得到回复，并持续跟进直到对方预约。沉寂的报价会被重新跟进，发出的内容都由你确认。
   deliverables:
-    - 为你的业务搭建 CRM 和销售管道
-    - 未接来电自动回短信和双向短信
-    - 通过短信和邮件自动跟进潜在客户
-    - 在线预约和预约提醒
-    - 每次服务后自动邀请评价
-    - 供你和团队使用的手机应用
-  idealFor: 因回复太慢而流失客户，或仍用笔记本和表格记录客户信息的服务型企业。
-  exampleResult: 为一家牙科服务公司设置未接来电自动回短信，让打不进来的患者也能收到短信。
+    - 即时回复来电、表单、邮件和私信，配合未接来电自动回短信或下班后的 AI 接待员
+    - 通过短信和邮件持续跟进，直到对方预约、回复或明确拒绝
+    - 重新跟进旧报价和沉寂的潜在客户
+    - 在线预约和提醒，减少爽约
+    - 一个销售管道，看清每位潜在客户的来源和下一步
+    - 每月报告：回复、预约，以及下一步该改进什么
+  idealFor: 已经有潜在客户，却因回复慢、语音信箱或忘记跟进而流失客户的企业。
+  exampleResult: 为一家牙科服务公司搭建未接来电自动回短信，让打不通电话的客户也能收到短信。
+  startingAt: 起价 $2,500 + $500/月

@@ -1,25 +1,28 @@
 pillar: design
-title: App design
-summary: Clear, easy-to-use app designs, from rough idea to a clickable prototype you can test and hand to developers.
+title: Custom apps & portals
+summary: Apps, client portals and internal tools designed and built around how your business works, from first sketch to launch.
 deliverables:
-  - User flows that map out every step
-  - Polished screens for iPhone, Android or web
-  - Clickable prototype for testing and pitching
-  - Developer-ready design files
-idealFor: Founders and businesses with an app idea, or an existing app that's confusing to use.
+  - User flows and screen design
+  - A working app for iPhone, Android or the web
+  - Client portals and internal dashboards
+  - Connected to your CRM, forms and payments
+  - Launch, hosting and ongoing support
+idealFor: Businesses whose customers or staff need their own app, portal or tool.
 exampleResult: 'The HayesX pilot companion app: designed, built and managed, with a preflight checklist, logbook and manuals.'
-# TODO: optional, e.g. 'From $2,500'. Leave out to show "Custom quote".
+startingAt: From $7,500
 discipline: app
-inquiryType: App design
-order: 2
+inquiryType: App
+order: 4
 # Chinese text for the /zh pages
 zh:
-  title: 应用设计
-  summary: 清晰易用的应用设计，从初步想法到可点击的原型，方便你测试并交给开发人员。
+  title: 定制应用与客户门户
+  summary: 围绕你的业务方式设计并开发的应用、客户门户和内部工具，从第一张草图到正式上线。
   deliverables:
-    - 梳理每一步的用户流程
-    - 适配 iPhone、Android 或网页的精致界面
-    - 可点击原型，用于测试和路演
-    - 可直接交付开发的设计文件
-  idealFor: 有应用想法的创业者和企业，或现有应用难以使用的团队。
-  exampleResult: HayesX 飞行员配套应用：从设计、开发到项目管理，包含飞行前检查清单、飞行日志和手册。
+    - 用户流程与界面设计
+    - 可用的 iPhone、Android 或网页应用
+    - 客户门户和内部数据看板
+    - 与你的 CRM、表单和支付打通
+    - 上线、托管与持续支持
+  idealFor: 客户或员工需要专属应用、门户或工具的企业。
+  exampleResult: HayesX 飞行员配套应用：由我设计、开发并管理，包含飞行前检查清单、飞行日志和手册。
+  startingAt: 起价 $7,500

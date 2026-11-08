@@ -1,27 +1,30 @@
 pillar: automation
-title: Custom AI automations
-summary: AI-powered automations built around how your business already works, handling the repetitive tasks that eat your week.
+title: AI operations agents
+summary: AI agents that read your emails, PDFs and forms, do the routine part of the job, and hand you a draft to approve. Quotes, onboarding, payment reminders and support replies, done in minutes instead of hours.
 deliverables:
+  - Quote and order intake that turns emailed requests and PDFs into draft quotes
+  - Client onboarding that sends forms, requests documents and chases until it's complete
+  - Payment follow-up with polite reminders, and replies sorted for you
+  - Support replies from your approved answers, handed to a person when needed
   - Inbox sorting and drafted replies
-  - Lead qualification and routing
-  - Data entry from emails, forms and documents
-  - Automatic reports and summaries
-  - Website chat assistants trained on your business
-idealFor: Teams spending hours a week on copy-paste work, email triage or manual data entry.
-exampleResult: 'Flowa AI, the company I started to set up automations for businesses.'
-# TODO: optional, e.g. 'From $1,000'. Leave out to show "Custom quote".
+  - A weekly summary of what the agents did and what needs you
+idealFor: Teams that retype the same information, chase documents or answer the same questions every day.
+exampleResult: 'Flowa AI, the company I started to build AI systems for businesses.'
+startingAt: From $4,000 + $750/mo
 discipline: ai
-inquiryType: AI automation
-order: 4
+inquiryType: AI agents
+order: 2
 # Chinese text for the /zh pages
 zh:
-  title: 定制 AI 自动化
-  summary: 围绕你现有的工作方式打造的 AI 自动化，接手那些占满你一周时间的重复性工作。
+  title: AI 运营智能体
+  summary: AI 智能体读取你的邮件、PDF 和表单，完成工作中重复的部分，再把草稿交给你确认。报价、客户入驻、付款提醒和客服回复，几分钟完成，而不是几小时。
   deliverables:
+    - 报价与订单录入：把邮件里的需求和 PDF 变成报价草稿
+    - 客户入驻：发送表单、索取文件，并持续提醒直到资料齐全
+    - 付款跟进：礼貌的提醒，并为你整理好对方的回复
+    - 依据你认可的答案回复客服问题，需要时转交给人工
     - 收件箱分类并起草回复
-    - 潜在客户筛选与分配
-    - 从邮件、表单和文件中自动录入数据
-    - 自动生成报告和摘要
-    - 基于你的业务训练的网站聊天助手
-  idealFor: 每周花大量时间复制粘贴、处理邮件或手动录入数据的团队。
-  exampleResult: Flowa AI，我创办的为企业搭建自动化的公司。
+    - 每周总结：智能体做了什么、哪些事需要你处理
+  idealFor: 每天都在重复录入信息、催要文件或回答同样问题的团队。
+  exampleResult: Flowa AI，我创办的为企业打造 AI 系统的公司。
+  startingAt: 起价 $4,000 + $750/月
