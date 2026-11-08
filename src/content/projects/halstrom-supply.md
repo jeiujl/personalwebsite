@@ -8,6 +8,8 @@ tools: [Email intake, PDF and photo reading, SKU matching, Price lists, Quote dr
 concept: true
 featured: true
 order: 6
+cover: ./images/concept-halstrom-supply-cover.webp
+coverAlt: "Quote Desk, an AI quoting agent for Halstrom Supply Co., in a browser. Left: a queue of contractor email requests with status pills. Centre: an email with a takeoff PDF and a table of extracted items matched to products, prices and stock, with one valve size flagged for a rep to check. Right: a draft quote totalling $3,706.63 CAD, ready to approve and send."
 workflow:
   - label: A quote request arrives
     detail: An email, a PDF takeoff or a photo of a handwritten list
