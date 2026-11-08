@@ -4,6 +4,7 @@ import type { CollectionEntry } from 'astro:content';
 import { getLang, localizePath, pick } from '../i18n';
 import DisciplineTag from './DisciplineTag.astro';
 import ProjectCover from './ProjectCover.astro';
+import DemoBadge from './DemoBadge.astro';
 import SampleBadge from './SampleBadge.astro';
 
 interface Props {
@@ -12,7 +13,7 @@ interface Props {
 }
 
 const { project, headingLevel: Heading = 'h3' } = Astro.props;
-const { title, client, summary, category, cover, coverAlt, sample, year } = project.data;
+const { title, client, summary, category, cover, coverAlt, sample, year, concept } = project.data;
 const lang = getLang(Astro.url);
 ---
 
@@ -36,6 +37,7 @@ const lang = getLang(Astro.url);
   </div>
   <div class="mt-4 flex flex-wrap items-center gap-2">
     <DisciplineTag discipline={category} />
+    {concept && <DemoBadge />}
     {sample && <SampleBadge />}
     {year && <span class="mono ml-auto text-[11px] text-muted">{year}</span>}
   </div>

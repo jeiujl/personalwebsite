@@ -34,8 +34,8 @@ const projects = defineCollection({
       liveUrl: z.url().optional(),
       featured: z.boolean().default(false),
       order: z.number().default(100),
-      // Marks demo projects in this prototype (not shown on the site), so
-      // they're easy to find and replace with real work.
+      // Demo builds for fictional companies. Shown with a "Demo build" badge
+      // and a note on the project page.
       concept: z.boolean().default(false),
       sample,
     }),

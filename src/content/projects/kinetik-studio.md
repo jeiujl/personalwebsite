@@ -7,7 +7,7 @@ role: "Brand, UI design & prototype"
 tools: [UI/UX design, Mobile app design, Booking flow, Design system]
 concept: true
 featured: true
-order: 6
+order: 10
 cover: ./images/concept-kinetik-studio-cover.webp
 coverAlt: "Three phone screens of the Kinetik app on black with a warm amber glow: a Discover screen with Yoga, Pilates, HIIT and Recover photo tiles, the Reformer Flow class page with a Book class button, and a You're booked confirmation with Add to calendar."
 gallery:
