@@ -1,5 +1,5 @@
 ---
-import FlowaMark from './FlowaMark.astro';
+import OnvloMark from './OnvloMark.astro';
 import { getCtaHref, getNav, site } from '../config/site';
 import { getLang, languages, localizePath, pick, switchLangPath } from '../i18n';
 
@@ -25,7 +25,7 @@ const isActive = (href: string) => current === href || current.startsWith(`${hre
 >
   <div class="container-page flex h-16 items-center justify-between gap-4">
     <a href={home} class="flex items-center gap-2.5 text-[16px] font-semibold tracking-[-0.02em] text-ink">
-      <FlowaMark class="h-6 w-6 shrink-0" />
+      <OnvloMark class="h-6 w-6 shrink-0" />
       {site.name}
     </a>
 

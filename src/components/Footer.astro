@@ -1,5 +1,5 @@
 ---
-import FlowaMark from './FlowaMark.astro';
+import OnvloMark from './OnvloMark.astro';
 import { getCtaHref, getNav, getSite } from '../config/site';
 import { getLang, localizePath, pick } from '../i18n';
 
@@ -85,12 +85,12 @@ const startLinks = [
 
   <div class="container-page" aria-hidden="true">
     <p class="monument monument-fade text-[clamp(64px,15.5vw,210px)] whitespace-nowrap">
-      {site.name}<FlowaMark class="ml-[0.08em] inline-block h-[0.42em] w-[0.42em] align-top text-accent" />
+      {site.name}<OnvloMark class="ml-[0.08em] inline-block h-[0.42em] w-[0.42em] align-top text-accent" />
     </p>
   </div>
 
   <div class="container-page mono flex flex-wrap justify-between gap-3 border-t border-line py-6 text-[11px] text-muted">
-    <span class="inline-flex items-center gap-2"><FlowaMark class="h-3.5 w-3.5" /> © {new Date().getFullYear()} {site.name} · Flowa AI</span>
+    <span class="inline-flex items-center gap-2"><OnvloMark class="h-3.5 w-3.5" /> © {new Date().getFullYear()} {site.name} · <a href="https://onvlo.com" target="_blank" rel="noopener" class="underline decoration-line underline-offset-4 hover:text-ink">Onvlo</a></span>
     <span>{site.location}</span>
   </div>
 </footer>

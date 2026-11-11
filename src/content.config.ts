@@ -42,7 +42,7 @@ const projects = defineCollection({
 });
 
 // Chinese versions of the projects, one file per project with the same file
-// name (e.g. projects-zh/flowa-ai.md). The body is the translated write-up;
+// name (e.g. projects-zh/onvlo.md). The body is the translated write-up;
 // any field left out falls back to the English one.
 const projectsZh = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/projects-zh' }),

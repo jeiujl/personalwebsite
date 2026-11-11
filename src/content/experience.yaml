@@ -1,15 +1,15 @@
 # Experience on the About page. `kind` is `work` (default) or `education`;
 # `period` and `summary` are optional. Lists are sorted by `order`.
-# TODO: add dates for Flowa AI, HayesX, IPMD and Alpha Futures, and say what you
+# TODO: add dates for Onvlo, HayesX, IPMD and Alpha Futures, and say what you
 # did with Alpha Futures.
-- id: flowa
+- id: onvlo
   role: Founder
-  org: Flowa AI
-  summary: Started Flowa AI, a company that sets up automations for businesses, including missed-call text-back for a dental services company.
+  org: Onvlo
+  summary: Started Onvlo, a company that builds AI systems for sales and business operations, including missed-call text-back for a dental services company.
   order: 1
   zh:
     role: 创始人
-    summary: 创立了 Flowa AI，为企业搭建自动化，包括为一家牙科服务公司设置未接来电自动回短信。
+    summary: 创立了 Onvlo，为企业打造销售与业务运营的 AI 系统，包括为一家牙科服务公司设置未接来电自动回短信。
 - id: hayesx
   role: App designer, developer & project manager
   org: HayesX
