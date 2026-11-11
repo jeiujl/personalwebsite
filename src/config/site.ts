@@ -41,8 +41,11 @@ export const site = {
   // TODO: the name of your white-label CRM & marketing platform
   platformName: '' as string,
 
-  // TODO: add LinkedIn and any other profiles, e.g. { label: 'LinkedIn', href: 'https://www.linkedin.com/in/…' }
-  socials: [{ label: 'GitHub', href: 'https://github.com/jeiujl' }],
+  // Your own profiles (shown in the footer and listed in the page's structured data).
+  socials: [
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/jerry-liu-55b9662b3/' },
+    { label: 'GitHub', href: 'https://github.com/jeiujl' },
+  ],
 
   // The homepage stats band. Numbers count up as they scroll into view.
   // Keep them true: clients check. TODO: as your numbers grow, swap in your

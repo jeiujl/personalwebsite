@@ -1,9 +1,9 @@
 ---
 title: Missed-call text-back for a dental company
 client: "Northview Dental Studio"
-summary: Set up missed-call text-back through Flowa AI, so patients who call when nobody can answer still get a text back.
+summary: Set up missed-call text-back through Onvlo, so patients who call when nobody can answer still get a text back.
 category: crm
-role: Automation setup, through Flowa AI
+role: Automation setup, through Onvlo
 tools: [Missed-call text-back]
 workflow:
   - label: A patient calls
@@ -29,5 +29,5 @@ Any busy front desk misses a call now and then, and Northview Dental Studio was 
 
 ## What I did
 
-- Set up **missed-call text-back** through Flowa AI, so callers who can't get through get a text right away
+- Set up **missed-call text-back** through Onvlo, so callers who can't get through get a text right away
 - Patients can **reply to the text** instead of calling back

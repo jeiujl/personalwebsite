@@ -28,7 +28,7 @@ const demos = (await getDemos(lang)).slice(0, 2);
 
 const t = pick(lang, {
   en: {
-    jobTitle: 'AI systems builder, founder of Flowa AI',
+    jobTitle: 'AI systems builder, founder of Onvlo',
     workGhost: 'Work',
     workEyebrow: 'Selected work',
     workTitle: 'Selected projects',
@@ -54,11 +54,11 @@ const t = pick(lang, {
     reviewsTitle: 'What clients say',
     aboutEyebrow: 'About me',
     hi: `Hi, I'm ${site.name}.`,
-    bio: "I'm the founder of Flowa AI. I build AI systems that answer and follow up with every lead and take routine work off busy teams, plus the websites and apps around them. I studied at University of Toronto Schools and have 4+ years of experience in finance and computer science.",
+    bio: "I'm the founder of Onvlo. I build AI systems that answer and follow up with every lead and take routine work off busy teams, plus the websites and apps around them. I studied at University of Toronto Schools and have 4+ years of experience in finance and computer science.",
     more: 'More about me',
   },
   zh: {
-    jobTitle: 'AI 系统搭建者，Flowa AI 创始人',
+    jobTitle: 'AI 系统搭建者，Onvlo 创始人',
     workGhost: '作品',
     workEyebrow: '精选作品',
     workTitle: '精选项目',
@@ -83,7 +83,7 @@ const t = pick(lang, {
     reviewsTitle: '客户怎么说',
     aboutEyebrow: '关于我',
     hi: `你好，我是 ${site.name}。`,
-    bio: '我是 Flowa AI 的创始人。我打造 AI 系统，回复并跟进每一位潜在客户，把日常事务从忙碌的团队手中接过来，也会做配套的网站和应用。我曾就读于多伦多大学附属中学（University of Toronto Schools），在金融和计算机科学领域拥有 4 年以上经验。',
+    bio: '我是 Onvlo 的创始人。我打造 AI 系统，回复并跟进每一位潜在客户，把日常事务从忙碌的团队手中接过来，也会做配套的网站和应用。我曾就读于多伦多大学附属中学（University of Toronto Schools），在金融和计算机科学领域拥有 4 年以上经验。',
     more: '更多关于我',
   },
 });
@@ -97,6 +97,7 @@ const personSchema = {
   ...(site.email ? { email: `mailto:${site.email}` } : {}),
   url: Astro.site?.href,
   sameAs: site.socials.map((s) => s.href),
+  worksFor: { '@type': 'Organization', name: 'Onvlo', url: 'https://onvlo.com/' },
 };
 ---
 

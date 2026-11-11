@@ -15,6 +15,11 @@ const site =
 export default defineConfig({
   site,
   output: 'static',
+  // The company was renamed from Flowa AI to Onvlo: old links to its project page still land.
+  redirects: {
+    '/work/flowa-ai': '/work/onvlo/',
+    '/zh/work/flowa-ai': '/zh/work/onvlo/',
+  },
   adapter: vercel({ webAnalytics: { enabled: true } }),
   integrations: [
     // English at the root, Chinese under /zh: the sitemap links each page to its translation
